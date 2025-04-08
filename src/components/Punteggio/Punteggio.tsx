@@ -1,12 +1,12 @@
 import { useState } from "react";
 import PunteggioInformation from "./Punteggio-information/Punteggio-information.tsx";
 import "./Punteggio.css";
+import Information from "../Information/Information.tsx";
 
 function Punteggio() {
     //state
-    const [testo, setTesto] = useState("Eccellente");
-    const [percentuale, setPercentuale] = useState("100");
-    const [isOpen, setIsOpen] = useState(false);
+    const [testo] = useState("Eccellente");
+    const [percentuale] = useState("100");
 
     //Render
     return (
@@ -14,20 +14,9 @@ function Punteggio() {
             <h1>
                 {percentuale} % - {testo}
             </h1>
-
-            <button
-                className="info-button"
-                onClick={() => setIsOpen(isOpen ? false : true)}
-            >
-                i
-                {isOpen ? (
-                    <span className="tooltip">
-                        <PunteggioInformation />
-                    </span>
-                ) : (
-                    ""
-                )}
-            </button>
+            <Information>
+                <PunteggioInformation />
+            </Information>
         </div>
     );
 }
