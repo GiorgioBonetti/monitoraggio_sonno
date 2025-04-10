@@ -1,0 +1,15 @@
+/* Definizione del font personalizzato */
+@font-face {
+    font-family: "SF Pro Text";
+    font-style: normal;
+    font-weight: 500;
+    src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Medium.ttf");
+}
+
+/* Importazione del font Roboto da Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+
+/* Applicazione del font con fallback */
+body {
+    font-family: "SF Pro Text", "Roboto", sans-serif;
+}

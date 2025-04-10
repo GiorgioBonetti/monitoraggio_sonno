@@ -1,22 +1,13 @@
 .Navbar {
-    background-color: #333;
-    overflow: hidden;
-}
-
-.Navbar ul {
-    list-style-type: none;
-    margin: 0;
-    padding-left: 30vh;
-    padding-right: 30vh;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
 
 .Navbar button {
-    background-color: #4caf50;
+    background-color: #4b6dd9;
     border: none;
-    color: white;
+    color: black;
     padding: 14px 20px;
     text-align: center;
     text-decoration: none;
@@ -28,6 +19,6 @@
 }
 
 .Navbar label {
-    color: white;
+    color: black;
     font-size: 18px;
 }
