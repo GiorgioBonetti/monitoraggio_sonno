@@ -4,15 +4,6 @@ import "./Navbar.css";
 function Navbar() {
     const [currentDate, setCurrentDate] = useState(new Date());
 
-    const formatDate = (date: Date) => {
-        // funzione per formattare la data in italiano stringato
-        return date.toLocaleDateString("it-IT", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-        });
-    };
-
     // funzione per passare al giorno successivo
     function nextDate() {
         const next = new Date(currentDate);
@@ -27,10 +18,15 @@ function Navbar() {
         setCurrentDate(prev);
     }
 
+
     return (
         <nav className="Navbar">
             <button onClick={previousDate}>&lt;</button>
-            <label>{formatDate(currentDate)}</label>
+            <input
+                type="date"
+                value={currentDate.toISOString().split("T")[0]}
+                onChange={(e) => setCurrentDate(e.target.value== '00/00/0000' ? new Date(e.target.value) : new Date())}
+            />
             <button onClick={nextDate}>&gt;</button>
         </nav>
     );

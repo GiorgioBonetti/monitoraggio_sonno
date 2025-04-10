@@ -11,12 +11,15 @@ function Punteggio() {
     //Render
     return (
         <div className="banner">
+
             <h1>
-                {percentuale} % - {testo}
+                {percentuale} - {testo}
             </h1>
-            <Information>
-                <PunteggioInformation />
-            </Information>
+            <div className="info">
+                <Information >
+                    <PunteggioInformation />
+                </Information>
+            </div>
         </div>
     );
 }
