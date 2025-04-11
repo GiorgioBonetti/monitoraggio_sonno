@@ -14,14 +14,10 @@ import {
 } from "./scripts/extractSleepStages.ts";
 
 function App() {
-    const data = [
-        { name: "Veglia", value: 3 },
-        { name: "REM", value: 10 },
-        { name: "Principale", value: 70 },
-        { name: "Profondo", value: 17 },
-    ];
 
     const COLORS = ["#FF8042", "lightskyblue", "royalblue", "blue"];
+    const [testo] = useState("Eccellente");
+    const [percentuale] = useState(100);
 
     // variabili per i dati
     const [sleepData, setSleepData] = useState<SleepData[] | null>(null);
@@ -35,7 +31,7 @@ function App() {
         const fetchData = async () => {
             try {
                 const data = await extractData(
-                    "/public/4-sleep_data_2025-02-11.csv",
+                    "/4-sleep_data_2025-02-11.csv",
                 );
                 setSleepData(data);
             } catch (err) {
@@ -88,7 +84,7 @@ function App() {
             <div className="riga2">
                 <div className="carta">
                     <Card>
-                        <Punteggio></Punteggio>
+                        <Punteggio punteggio={percentuale} testo={testo} ></Punteggio>
                     </Card>
                 </div>
             </div>
@@ -108,14 +104,26 @@ function App() {
                 <div className="bho"></div>
                 <div className="mezzaCarta">
                     <Card>
-                        <PieGraph colors={COLORS} data={data} />
+                        {/*<PieGraph*/}
+                        {/*    colors={COLORS}*/}
+                        {/*    data={*/}
+                        {/*        sleepStages*/}
+                        {/*            ? Object.keys(sleepStages).map((val) => {*/}
+                        {/*                return {*/}
+                        {/*                    name: val,*/}
+                        {/*                    value: sleepStages[val as keyof SleepStages],*/}
+                        {/*                };*/}
+                        {/*            })*/}
+                        {/*            : []*/}
+                        {/*    }*/}
+                        {/*/>*/}
                     </Card>
                 </div>
             </div>
             <div className="riga4">
                 <div className="carta big">
                     <Card>
-                        <CreateScatterPlot />
+                        <CreateScatterPlot dati={sleepData ? sleepData : []} colors={COLORS} />
                     </Card>
                 </div>
             </div>

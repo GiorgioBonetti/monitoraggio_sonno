@@ -1,19 +1,20 @@
-import { useState } from "react";
+
 import PunteggioInformation from "./Punteggio-information/Punteggio-information.tsx";
 import "./Punteggio.css";
 import Information from "../Information/Information.tsx";
 
-function Punteggio() {
-    //state
-    const [testo] = useState("Eccellente");
-    const [percentuale] = useState("100");
+type PunteggioProps = {
+    punteggio : number;
+    testo : string;
+};
 
+function Punteggio(props: PunteggioProps) {
     //Render
     return (
         <div className="banner">
 
             <h1>
-                {percentuale} - {testo}
+                {props.punteggio} - {props.testo}
             </h1>
             <div className="info">
                 <Information >

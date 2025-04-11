@@ -6,9 +6,13 @@ function Navbar() {
 
     // funzione per passare al giorno successivo
     function nextDate() {
+
+
         const next = new Date(currentDate);
         next.setDate(next.getDate() + 1);
-        setCurrentDate(next);
+        if(next <= new Date()) {
+            setCurrentDate(next);
+        }
     }
 
     // funzione per passare al giorno precedente
@@ -17,7 +21,6 @@ function Navbar() {
         prev.setDate(prev.getDate() - 1);
         setCurrentDate(prev);
     }
-
 
     return (
         <nav className="Navbar">

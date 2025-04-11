@@ -1,10 +1,15 @@
 import { SleepData } from "./extractData.ts";
 
-export interface SleepStages {
+interface SleepStages {
     awake: number;
     rem: number;
     light: number;
     deep: number;
+}
+
+export type SleepStage = {
+    nome: string;
+    number: string;
 }
 
 export function extractSleepStages(dataArray: SleepData[] | null): SleepStages {
