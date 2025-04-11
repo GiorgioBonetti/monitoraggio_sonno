@@ -1,13 +1,15 @@
 import Papa from "papaparse";
 
-export interface SleepData {
+export interface SleepDataInterface {
     date: string; // Data del dato di sonno
     timestamp: string; // Ora del dato di sonno
     stage: string; // Fase del sonno (es. Light, Deep, REM, Awake)
 }
 
 // Funzione asincrona per estrarre i dati da un file CSV
-export async function extractData(filePath: string): Promise<SleepData[]> {
+export async function extractData(
+    filePath: string,
+): Promise<SleepDataInterface[]> {
     // Effettua una richiesta HTTP per ottenere il file CSV
     const response = await fetch(filePath);
 

@@ -6,22 +6,25 @@ import PieGraph from "./components/PieGraph/PieGraph.tsx";
 import Card from "./components/Card/Card.tsx";
 import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/SleepStageChart/SleepStageChart.tsx";
-import { extractData, SleepData } from "./scripts/extractData.ts";
+import { extractData, SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
 import {
     extractSleepStages,
-    SleepStages,
+    SleepStageType,
 } from "./scripts/extractSleepStages.ts";
 
 function App() {
-
     const COLORS = ["#FF8042", "lightskyblue", "royalblue", "blue"];
     const [testo] = useState("Eccellente");
     const [percentuale] = useState(100);
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepData[] | null>(null);
-    const [sleepStages, setSleepStages] = useState<SleepStages | null>(null);
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
+        null,
+    );
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
+        null,
+    );
     const [error, setError] = useState<string | null>(null);
 
     // variabili di loading - se false, i dati sono stati caricati
@@ -30,9 +33,7 @@ function App() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await extractData(
-                    "/4-sleep_data_2025-02-11.csv",
-                );
+                const data = await extractData("/4-sleep_data_2025-02-11.csv");
                 setSleepData(data);
             } catch (err) {
                 setError("Errore durante il caricamento dei dati dal csv.");
@@ -84,7 +85,10 @@ function App() {
             <div className="riga2">
                 <div className="carta">
                     <Card>
-                        <Punteggio punteggio={percentuale} testo={testo} ></Punteggio>
+                        <Punteggio
+                            punteggio={percentuale}
+                            testo={testo}
+                        ></Punteggio>
                     </Card>
                 </div>
             </div>
@@ -123,7 +127,10 @@ function App() {
             <div className="riga4">
                 <div className="carta big">
                     <Card>
-                        <CreateScatterPlot dati={sleepData ? sleepData : []} colors={COLORS} />
+                        <CreateScatterPlot
+                            dati={sleepData ? sleepData : []}
+                            colors={COLORS}
+                        />
                     </Card>
                 </div>
             </div>

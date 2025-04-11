@@ -1,31 +1,33 @@
-import { SleepData } from "./extractData.ts";
+import { SleepDataInterface } from "./extractData.ts";
 
-interface SleepStages {
+interface SleepStagesInterface {
     awake: number;
     rem: number;
     light: number;
     deep: number;
 }
 
-export type SleepStage = {
+export type SleepStageType = {
     nome: string;
     number: string;
-}
+};
 
-export function extractSleepStages(dataArray: SleepData[] | null): SleepStages {
+export function extractSleepStages(
+    dataArray: SleepDataInterface[] | null,
+): SleepStageType[] {
     // controllo se l'array passato è nullo
     if (!dataArray) {
         console.error("L'array passato è nullo");
-        return {
-            awake: 0,
-            rem: 0,
-            light: 0,
-            deep: 0,
-        };
+        return [
+            { nome: "awake", number: "0" },
+            { nome: "rem", number: "0" },
+            { nome: "light", number: "0" },
+            { nome: "deep", number: "0" },
+        ];
     }
 
     // Inizializza un oggetto per contare le fasi del sonno
-    const sleepStagesCount: SleepStages = {
+    const sleepStagesCount: SleepStagesInterface = {
         awake: 0,
         rem: 0,
         light: 0,
@@ -60,7 +62,7 @@ export function extractSleepStages(dataArray: SleepData[] | null): SleepStages {
         sleepStagesCount.deep;
 
     // arrotondo le percentuali
-    const sleepStagesPercentage: SleepStages = {
+    const sleepStagesPercentage: SleepStagesInterface = {
         awake: Math.round((sleepStagesCount.awake / total) * 100),
         rem: Math.round((sleepStagesCount.rem / total) * 100),
         light: Math.round((sleepStagesCount.light / total) * 100),
@@ -79,5 +81,10 @@ export function extractSleepStages(dataArray: SleepData[] | null): SleepStages {
         sleepStagesPercentage.light += difference; // Aggiusta uno dei valori - scelgo light essendo il più comune
     }
 
-    return sleepStagesPercentage;
+    return [
+        { nome: "awake", number: `${sleepStagesPercentage.awake}%` },
+        { nome: "rem", number: `${sleepStagesPercentage.rem}%` },
+        { nome: "light", number: `${sleepStagesPercentage.light}%` },
+        { nome: "deep", number: `${sleepStagesPercentage.deep}%` },
+    ];
 }
