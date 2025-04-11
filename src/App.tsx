@@ -6,6 +6,12 @@ import PieGraph from "./components/PieGraph/PieGraph.tsx";
 import Card from "./components/Card/Card.tsx";
 import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/SleepStageChart/SleepStageChart.tsx";
+import { extractData, SleepData } from "./scripts/extractData.ts";
+import { useEffect, useState } from "react";
+import {
+    extractSleepStages,
+    SleepStages,
+} from "./scripts/extractSleepStages.ts";
 
 function App() {
     const data = [
@@ -15,11 +21,67 @@ function App() {
         { name: "Profondo", value: 17 },
     ];
 
-
     const COLORS = ["#FF8042", "lightskyblue", "royalblue", "blue"];
+
+    // variabili per i dati
+    const [sleepData, setSleepData] = useState<SleepData[] | null>(null);
+    const [sleepStages, setSleepStages] = useState<SleepStages | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    // variabili di loading
+    const [loading, setLoading] = useState<boolean>(true);
+    const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+    const [stagesLoaded, setStagesLoaded] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await extractData(
+                    "/public/4-sleep_data_2025-02-11.csv",
+                );
+                setSleepData(data);
+                setDataLoaded(true);
+            } catch (err) {
+                setError("Errore durante il caricamento dei dati dal csv.");
+                console.error(err);
+            }
+        };
+
+        fetchData();
+    }, []); // fetch del csv
+
+    useEffect(() => {
+        if (sleepData) {
+            try {
+                const stages = extractSleepStages(sleepData);
+                setSleepStages(stages);
+                setStagesLoaded(true);
+            } catch (err) {
+                setError(
+                    "Errore durante il calcolo dei dati degli stadi del sonno.",
+                );
+                console.error(err);
+            }
+        }
+    }, [sleepData]); // fetch dei dati degli stadi del sonno
+
+    useEffect(() => {
+        if (dataLoaded && stagesLoaded) {
+            setLoading(false);
+        }
+    }, [dataLoaded, stagesLoaded]); // controllo se i dati sono stati caricati
+
+    useEffect(() => {
+        if (!loading) {
+            console.table(sleepData);
+            console.table(sleepStages);
+        }
+    }, [loading]); // semplice stampa dei dati caricati ---- da togliere
 
     return (
         <div>
+            {/* nel caso ci sia stato un errore nel caricare i dati, fa vedere l'errore */}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <div className="riga1">
                 <div className="carta">
                     <Card>
@@ -57,7 +119,7 @@ function App() {
             <div className="riga4">
                 <div className="carta big">
                     <Card>
-                        <CreateScatterPlot/>
+                        <CreateScatterPlot />
                     </Card>
                 </div>
             </div>
@@ -83,8 +145,6 @@ function App() {
                 </div>
             </div>
         </div>
-
-
     );
 }
 
