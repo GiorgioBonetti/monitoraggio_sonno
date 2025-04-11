@@ -9,7 +9,7 @@ interface SleepStagesInterface {
 
 export type SleepStageType = {
     nome: string;
-    number: string;
+    number: number;
 };
 
 export function extractSleepStages(
@@ -19,10 +19,10 @@ export function extractSleepStages(
     if (!dataArray) {
         console.error("L'array passato è nullo");
         return [
-            { nome: "awake", number: "0" },
-            { nome: "rem", number: "0" },
-            { nome: "light", number: "0" },
-            { nome: "deep", number: "0" },
+            { nome: "awake", number: 0 },
+            { nome: "rem", number: 0 },
+            { nome: "light", number: 0 },
+            { nome: "deep", number: 0 },
         ];
     }
 
@@ -82,9 +82,9 @@ export function extractSleepStages(
     }
 
     return [
-        { nome: "awake", number: `${sleepStagesPercentage.awake}%` },
-        { nome: "rem", number: `${sleepStagesPercentage.rem}%` },
-        { nome: "light", number: `${sleepStagesPercentage.light}%` },
-        { nome: "deep", number: `${sleepStagesPercentage.deep}%` },
+        { nome: "awake", number: sleepStagesPercentage.awake },
+        { nome: "rem", number: sleepStagesPercentage.rem },
+        { nome: "light", number: sleepStagesPercentage.light },
+        { nome: "deep", number: sleepStagesPercentage.deep },
     ];
 }

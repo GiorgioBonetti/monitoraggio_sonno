@@ -1,71 +1,53 @@
-import {
-    PieChart,
-    Pie,
-    Cell,
-    Tooltip
-} from "recharts";
+
 import "./PieGraph.css";
+import { SleepStageType } from "../../scripts/extractSleepStages";
+import { useEffect } from "react";
+import { Pie } from '@antv/g2plot';
 
 type PieGraphProps = {
-    data: {name : string, value: number}[];
+    data: SleepStageType[];
     colors: string[];
 };
 
 function PieGraph(props: PieGraphProps) {
-        return (
-            <div className="container">
-                <div className="grafico">
-                    <PieChart width={200} height={200}>
-                        <Pie
-                            data={props.data}
-                            innerRadius={60}
-                            outerRadius={80}
-                            paddingAngle={3}
-                            dataKey="value"
-                            isAnimationActive={false}
-                        >
-                            {(props.data || []).map((entry, index) => (
-                                <Cell
-                                    key={`${index} ${entry.name}`}
-                                    fill={props.colors[index % props.colors.length]}
-                                />
-                            ))}
-                        </Pie>
-                        <Tooltip
-                            content={({ active, payload }) => {
-                                if (active && payload && payload.length) {
-                                    return (
-                                        <div className="blocco">
-                                            <div className="testo">
-                                                {`${payload[0].name}`}{":"} {`${payload[0].value}%`}
-                                            </div>
-                                        </div>
-                                    );
-                                }
-                                return null;
-                            }}
-                        />
-                    </PieChart>
-                </div>
-                <div className="legenda"></div>
-                <ul>
-                    {(props.data || []).map((entry, index) => (
-                        <li
-                            key={index}
-                            style={{
-                                color: props.colors[index % props.colors.length],
-                                fontSize: "30px",
-                                height: "50px",
-                                textAlign: "left",
-                                listStyleType: "square",
-                            }}
-                        >
-                            <div className="piccolo">{entry.name}</div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        );
-    
+
+    useEffect(() => {
+        const piePlot = new Pie("container", {
+            appendPadding: 0,
+            
+            color: props.colors,
+            data: props.data,
+            angleField: 'number',
+            colorField: 'nome',
+            radius: 1,
+            innerRadius: 0.64,
+            label: {
+                type: 'inner',
+                offset: '-50%',
+                autoRotate: false,
+                style: { textAlign: 'center' },
+                formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+            },
+            legend: false,
+            statistic: {
+                title: false,
+                content: {
+                  content: '',
+                },
+              },
+            
+            
+        });
+        piePlot.render();
+        return () => {
+            piePlot.destroy();
+        };
+    }, [props.data]);
+
+    return (
+            <div id="container" style={{ padding: "5px",   width: "300px"}}></div>
+            
+
+    );
 }
 export default PieGraph;

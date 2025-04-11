@@ -1,16 +1,15 @@
 import { Scatter } from "@antv/g2plot";
 import { useEffect } from "react";
-import { SleepData } from "../../scripts/extractData";
+import { SleepDataInterface } from "../../scripts/extractData";
 
 type GraphProps = {
-    dati: SleepData[];
+    dati: SleepDataInterface[];
     colors: string[];
 };
 function CreateScatterPlot(props: GraphProps) {
 
     useEffect(() => {
-        console.table("TEST" + props.dati);
-        const scatterPlot = new Scatter("container", {
+        const scatterPlot = new Scatter("container2", {
             data: props.dati,
             xField: "timestamp",
             yField: "stage",
@@ -40,7 +39,7 @@ function CreateScatterPlot(props: GraphProps) {
 
     return (
         <div>
-            <div id="container" style={{ padding: "5px", width: "90vw" }}></div>
+            <div id="container2" style={{ padding: "5px", width: "90vw" }}></div>
         </div>
     );
 }

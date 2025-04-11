@@ -108,19 +108,9 @@ function App() {
                 <div className="bho"></div>
                 <div className="mezzaCarta">
                     <Card>
-                        {/*<PieGraph*/}
-                        {/*    colors={COLORS}*/}
-                        {/*    data={*/}
-                        {/*        sleepStages*/}
-                        {/*            ? Object.keys(sleepStages).map((val) => {*/}
-                        {/*                return {*/}
-                        {/*                    name: val,*/}
-                        {/*                    value: sleepStages[val as keyof SleepStages],*/}
-                        {/*                };*/}
-                        {/*            })*/}
-                        {/*            : []*/}
-                        {/*    }*/}
-                        {/*/>*/}
+                        <PieGraph
+                            data={sleepStages ? sleepStages : []}
+                            colors={COLORS} />
                     </Card>
                 </div>
             </div>
