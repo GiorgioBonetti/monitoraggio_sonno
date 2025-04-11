@@ -28,10 +28,8 @@ function App() {
     const [sleepStages, setSleepStages] = useState<SleepStages | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // variabili di loading
+    // variabili di loading - se false, i dati sono stati caricati
     const [loading, setLoading] = useState<boolean>(true);
-    const [dataLoaded, setDataLoaded] = useState<boolean>(false);
-    const [stagesLoaded, setStagesLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,7 +38,6 @@ function App() {
                     "/public/4-sleep_data_2025-02-11.csv",
                 );
                 setSleepData(data);
-                setDataLoaded(true);
             } catch (err) {
                 setError("Errore durante il caricamento dei dati dal csv.");
                 console.error(err);
@@ -55,7 +52,6 @@ function App() {
             try {
                 const stages = extractSleepStages(sleepData);
                 setSleepStages(stages);
-                setStagesLoaded(true);
             } catch (err) {
                 setError(
                     "Errore durante il calcolo dei dati degli stadi del sonno.",
@@ -66,10 +62,10 @@ function App() {
     }, [sleepData]); // fetch dei dati degli stadi del sonno
 
     useEffect(() => {
-        if (dataLoaded && stagesLoaded) {
+        if (sleepData != null && sleepStages != null) {
             setLoading(false);
         }
-    }, [dataLoaded, stagesLoaded]); // controllo se i dati sono stati caricati
+    }, [sleepData, sleepStages]); // controllo se i dati sono stati caricati
 
     useEffect(() => {
         if (!loading) {
