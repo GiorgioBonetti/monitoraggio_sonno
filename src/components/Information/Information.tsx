@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Information.css";
+// import "./Information.css";
 
 type InformationProps = {
     children?: React.ReactNode;

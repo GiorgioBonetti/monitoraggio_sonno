@@ -1,5 +1,5 @@
 
-import "./PieGraph.css";
+// import "./PieGraph.css";
 import { SleepStageType } from "../../scripts/extractSleepStages";
 import { useEffect } from "react";
 import { Pie } from '@antv/g2plot';
@@ -12,7 +12,7 @@ type PieGraphProps = {
 function PieGraph(props: PieGraphProps) {
 
     useEffect(() => {
-        const piePlot = new Pie("container", {
+        const piePlot = new Pie("contenitore", {
             appendPadding: 0,
             
             color: props.colors,
@@ -45,7 +45,7 @@ function PieGraph(props: PieGraphProps) {
     }, [props.data]);
 
     return (
-            <div id="container" style={{ padding: "5px",   width: "300px"}}></div>
+            <div id="contenitore" style={{ padding: "5px" }}></div>
             
 
     );

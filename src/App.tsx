@@ -13,6 +13,7 @@ import {
     SleepStageType,
 } from "./scripts/extractSleepStages.ts";
 
+
 function App() {
     const COLORS = ["#FF8042", "lightskyblue", "royalblue", "blue"];
     const [testo] = useState("Eccellente");
@@ -75,74 +76,83 @@ function App() {
         <div>
             {/* nel caso ci sia stato un errore nel caricare i dati, fa vedere l'errore */}
             {error && <p style={{ color: "red" }}>{error}</p>}
-            <div className="riga1">
-                <div className="carta">
-                    <Card>
-                        <Navbar></Navbar>
-                    </Card>
+            <div className="container">
+                <div className="riga1 row">
+                    <div className="carta card justify-content-center align-items-center text-center">
+                        <Card>
+                            <Navbar></Navbar>
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <div className="riga2">
-                <div className="carta">
-                    <Card>
-                        <Punteggio
-                            punteggio={percentuale}
-                            testo={testo}
-                        ></Punteggio>
-                    </Card>
+                <div className="riga2 justify-content-center align-items-center row">
+                    <div className="carta card  text-center">
+                        <Card>
+                            <Punteggio
+                                punteggio={percentuale}
+                                testo={testo}
+                            ></Punteggio>
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <div className="riga3">
-                <div className="mezzaCarta">
-                    <Card>
-                        <h1>HAI DORMITO</h1>
-                        <div className="dormito">
-                            <div className="grande">8</div>
-                            <div>h</div>
-                            <div className="vuoto"></div>
-                            <div className="grande">20</div>
-                            <div>min</div>
+                <div className="riga3 row">
+                    <div className="card col-6">
+                        <div className="mezzaCarta  text-center">
+                            <Card>
+                                <div className="d-flex flex-column justify-content-center align-items-center" style={{ height: "100%" }}>
+                                    <h1 className="title align-middle">HAI DORMITO</h1>
+                                    <div className="row text-center  align-middle">
+                                        <div className="dormito col-12">
+                                            <div className="grande mx-1 text-center">8</div>
+                                            <div className="text-center">h</div>
+                                            <div className="grande mx-1 text-center">20</div>
+                                            <div className="text-center">min</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card>
                         </div>
-                    </Card>
+                    </div>
+                    <div className="card col-6">
+                        <div className="mezzaCarta text-center justify-content-center align-items-center">
+                            <Card>
+                                <PieGraph
+                                    data={sleepStages ? sleepStages : []}
+                                    colors={COLORS} />
+                            </Card>
+                        </div>
+                    </div>
                 </div>
-                <div className="bho"></div>
-                <div className="mezzaCarta">
-                    <Card>
-                        <PieGraph
-                            data={sleepStages ? sleepStages : []}
-                            colors={COLORS} />
-                    </Card>
+
+                <div className="riga4  justify-content-center align-items-center row">
+                    <div className="carta big card ">
+                        <Card>
+                            <CreateScatterPlot
+                                dati={sleepData ? sleepData : []}
+                                colors={COLORS}
+                            />
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <div className="riga4">
-                <div className="carta big">
-                    <Card>
-                        <CreateScatterPlot
-                            dati={sleepData ? sleepData : []}
-                            colors={COLORS}
-                        />
-                    </Card>
+                <div className="riga2 justify-content-center align-items-center row">
+                    <div className="carta card ">
+                        <Card>
+                            <Consiglio />
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <div className="riga2">
-                <div className="carta">
-                    <Card>
-                        <Consiglio />
-                    </Card>
+                <div className="riga4 justify-content-center align-items-center row">
+                    <div className="carta big card">
+                        <Card>
+                            <h1>SEGNAPOSTO X GRAFICO</h1>
+                        </Card>
+                    </div>
                 </div>
-            </div>
-            <div className="riga4">
-                <div className="carta big">
-                    <Card>
-                        <h1>SEGNAPOSTO X GRAFICO</h1>
-                    </Card>
-                </div>
-            </div>
-            <div className="riga4">
-                <div className="carta big">
-                    <Card>
-                        <h1>SEGNAPOSTO X INFORMAZIONI SUL SONNO</h1>
-                    </Card>
+                <div className="riga4 justify-content-center align-items-center row">
+                    <div className="carta big card">
+                        <Card>
+                            <h1>SEGNAPOSTO X INFORMAZIONI SUL SONNO</h1>
+                        </Card>
+                    </div>
                 </div>
             </div>
         </div>

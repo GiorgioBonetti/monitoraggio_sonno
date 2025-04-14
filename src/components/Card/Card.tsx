@@ -1,5 +1,5 @@
 import React from "react";
-import "./Card.css";
+// import "./Card.css";
 
 type CardProps = {
     children?: React.ReactNode;
@@ -7,7 +7,7 @@ type CardProps = {
 
 function Card(props: CardProps) {
     return (
-        <div className="card">
+        <div className="card-body text-center justify-content-center align-items-center">
             {props.children}
         </div>
 

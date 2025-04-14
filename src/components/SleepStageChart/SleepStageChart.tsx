@@ -39,7 +39,7 @@ function CreateScatterPlot(props: GraphProps) {
 
     return (
         <div>
-            <div id="container2" style={{ padding: "5px", width: "90vw" }}></div>
+            <div id="container2" style={{ padding: "5px"  }}></div>
         </div>
     );
 }
