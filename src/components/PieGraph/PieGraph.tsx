@@ -34,16 +34,17 @@ function PieGraph(props: PieGraphProps) {
                     // 👇 Funzione personalizzata per il contenuto centrale
                     customHtml: (container, view, datum, data) => {
                         if (datum) {
-                            return `
+                          return `
                             <div style="text-align: center;">
-                              <div >${datum.percent} ${datum.data} %</div>
+                              <div>${datum.nome}</div>
+                              <div>${datum.number}%</div>
                             </div>`;
                         }
-                    },
+                      }
+                      
                 },
             },
             interactions: [
-                { type: "element-selected" },
                 { type: "element-active" },
                 { type: "pie-statistic-active" }, // 👉 dinamica centrale!
             ],

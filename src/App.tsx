@@ -12,14 +12,12 @@ import {
     extractSleepStages,
     SleepStageType,
 } from "./scripts/extractSleepStages.ts";
-import { extractOreDormite } from "./scripts/totOreDormite.ts";
+import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
-
-    const [testo] = useState("Eccellente");
 
     // variabili per i dati
     const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
@@ -29,7 +27,11 @@ function App() {
         null,
     );
     const [oreDormite, setOreDormite] = useState<string[]>([]);
-    const [punteggio, setPunteggio] = useState<number>(0);
+    const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
+
+
+    const [punteggio, setPunteggio] = useState<[number,string]>([0,""]);
+
     const [data, setData] = useState<Date>(new Date());
 
     // variabili di loading - se false, i dati sono stati caricati
@@ -61,6 +63,9 @@ function App() {
                 setOreDormite(extractOreDormite(sleepData));
 
                 setPunteggio(extractPunteggioSonno(sleepData));
+
+
+                setoreNelLetto(extractOreLetto(sleepData));
             } catch (err) {
                 console.log(
                     "Errore durante il calcolo dei dati degli stadi del sonno.",
@@ -78,6 +83,7 @@ function App() {
 
     useEffect(() => {
         if (!loading) {
+            return
         }
     }, [loading]); // semplice stampa dei dati caricati ---- da togliere
 
@@ -114,8 +120,8 @@ function App() {
                             <div className="card text-center border-4 rounded-4">
                                 <Card>
                                     <Punteggio
-                                        punteggio={punteggio}
-                                        testo={testo}
+                                        punteggio={punteggio[0]}
+                                        testo={punteggio[1]}
                                     ></Punteggio>
                                 </Card>
                             </div>
@@ -144,6 +150,29 @@ function App() {
                                                         </div>
                                                         <div className="grande mx-1 text-center">
                                                             {oreDormite[1]}
+                                                        </div>
+                                                        <div className="text-center">
+                                                            min
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {oreNelLetto.length === 2 && (
+                                            <div>
+                                                <h1 className="title align-middle">
+                                                    sei stato nel letto
+                                                </h1>
+                                                <div className="row text-center align-middle">
+                                                    <div className="dormito col-12">
+                                                        <div className="grande mx-1 text-center">
+                                                            {oreNelLetto[0]}
+                                                        </div>
+                                                        <div className="text-center">
+                                                            h
+                                                        </div>
+                                                        <div className="grande mx-1 text-center">
+                                                            {oreNelLetto[1]}
                                                         </div>
                                                         <div className="text-center">
                                                             min
