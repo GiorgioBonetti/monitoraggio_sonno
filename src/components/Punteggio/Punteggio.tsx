@@ -1,7 +1,9 @@
 
 import PunteggioInformation from "./Punteggio-information/Punteggio-information.tsx";
 // import "./Punteggio.css";
-import Information from "../Information/Information.tsx";
+// import Information from "../Information/Information.tsx";
+import Popup from "../Popup/Popup.tsx";
+// import Information from "../Information/Information.tsx";
 
 type PunteggioProps = {
     punteggio : number;
@@ -16,9 +18,7 @@ function Punteggio(props: PunteggioProps) {
                 {props.punteggio} - {props.testo}
             </h1>
             <div className="info col-1 d-flex align-items-center">
-                <Information >
-                    <PunteggioInformation />
-                </Information>
+                <Popup title="Informazioni sul Punteggio del Sonno" modalId="PunteggioSonno"> <PunteggioInformation /> </Popup>
             </div>
         </div>
     );

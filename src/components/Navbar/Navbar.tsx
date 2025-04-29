@@ -1,25 +1,40 @@
-import { useState } from "react";
+
 // import "./Navbar.css";
 
-function Navbar() {
-    const [currentDate, setCurrentDate] = useState(new Date());
+
+type NavbarProps = {
+    currentDate: Date;
+    setCurrentDate: (date: Date) => void;
+};
+
+function Navbar(props: NavbarProps) {
+
 
     // funzione per passare al giorno successivo
     function nextDate() {
 
 
-        const next = new Date(currentDate);
+        const next = new Date(props.currentDate);
         next.setDate(next.getDate() + 1);
         if (next <= new Date()) {
-            setCurrentDate(next);
+            props.setCurrentDate(next);
         }
     }
 
     // funzione per passare al giorno precedente
     function previousDate() {
-        const prev = new Date(currentDate);
+        const prev = new Date(props.currentDate);
         prev.setDate(prev.getDate() - 1);
-        setCurrentDate(prev);
+        props.setCurrentDate(prev);
+    }
+
+    function checkDate(date: Date) {
+        if (date <= new Date()) {
+            props.setCurrentDate(date);
+        }
+        else
+            props.setCurrentDate(new Date());
+
     }
 
     return (
@@ -31,8 +46,8 @@ function Navbar() {
                 <input
                     className="form-control"
                     type="date"
-                    value={currentDate.toISOString().split("T")[0]}
-                    onChange={(e) => setCurrentDate(e.target.value == '00/00/0000' ? new Date(e.target.value) : new Date())}
+                    value={props.currentDate.toISOString().split("T")[0]}
+                    onChange={(e) => checkDate(new Date(e.target.value))}
                 />
             </div>
             <div className="col">

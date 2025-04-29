@@ -12,48 +12,57 @@ import {
     extractSleepStages,
     SleepStageType,
 } from "./scripts/extractSleepStages.ts";
+import { extractOreDormite } from "./scripts/totOreDormite.ts";
+import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 
 function App() {
     const COLORS = ["#FF8042", "lightskyblue", "royalblue", "blue"];
     const [testo] = useState("Eccellente");
-    const [percentuale] = useState(100);
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
-        null,
-    );
-    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
-        null,
-    );
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(null,);
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(null,);
+    const [oreDormite, setOreDormite] = useState<string[]>([]);
+    const [punteggio, setPunteggio] = useState<number>(0);
+    const [data, setData] = useState<Date>(new Date());
+
     const [error, setError] = useState<string | null>(null);
 
     // variabili di loading - se false, i dati sono stati caricati
     const [loading, setLoading] = useState<boolean>(true);
 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await extractData("/4-sleep_data_2025-02-11.csv");
-                setSleepData(data);
+                console.log(data.toISOString().split("T")[0])
+                const dati = await extractData(`/4-sleep_data_${data.toISOString().split("T")[0]}.csv`);
+                setSleepData(dati);
             } catch (err) {
                 setError("Errore durante il caricamento dei dati dal csv.");
                 console.error(err);
+                setSleepData(null);
             }
         };
 
         fetchData();
-    }, []); // fetch del csv
+    }, [data]); // fetch del csv
 
     useEffect(() => {
         if (sleepData) {
             try {
-                const stages = extractSleepStages(sleepData);
-                setSleepStages(stages);
+                setSleepStages(extractSleepStages(sleepData));
+
+                setOreDormite(extractOreDormite(sleepData));
+
+                setPunteggio(extractPunteggioSonno(sleepData));
+
             } catch (err) {
                 setError(
                     "Errore durante il calcolo dei dati degli stadi del sonno.",
                 );
                 console.error(err);
+
             }
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno
@@ -64,14 +73,15 @@ function App() {
         }
     }, [sleepData, sleepStages]); // controllo se i dati sono stati caricati
 
-    useEffect(() => {
-        if (!loading) {
-            console.table(sleepData);
-            console.table(sleepStages);
-        }
-    }, [loading]); // semplice stampa dei dati caricati ---- da togliere
+    // useEffect(() => {
+    //     if (!loading) {
+    //         console.table(sleepData);
+    //         console.table(sleepStages);
+    //     }
+    // }, [loading]); // semplice stampa dei dati caricati ---- da togliere
 
     return (
+
         <div className="bg-dark-subtle">
             {/* nel caso ci sia stato un errore nel caricare i dati, fa vedere l'errore */}
             {error && <p style={{ color: "red" }}>{error}</p>}
@@ -79,103 +89,126 @@ function App() {
                 <div className="row">
                     <div className="card bg-dark-subtle justify-content-center align-items-center border-0 border-bottom border-1 border-light rounded-0">
                         <Card>
-                            <Navbar></Navbar>
+                            <Navbar currentDate={data || new Date()} setCurrentDate={setData}></Navbar>
                         </Card>
                     </div>
                 </div>
             </div>
-            {/* Spacer per evitare sovrapposizione */}
-            <div className="pt-5 mt-4"></div>
-            <div className="container-lg">
-                <div className="riga2 justify-content-center align-items-center row">
-                    <div className="card text-center border-4 rounded-4">
-                        <Card>
-                            <Punteggio
-                                punteggio={percentuale}
-                                testo={testo}
-                            ></Punteggio>
-                        </Card>
+
+            {sleepData && sleepData.length > 0 ? (
+                < div >
+                    <div className="pt-5 mt-4"></div>
+                    <div className="container-lg">
+                        <div className="riga2 justify-content-center align-items-center row">
+                            <div className="card text-center border-4 rounded-4">
+                                <Card>
+                                    <Punteggio
+                                        punteggio={punteggio}
+                                        testo={testo}
+                                    ></Punteggio>
+                                </Card>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div className="container-lg">
-                <div className="riga3 row">
-                    <div className="card col-12 col-md-6 border-4 rounded-4">
-                        <Card>
-                            <div
-                                className="d-flex flex-column justify-content-center align-items-center"
-                                style={{ height: "100%" }}
-                            >
-                                <h1 className="title align-middle">
-                                    HAI DORMITO
-                                </h1>
-                                <div className="row text-center  align-middle">
-                                    <div className="dormito col-12">
-                                        <div className="grande mx-1 text-center">
-                                            8
-                                        </div>
-                                        <div className="text-center">h</div>
-                                        <div className="grande mx-1 text-center">
-                                            20
-                                        </div>
-                                        <div className="text-center">min</div>
+                    <div className="container-lg">
+                        <div className="riga3 row">
+                            <div className="card col-12 col-md-6 border-4 rounded-4">
+                                <Card>
+                                    <div
+                                        className="d-flex flex-column justify-content-center align-items-center"
+                                        style={{ height: "100%" }}
+                                    >
+                                        {oreDormite.length === 2 && (
+                                            <div>
+                                                <h1 className="title align-middle">
+                                                    HAI DORMITO
+                                                </h1>
+                                                <div className="row text-center align-middle">
+                                                    <div className="dormito col-12">
+                                                        <div className="grande mx-1 text-center">
+                                                            {oreDormite[0]}
+                                                        </div>
+                                                        <div className="text-center">h</div>
+                                                        <div className="grande mx-1 text-center">
+                                                            {oreDormite[1]}
+                                                        </div>
+                                                        <div className="text-center">min</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
+                                </Card>
+                            </div>
+                            <div className="card col-12 col-md-6 border-4 rounded-4">
+                                <div className="text-center justify-content-center align-items-center ">
+                                    <Card>
+                                        <PieGraph
+                                            data={sleepStages ? sleepStages : []}
+                                            colors={COLORS}
+                                        />
+                                    </Card>
                                 </div>
                             </div>
-                        </Card>
+                        </div>
                     </div>
-                    <div className="card col-12 col-md-6 border-4 rounded-4">
-                        <div className="text-center justify-content-center align-items-center ">
-                            <Card>
-                                <PieGraph
-                                    data={sleepStages ? sleepStages : []}
-                                    colors={COLORS}
-                                />
-                            </Card>
+                    <div className="container-lg">
+                        <div className="riga4 justify-content-center align-items-center row">
+                            <div className="big card border-4 rounded-4">
+                                <Card>
+                                    <CreateScatterPlot
+                                        dati={sleepData ? sleepData : []}
+                                        colors={COLORS}
+                                    />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="container-lg">
+                        <div className="riga2 justify-content-center align-items-center row">
+                            <div className="big card border-4 rounded-4">
+                                <Card>
+                                    <Consiglio />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="container-lg">
+                        <div className="riga4 justify-content-center align-items-center row">
+                            <div className="big card border-4 rounded-4">
+                                <Card>
+                                    <h1>SEGNAPOSTO X GRAFICO</h1>
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="container-lg">
+                        <div className="riga4 justify-content-center align-items-center row">
+                            <div className="big card border-4 rounded-4">
+                                <Card>
+                                    <h1>SEGNAPOSTO X INFORMAZIONI SUL SONNO</h1>
+                                </Card>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="container-lg">
-                <div className="riga4 justify-content-center align-items-center row">
-                    <div className="big card border-4 rounded-4">
-                        <Card>
-                            <CreateScatterPlot
-                                dati={sleepData ? sleepData : []}
-                                colors={COLORS}
-                            />
-                        </Card>
+            ) : (
+                <div>
+                    <div className="pt-5 mt-4"></div>
+                    <div className="container-lg">
+                        <div className=" justify-content-center align-items-center row">
+                            <div className="card text-center border-4 rounded-4">
+                                <Card>
+                                    <h1>Nessun dato presente</h1>
+                                </Card>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="container-lg">
-                <div className="riga2 justify-content-center align-items-center row">
-                    <div className="big card border-4 rounded-4">
-                        <Card>
-                            <Consiglio />
-                        </Card>
-                    </div>
-                </div>
-            </div>
-            <div className="container-lg">
-                <div className="riga4 justify-content-center align-items-center row">
-                    <div className="big card border-4 rounded-4">
-                        <Card>
-                            <h1>SEGNAPOSTO X GRAFICO</h1>
-                        </Card>
-                    </div>
-                </div>
-            </div>
-            <div className="container-lg">
-                <div className="riga4 justify-content-center align-items-center row">
-                    <div className="big card border-4 rounded-4">
-                        <Card>
-                            <h1>SEGNAPOSTO X INFORMAZIONI SUL SONNO</h1>
-                        </Card>
-                    </div>
-                </div>
-            </div>
-        </div>
+            )
+            }
+
+        </div >
     );
 }
 
