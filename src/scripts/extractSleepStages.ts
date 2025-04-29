@@ -82,9 +82,9 @@ export function extractSleepStages(
     }
 
     return [
-        { nome: "awake", number: sleepStagesPercentage.awake },
-        { nome: "rem", number: sleepStagesPercentage.rem },
-        { nome: "light", number: sleepStagesPercentage.light },
-        { nome: "deep", number: sleepStagesPercentage.deep },
+        { nome: "Deep", number: sleepStagesPercentage.deep },
+        { nome: "Light", number: sleepStagesPercentage.light },
+        { nome: "REM", number: sleepStagesPercentage.rem },
+        { nome: "Awake", number: sleepStagesPercentage.awake },
     ];
 }

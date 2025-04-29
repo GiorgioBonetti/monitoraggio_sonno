@@ -5,14 +5,21 @@ import { SleepDataInterface } from "../../scripts/extractData";
 type GraphProps = {
     dati: SleepDataInterface[];
     colors: string[];
+    ordine: string[];
 };
-function CreateScatterPlot(props: GraphProps) {
 
+function CreateScatterPlot(props: GraphProps) {
     useEffect(() => {
         const scatterPlot = new Scatter("container2", {
             data: props.dati,
             xField: "timestamp",
             yField: "stage",
+            meta: {
+                stage: {
+                    type: "cat",
+                    values: props.ordine, // Ordine personalizzato
+                },
+            },
             size: 5,
             color: props.colors,
             colorField: "stage",
@@ -39,8 +46,9 @@ function CreateScatterPlot(props: GraphProps) {
 
     return (
         <div>
-            <div id="container2" style={{ padding: "5px"  }}></div>
+            <div id="container2" style={{ padding: "5px" }}></div>
         </div>
     );
 }
+
 export default CreateScatterPlot;
