@@ -1,5 +1,5 @@
 // import "./PieGraph.css";
-import { SleepStageType } from "../../scripts/extractSleepStages";
+import { SleepStageType } from "../../../scripts/extractSleepStages";
 import { useEffect } from "react";
 import { Pie } from "@antv/g2plot";
 

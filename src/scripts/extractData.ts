@@ -1,6 +1,7 @@
 import Papa from "papaparse";
 
 export interface SleepDataInterface {
+    forEach(arg0: ({ stage }: { stage: any; }) => void): unknown;
     date: string; // Data del dato di sonno
     timestamp: string; // Ora del dato di sonno
     stage: string; // Fase del sonno (es. Light, Deep, REM, Awake)

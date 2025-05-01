@@ -2,10 +2,10 @@ import "./fonts.css";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.tsx";
 import Punteggio from "./components/Punteggio/Punteggio.tsx";
-import PieGraph from "./components/PieGraph/PieGraph.tsx";
+import PieGraph from "./components/Chart/PieGraph/PieGraph.tsx";
 import Card from "./components/Card/Card.tsx";
 import Consiglio from "./components/Consiglio/Consiglio.tsx";
-import CreateScatterPlot from "./components/SleepStageChart/SleepStageChart.tsx";
+import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { extractData, SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
 import {
@@ -16,6 +16,7 @@ import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import Articolo from "./components/Articolo/Articolo.tsx";
 import ButtonArticolo from "./components/Articolo/button/ButtonArticolo.tsx";
+import CreateStackedColumnPlot from "./components/Chart/BarChart/StackedColumnPlot.tsx";
 
 
 type ArticoloType = {
@@ -61,30 +62,50 @@ function App() {
     ]
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
-        null,
-    );
-    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
-        null,
-    );
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(null,);
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(null,);
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
 
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
-
     const [data, setData] = useState<Date>(new Date());
 
     // variabili di loading - se false, i dati sono stati caricati
     const [loading, setLoading] = useState<boolean>(true);
+    const [settMese, setsettMese] = useState<boolean>(false);
+
+
+    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null,);
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log(data.toISOString().split("T")[0]);
                 const dati = await extractData(
                     `/4-sleep_data_${data.toISOString().split("T")[0]}.csv`,
                 );
                 setSleepData(dati);
+
+                if (settMese) {
+                    const datiSettimana = [dati];
+                    for (let i = 1; i <= 6; i++) {
+                        const datiGiorno = await extractData(
+                            `/4-sleep_data_${new Date(data.getTime() - i * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}.csv`,
+                        ).catch(() => []);
+                        datiSettimana.push(datiGiorno);
+                    }
+                    setSleepDataWeek(datiSettimana);
+                }
+                else {
+                    const datiSettimana = [dati];
+                    for (let i = 1; i <= 30; i++) {
+                        const datiGiorno = await extractData(
+                            `/4-sleep_data_${new Date(data.getTime() - i * 24 * 60 * 60 * 1000).toISOString().split("T")[0]}.csv`,
+                        ).catch(() => []);
+                        datiSettimana.push(datiGiorno);
+                    }
+                    setSleepDataWeek(datiSettimana);
+                }
             } catch (err) {
                 console.log("Errore durante il caricamento dei dati dal csv.");
                 console.error(err);
@@ -265,9 +286,14 @@ function App() {
                     </div>
                     <div className="container-lg">
                         <div className="riga4 justify-content-center align-items-center row">
-                            <div className="big card border-4 rounded-4">
+                            <div className="card border-4 rounded-4">
                                 <Card>
-                                    <h1>SEGNAPOSTO X GRAFICO</h1>
+                                    <button onClick={() => setsettMese(true)} className="btn btn-primary">SETTIMANA</button>
+                                    <button onClick={() => setsettMese(false)} className="btn btn-primary">MESE</button>
+                                    <CreateStackedColumnPlot dati={sleepDataWeek || []}
+                                        colors={COLORS}
+                                        ordine={stageOrder}
+                                        settMese={settMese} />
                                 </Card>
                             </div>
                         </div>
@@ -278,7 +304,7 @@ function App() {
                                 <Card>
                                     <h1>Articoli</h1>
                                     {articoli.map((articolo) => (
-                                        <div className="container mb-1">
+                                        <div key={articolo.target} className="container mb-1">
                                             <div className="row">
                                                 <div className="col">
                                                     <div className="card rounded-4">
@@ -306,6 +332,8 @@ function App() {
                             </div>
                         </div>
                     </div>
+
+
                 </div >
             ) : (
                 <div

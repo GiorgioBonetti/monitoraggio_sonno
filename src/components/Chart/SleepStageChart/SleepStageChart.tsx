@@ -1,6 +1,6 @@
 import { Scatter } from "@antv/g2plot";
 import { useEffect } from "react";
-import { SleepDataInterface } from "../../scripts/extractData";
+import { SleepDataInterface } from "../../../scripts/extractData";
 
 type GraphProps = {
     dati: SleepDataInterface[];
