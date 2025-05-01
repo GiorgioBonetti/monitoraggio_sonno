@@ -14,6 +14,8 @@ import {
 } from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
+import Articolo from "./components/Articolo/Articolo.tsx";
+import ButtonArticolo from "./components/Articolo/button/ButtonArticolo.tsx";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -235,20 +237,21 @@ function App() {
                                     <div className="container">
                                         <div className="row">
                                             <div className="col-10">
-                                                <h1>SEGNAPOSTO X GRAFICO</h1>
+                                                <Card>
+                                                    <div className="row">
+                                                        <h3>
+                                                            Reset Sonno: Sincronizza il Tuo Orario e Riparti alla Grande
+                                                        </h3>
+                                                        <ButtonArticolo target="1" />
+                                                    </div>
+                                                    <Articolo target="1">
+                                                        <p>
+                                                            Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati.
+                                                        </p>
+                                                    </Articolo>
+                                                </Card>
                                             </div>
-                                            <div className="col">
-                                                <a
-                                                    className="btn btn-primary"
-                                                    data-bs-toggle="collapse"
-                                                    href="#collapseExample"
-                                                    role="button"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapseExample"
-                                                >
-                                                    <i className="bi bi-chevron-down"></i>
-                                                </a>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </Card>
