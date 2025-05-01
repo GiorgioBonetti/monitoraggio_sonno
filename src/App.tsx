@@ -29,8 +29,7 @@ function App() {
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
 
-
-    const [punteggio, setPunteggio] = useState<[number,string]>([0,""]);
+    const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
 
     const [data, setData] = useState<Date>(new Date());
 
@@ -64,7 +63,6 @@ function App() {
 
                 setPunteggio(extractPunteggioSonno(sleepData));
 
-
                 setoreNelLetto(extractOreLetto(sleepData));
             } catch (err) {
                 console.log(
@@ -83,7 +81,7 @@ function App() {
 
     useEffect(() => {
         if (!loading) {
-            return
+            return;
         }
     }, [loading]); // semplice stampa dei dati caricati ---- da togliere
 
@@ -234,7 +232,25 @@ function App() {
                         <div className="riga4 justify-content-center align-items-center row">
                             <div className="big card border-4 rounded-4">
                                 <Card>
-                                    <h1>SEGNAPOSTO X INFORMAZIONI SUL SONNO</h1>
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col-10">
+                                                <h1>SEGNAPOSTO X GRAFICO</h1>
+                                            </div>
+                                            <div className="col">
+                                                <a
+                                                    className="btn btn-primary"
+                                                    data-bs-toggle="collapse"
+                                                    href="#collapseExample"
+                                                    role="button"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseExample"
+                                                >
+                                                    <i className="bi bi-chevron-down"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </Card>
                             </div>
                         </div>
