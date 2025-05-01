@@ -1,3 +1,4 @@
+import Card from "../Card/Card";
 
 type ArticoloProps = {
 
@@ -10,8 +11,11 @@ type ArticoloProps = {
 function Articolo(props: ArticoloProps) {
     return (
         <div className="collapse" id={props.target}>
-            {props.children}
+            <div className="text-start">
+                {props.children}
+            </div>
         </div>
     );
+
 }
 export default Articolo;

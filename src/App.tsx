@@ -232,33 +232,62 @@ function App() {
                     </div>
                     <div className="container-lg">
                         <div className="riga4 justify-content-center align-items-center row">
-                            <div className="big card border-4 rounded-4">
+                            <div className="card border-4 rounded-4">
                                 <Card>
                                     <div className="container">
                                         <div className="row">
-                                            <div className="col-10">
-                                                <Card>
-                                                    <div className="row">
-                                                        <h3>
-                                                            Reset Sonno: Sincronizza il Tuo Orario e Riparti alla Grande
-                                                        </h3>
-                                                        <ButtonArticolo target="1" />
-                                                    </div>
-                                                    <Articolo target="1">
-                                                        <p>
-                                                            Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati.
-                                                        </p>
-                                                    </Articolo>
-                                                </Card>
+                                            <div className="col">
+                                                <div className="card rounded-4">
+                                                    <Card>
+                                                        <div className="row">
+                                                            <div className="col-10">
+                                                                <h2>
+                                                                    Reset Sonno: Sincronizza il Tuo Orario
+                                                                </h2>
+                                                            </div>
+                                                            <div className="col">
+                                                                <ButtonArticolo target="1" />
+                                                            </div>
+                                                            <Articolo target="1">
+                                                                <p>
+                                                                    Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati.                                                                </p>
+                                                            </Articolo>
+                                                        </div>
+                                                    </Card>
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
 
+                                    <div className="container">
+                                        <div className="row">
+                                            <div className="col">
+                                                <div className="card rounded-4">
+                                                    <Card>
+                                                        <div className="row">
+                                                            <div className="col-10">
+                                                                <h2>
+                                                                    Termo-Relax: Ottimizza la Temperatura per un Sonno Profondo
+                                                                </h2>
+                                                            </div>
+                                                            <div className="col">
+                                                                <ButtonArticolo target="2" />
+                                                            </div>
+                                                            <Articolo target="2">
+                                                                <p>
+                                                                La temperatura della tua camera da letto gioca un ruolo cruciale nella qualità del tuo sonno. Immagina di avvolgerti in un fresco abbraccio anziché lottare contro un ambiente surriscaldato. Idealmente, la temperatura dovrebbe mantenersi tra i 18 e i 22 gradi Celsius. Questo intervallo favorisce un abbassamento della temperatura corporea interna, un processo naturale che precede l'addormentamento. Una stanza troppo calda può ostacolare questo processo, rendendo il sonno più leggero e frammentato. Considera di utilizzare lenzuola traspiranti, regolare il termostato o aprire una finestra per creare la tua personale "oasi di freschezza", un ambiente che inviti al riposo profondo e rigenerante che la tua app saprà quantificare in termini di miglioramento delle fasi di sonno profondo.                                                                </p>
+                                                            </Articolo>
+                                                        </div>
+                                                    </Card>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </Card>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div >
             ) : (
                 <div
                     style={{ minHeight: "100vh" }}
@@ -274,8 +303,9 @@ function App() {
                         </div>
                     </div>
                 </div>
-            )}
-        </div>
+            )
+            }
+        </div >
     );
 }
 

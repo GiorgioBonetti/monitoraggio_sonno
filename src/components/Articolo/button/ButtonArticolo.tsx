@@ -7,7 +7,7 @@ type ButtonArticoloProps = {
 }
 function ButtonArticolo(props: ButtonArticoloProps) {
     return (
-        <button className="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target={`#${props.target}`} aria-expanded="false" aria-controls="collapseExample">
+        <button className="btn" type="button" data-bs-toggle="collapse" data-bs-target={`#${props.target}`} aria-expanded="false" aria-controls="collapseExample">
             <i className="bi bi-chevron-down"></i>
         </button>
     )
