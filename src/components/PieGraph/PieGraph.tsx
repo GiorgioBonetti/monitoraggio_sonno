@@ -37,11 +37,10 @@ function PieGraph(props: PieGraphProps) {
                           return `
                             <div style="text-align: center;">
                               <div>${datum.nome}</div>
-                              <div>${datum.number}%</div>
+                              <div>${Math.floor(datum.number / 60) !== 0 ? Math.floor(datum.number / 60) + "h" : ""} ${Math.floor(datum.number % 60)} min</div>
                             </div>`;
                         }
                       }
-                      
                 },
             },
             interactions: [

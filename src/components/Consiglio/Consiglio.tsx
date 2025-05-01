@@ -1,17 +1,22 @@
 // import Information from "../Information/Information.tsx";
-import Popup from "../Popup/Popup.tsx";
+import { ConsiglioType } from "../../App.tsx";
+import Card from "../Card/Card.tsx";
 // import "./Consiglio.css";
 
+type ConsiglioProps = {
+    articolo: ConsiglioType
+}
 
-function Consiglio() {
+
+function Consiglio(props: ConsiglioProps) {
     return (
-        <div className="consiglio row">
-            <h1 className="title col-11 d-flex align-items-center">Hai totalizzato un punteggio di 100, hai dormito bene, continua cosi!</h1>
-            <div className="info col-1 d-flex align-items-center">
-                <Popup title="Informazioni sul Consiglio" modalId="Consiglio">
-                    <p className="cons">SEGNAPOSTO INFO CONSIGLIO</p>
-                </Popup>
-            </div>
+        <div className="card">
+            <Card>
+                <div className="consiglio row">
+                    <h2 className="title col-12 d-flex align-items-center">{props.articolo.titolo}</h2>
+
+                </div>
+            </Card>
         </div>
     );
 }

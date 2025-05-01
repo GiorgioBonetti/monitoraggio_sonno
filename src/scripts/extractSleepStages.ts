@@ -35,56 +35,16 @@ export function extractSleepStages(
     };
 
     // Itera attraverso i dati e conta le occorrenze di ciascuna fase del sonno
-    dataArray.forEach((data) => {
-        switch (data.stage) {
-            case "Awake":
-                sleepStagesCount.awake++;
-                break;
-            case "REM":
-                sleepStagesCount.rem++;
-                break;
-            case "Light":
-                sleepStagesCount.light++;
-                break;
-            case "Deep":
-                sleepStagesCount.deep++;
-                break;
-            default:
-                break;
-        }
-    });
 
-    // adesso devo calcolare la percentuale di ciascuna fase del sonno
-    const total =
-        sleepStagesCount.awake +
-        sleepStagesCount.rem +
-        sleepStagesCount.light +
-        sleepStagesCount.deep;
-
-    // arrotondo le percentuali
-    const sleepStagesPercentage: SleepStagesInterface = {
-        awake: Math.round((sleepStagesCount.awake / total) * 100),
-        rem: Math.round((sleepStagesCount.rem / total) * 100),
-        light: Math.round((sleepStagesCount.light / total) * 100),
-        deep: Math.round((sleepStagesCount.deep / total) * 100),
-    };
-
-    // Corregge la somma per assicurarsi che sia esattamente 100
-    const percentageSum =
-        sleepStagesPercentage.awake +
-        sleepStagesPercentage.rem +
-        sleepStagesPercentage.light +
-        sleepStagesPercentage.deep;
-
-    if (percentageSum !== 100) {
-        const difference = 100 - percentageSum;
-        sleepStagesPercentage.light += difference; // Aggiusta uno dei valori - scelgo light essendo il più comune
-    }
+    sleepStagesCount.awake = dataArray.filter(e => e.stage === "Awake").length;
+    sleepStagesCount.rem = dataArray.filter(e => e.stage === "REM").length;
+    sleepStagesCount.light = dataArray.filter(e => e.stage === "Light").length;
+    sleepStagesCount.deep = dataArray.filter(e => e.stage === "Deep").length;
 
     return [
-        { nome: "Deep", number: sleepStagesPercentage.deep },
-        { nome: "Light", number: sleepStagesPercentage.light },
-        { nome: "REM", number: sleepStagesPercentage.rem },
-        { nome: "Awake", number: sleepStagesPercentage.awake },
+        { nome: "Deep", number: sleepStagesCount.deep },
+        { nome: "Light", number: sleepStagesCount.light },
+        { nome: "REM", number: sleepStagesCount.rem },
+        { nome: "Awake", number: sleepStagesCount.awake },
     ];
 }
