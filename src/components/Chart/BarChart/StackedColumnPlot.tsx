@@ -19,7 +19,7 @@ function CreateStackedColumnPlot(props: GraphProps) {
       xField: 'date',
       yField: 'valore',
       seriesField: 'stage',
-      color: props.colors.slice().reverse(),
+      color: props.colors.reverse(),
       legend: false,
       meta: {
         valore: {
