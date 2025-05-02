@@ -12,11 +12,11 @@ type PunteggioProps = {
 function Punteggio(props: PunteggioProps) {
     //Render
     return (
-        <div className=" row">
+        <div className="row pt-2 ">
             <h1 className="col-11">
                 {props.punteggio} - {props.testo}
             </h1>
-            <div className="info col-1 d-flex align-items-center">
+            <div className="col-1 d-flex align-items-center">
                 <Popup
                     title="Informazioni sul Punteggio del Sonno"
                     modalId="PunteggioSonno"

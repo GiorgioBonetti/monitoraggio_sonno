@@ -18,52 +18,66 @@ import Articolo from "./components/Articolo/Articolo.tsx";
 import ButtonArticolo from "./components/Articolo/button/ButtonArticolo.tsx";
 import CreateStackedColumnPlot from "./components/Chart/BarChart/StackedColumnPlot.tsx";
 
-
 type ArticoloType = {
     target: string;
     titolo: string;
     testo: string;
-}
+};
 
 export type ConsiglioType = {
     titolo: string;
-}
+};
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
 
-
     const articoli: ArticoloType[] = [
         {
             target: "1",
             titolo: "Reset Sonno: Sincronizza il Tuo Orario",
-            testo: "Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati."
+            testo: "Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati.",
         },
         {
             target: "2",
             titolo: "Termo-Relax: Ottimizza la Temperatura per un Sonno Profondo",
-            testo: "La temperatura della tua camera da letto gioca un ruolo cruciale nella qualità del tuo sonno. Immagina di avvolgerti in un fresco abbraccio anziché lottare contro un ambiente surriscaldato. Idealmente, la temperatura dovrebbe mantenersi tra i 18 e i 22 gradi Celsius. Questo intervallo favorisce un abbassamento della temperatura corporea interna, un processo naturale che precede l'addormentamento. Una stanza troppo calda può ostacolare questo processo, rendendo il sonno più leggero e frammentato. Considera di utilizzare lenzuola traspiranti, regolare il termostato o aprire una finestra per creare la tua personale \"oasi di freschezza\", un ambiente che inviti al riposo profondo e rigenerante che la tua app saprà quantificare in termini di miglioramento delle fasi di sonno profondo."
+            testo: 'La temperatura della tua camera da letto gioca un ruolo cruciale nella qualità del tuo sonno. Immagina di avvolgerti in un fresco abbraccio anziché lottare contro un ambiente surriscaldato. Idealmente, la temperatura dovrebbe mantenersi tra i 18 e i 22 gradi Celsius. Questo intervallo favorisce un abbassamento della temperatura corporea interna, un processo naturale che precede l\'addormentamento. Una stanza troppo calda può ostacolare questo processo, rendendo il sonno più leggero e frammentato. Considera di utilizzare lenzuola traspiranti, regolare il termostato o aprire una finestra per creare la tua personale "oasi di freschezza", un ambiente che inviti al riposo profondo e rigenerante che la tua app saprà quantificare in termini di miglioramento delle fasi di sonno profondo.',
         },
         {
             target: "3",
             titolo: "Bye Bye Schermo: Libera la Tua Notte e Dormi Meglio",
-            testo: "La luce brillante emessa dagli schermi dei nostri dispositivi elettronici è un potente interferente con la nostra naturale preparazione al sonno. Questa \"luce blu\" inganna il cervello facendogli credere che sia ancora giorno, sopprimendo la produzione di melatonina, l'ormone chiave che segnala al corpo che è ora di dormire. Stabilire una \"zona libera da schermi\" almeno un'ora prima di coricarsi può fare una differenza significativa. Invece di scorrere feed infiniti, prova attività rilassanti come leggere un libro cartaceo, ascoltare musica dolce o dedicarti a esercizi di respirazione. Proteggere la tua melatonina è un investimento diretto nella qualità del tuo sonno, permettendo al tuo corpo di entrare naturalmente nelle fasi di riposo profondo e REM che la tua app analizza minuziosamente."
-        }
-    ]
+            testo: 'La luce brillante emessa dagli schermi dei nostri dispositivi elettronici è un potente interferente con la nostra naturale preparazione al sonno. Questa "luce blu" inganna il cervello facendogli credere che sia ancora giorno, sopprimendo la produzione di melatonina, l\'ormone chiave che segnala al corpo che è ora di dormire. Stabilire una "zona libera da schermi" almeno un\'ora prima di coricarsi può fare una differenza significativa. Invece di scorrere feed infiniti, prova attività rilassanti come leggere un libro cartaceo, ascoltare musica dolce o dedicarti a esercizi di respirazione. Proteggere la tua melatonina è un investimento diretto nella qualità del tuo sonno, permettendo al tuo corpo di entrare naturalmente nelle fasi di riposo profondo e REM che la tua app analizza minuziosamente.',
+        },
+    ];
 
     const consigli: ConsiglioType[] = [
-        { titolo: "Orario Fisso: Vai a letto e svegliati alla stessa ora ogni giorno per regolare il tuo orologio biologico" },
-        { titolo: "Camera Fresca e Buia: Ottimizza l'ambiente della tua stanza per favorire il rilassamento notturno" },
-        { titolo: "Stop Schermi: Evita l'uso di dispositivi elettronici almeno un'ora prima di dormire per proteggere la melatonina" },
-        { titolo: "Cena Leggera: Non appesantirti con pasti abbondanti o troppo tardi la sera" },
-        { titolo: "Movimento OK, Eccesso KO: Fai attività fisica regolarmente, ma evita allenamenti intensi vicino all'ora di andare a letto" },
-        { titolo: "Rilassati Prima: Crea una routine serale distensiva, come leggere o fare un bagno caldo" }
-    ]
+        {
+            titolo: "Orario Fisso: Vai a letto e svegliati alla stessa ora ogni giorno per regolare il tuo orologio biologico",
+        },
+        {
+            titolo: "Camera Fresca e Buia: Ottimizza l'ambiente della tua stanza per favorire il rilassamento notturno",
+        },
+        {
+            titolo: "Stop Schermi: Evita l'uso di dispositivi elettronici almeno un'ora prima di dormire per proteggere la melatonina",
+        },
+        {
+            titolo: "Cena Leggera: Non appesantirti con pasti abbondanti o troppo tardi la sera",
+        },
+        {
+            titolo: "Movimento OK, Eccesso KO: Fai attività fisica regolarmente, ma evita allenamenti intensi vicino all'ora di andare a letto",
+        },
+        {
+            titolo: "Rilassati Prima: Crea una routine serale distensiva, come leggere o fare un bagno caldo",
+        },
+    ];
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(null,);
-    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(null,);
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
+        null,
+    );
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
+        null,
+    );
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
 
@@ -74,9 +88,9 @@ function App() {
     const [loading, setLoading] = useState<boolean>(true);
     const [settMese, setsettMese] = useState<boolean>(false);
 
-
-    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null,);
-
+    const [sleepDataWeek, setSleepDataWeek] = useState<
+        SleepDataInterface[][] | null
+    >(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,8 +109,7 @@ function App() {
                         datiSettimana.push(datiGiorno);
                     }
                     setSleepDataWeek(datiSettimana);
-                }
-                else {
+                } else {
                     const datiSettimana = [dati];
                     for (let i = 1; i <= 30; i++) {
                         const datiGiorno = await extractData(
@@ -113,7 +126,7 @@ function App() {
             }
         };
 
-        fetchData();
+        fetchData().then(() => {});
     }, [data]); // fetch del csv
 
     useEffect(() => {
@@ -149,6 +162,7 @@ function App() {
 
     return (
         <div className="bg-dark-subtle">
+            {/* Navbar */}
             <div className="container-fluid mb-1 fixed-top">
                 <div className="row">
                     <div className="card bg-dark-subtle justify-content-center align-items-center border-0 border-bottom border-1 border-light rounded-0">
@@ -175,6 +189,7 @@ function App() {
 
             {sleepData && sleepData.length > 0 ? (
                 <div>
+                    {/* Titolo */}
                     <div className="container-lg">
                         <div className="riga2 justify-content-center align-items-center row">
                             <div className="card text-center border-4 rounded-4">
@@ -187,6 +202,7 @@ function App() {
                             </div>
                         </div>
                     </div>
+                    {/* Scritta 'hai dormito' */}
                     <div className="container-lg">
                         <div className="riga3 row">
                             <div className="card col-12 col-md-6 border-4 rounded-4">
@@ -198,7 +214,7 @@ function App() {
                                         {oreDormite.length === 2 && (
                                             <div>
                                                 <h1 className="title align-middle">
-                                                    HAI DORMITO
+                                                    Hai dormito
                                                 </h1>
                                                 <div className="row text-center align-middle">
                                                     <div className="dormito col-12">
@@ -218,23 +234,25 @@ function App() {
                                                 </div>
                                             </div>
                                         )}
+                                        {/* spacer tra i due orari */}
+                                        <div className="pt-5"></div>
                                         {oreNelLetto.length === 2 && (
                                             <div>
                                                 <h1 className="title align-middle">
-                                                    sei stato nel letto
+                                                    Sei stato nel letto
                                                 </h1>
                                                 <div className="row text-center align-middle">
-                                                    <div className="dormito col-12">
-                                                        <div className="grande mx-1 text-center">
+                                                    <div className="dormito col-12 px-5">
+                                                        <div className="grande">
                                                             {oreNelLetto[0]}
                                                         </div>
-                                                        <div className="text-center">
+                                                        <div className="">
                                                             h
                                                         </div>
-                                                        <div className="grande mx-1 text-center">
+                                                        <div className="grande">
                                                             {oreNelLetto[1]}
                                                         </div>
-                                                        <div className="text-center">
+                                                        <div className="">
                                                             min
                                                         </div>
                                                     </div>
@@ -244,8 +262,9 @@ function App() {
                                     </div>
                                 </Card>
                             </div>
+                            {/* Grafico a torta */}
                             <div className="card col-12 col-md-6 border-4 rounded-4">
-                                <div className="text-center justify-content-center align-items-center ">
+                                <div className="pt-1">
                                     <Card>
                                         <PieGraph
                                             data={
@@ -259,9 +278,10 @@ function App() {
                             </div>
                         </div>
                     </div>
+                    {/* Grafico a dispersione */}
                     <div className="container-lg">
-                        <div className="riga4 justify-content-center align-items-center row">
-                            <div className="card border-4 rounded-4">
+                        <div className="riga4 row">
+                            <div className="card border-4 rounded-4 py-1 px-2">
                                 <Card>
                                     <CreateScatterPlot
                                         dati={sleepData}
@@ -272,70 +292,115 @@ function App() {
                             </div>
                         </div>
                     </div>
+                    {/* Consiglio */}
                     <div className="container-lg">
-                        <div className="riga2 justify-content-center align-items-center row">
-                            <div className="big card border-4 rounded-4">
+                        <div className="riga2 justify-content-center row">
+                            <div className="card border-4 rounded-4 py-1">
                                 <Card>
                                     <h1>Consigli</h1>
                                     <div className="text-start">
-                                        <Consiglio articolo={consigli[Math.floor(Math.random() * consigli.length)]} />
+                                        <Consiglio
+                                            articolo={
+                                                consigli[
+                                                    Math.floor(
+                                                        Math.random() *
+                                                            consigli.length,
+                                                    )
+                                                ]
+                                            }
+                                        />
                                     </div>
                                 </Card>
                             </div>
                         </div>
                     </div>
+                    {/* Grafico a barre */}
                     <div className="container-lg">
                         <div className="riga4 justify-content-center align-items-center row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <button onClick={() => setsettMese(true)} className="btn btn-primary">SETTIMANA</button>
-                                    <button onClick={() => setsettMese(false)} className="btn btn-primary">MESE</button>
-                                    <CreateStackedColumnPlot dati={sleepDataWeek || []}
+                                    <div className="row px-5 mt-2 mb-4">
+                                        <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
+                                            <button
+                                                onClick={() =>
+                                                    setsettMese(true)
+                                                }
+                                                className="btn btn-primary px-4"
+                                            >
+                                                SETTIMANA
+                                            </button>
+                                        </div>
+                                        <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
+                                            <button
+                                                onClick={() =>
+                                                    setsettMese(false)
+                                                }
+                                                className="btn btn-primary px-5"
+                                            >
+                                                MESE
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <CreateStackedColumnPlot
+                                        dati={sleepDataWeek || []}
                                         colors={COLORS}
                                         ordine={stageOrder}
-                                        settMese={settMese} />
+                                        settMese={settMese}
+                                    />
                                 </Card>
                             </div>
                         </div>
                     </div>
+                    {/* Articoli */}
                     <div className="container-lg">
-                        <div className="riga4 justify-content-center align-items-center row">
+                        <div className="riga4 row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <h1>Articoli</h1>
+                                    <h1 className="py-1">Articoli</h1>
                                     {articoli.map((articolo) => (
-                                        <div key={articolo.target} className="container mb-1">
-                                            <div className="row">
-                                                <div className="col">
-                                                    <div className="card rounded-4">
-                                                        <Card>
-                                                            <div className="text-start row">
-                                                                <div className="col-11">
-                                                                    <h2>
-                                                                        {articolo.titolo}
-                                                                    </h2>
-                                                                </div>
-                                                                <div className="col">
-                                                                    <ButtonArticolo target={articolo.target} />
-                                                                </div>
-                                                                <Articolo target={articolo.target}>
-                                                                    <p>{articolo.testo}</p>                                                                </Articolo>
-                                                            </div>
-                                                        </Card>
+                                        <div
+                                            key={articolo.target}
+                                            className="container my-3"
+                                        >
+                                            <div className="card border-4 rounded-4">
+                                                <Card>
+                                                    <div className="text-start row">
+                                                        <h2 className="col-10 col-md-10 col-sm-9">
+                                                            {articolo.titolo}
+                                                        </h2>
+                                                        <div className="col-1 offset-0 offset-sm-1 align-self-center">
+                                                            <ButtonArticolo
+                                                                target={
+                                                                    articolo.target
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <Articolo
+                                                            target={
+                                                                articolo.target
+                                                            }
+                                                        >
+                                                            <p className="pt-2">
+                                                                <small>
+                                                                    {
+                                                                        articolo.testo
+                                                                    }
+                                                                </small>
+                                                            </p>
+                                                        </Articolo>
                                                     </div>
-                                                </div>
+                                                </Card>
                                             </div>
                                         </div>
                                     ))}
-
                                 </Card>
                             </div>
                         </div>
                     </div>
-
-
-                </div >
+                </div>
             ) : (
+                // Se non ci sono dati, mostra un messaggio
                 <div
                     style={{ minHeight: "100vh" }}
                     className="d-flex justify-content-center"
@@ -350,9 +415,8 @@ function App() {
                         </div>
                     </div>
                 </div>
-            )
-            }
-        </div >
+            )}
+        </div>
     );
 }
 

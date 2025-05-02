@@ -1,6 +1,4 @@
-
 // import "./Navbar.css";
-
 
 type NavbarProps = {
     currentDate: Date;
@@ -8,12 +6,8 @@ type NavbarProps = {
 };
 
 function Navbar(props: NavbarProps) {
-
-
     // funzione per passare al giorno successivo
     function nextDate() {
-
-
         const next = new Date(props.currentDate);
         next.setDate(next.getDate() + 1);
         if (next <= new Date()) {
@@ -31,16 +25,15 @@ function Navbar(props: NavbarProps) {
     function checkDate(date: Date) {
         if (date <= new Date()) {
             props.setCurrentDate(date);
-        }
-        else
-            props.setCurrentDate(new Date());
-
+        } else props.setCurrentDate(new Date());
     }
 
     return (
-        <nav className="Navbar row">
+        <nav className="row gx-3 gx-sm-5">
             <div className="col">
-                <button className="btn btn-success" onClick={previousDate}>&lt;</button>
+                <button className="btn btn-primary" onClick={previousDate}>
+                    &lt;
+                </button>
             </div>
             <div className="col">
                 <input
@@ -51,8 +44,9 @@ function Navbar(props: NavbarProps) {
                 />
             </div>
             <div className="col">
-
-                <button className="btn btn-success col" onClick={nextDate}>&gt;</button>
+                <button className="btn btn-primary col" onClick={nextDate}>
+                    &gt;
+                </button>
             </div>
         </nav>
     );

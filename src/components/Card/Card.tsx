@@ -6,11 +6,7 @@ type CardProps = {
 };
 
 function Card(props: CardProps) {
-    return (
-        <div className="card-body text-center justify-content-center align-items-center">
-            {props.children}
-        </div>
-
-    );
+    return <div className="card-body text-center">{props.children}</div>;
 }
+
 export default Card;
