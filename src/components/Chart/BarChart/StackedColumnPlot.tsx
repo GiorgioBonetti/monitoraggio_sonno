@@ -9,23 +9,25 @@ type GraphProps = {
   ordine: string[];
   settMese: boolean
 };
-
 function CreateStackedColumnPlot(props: GraphProps) {
   useEffect(() => {
     const dati = getDatiDivisi(props.dati);
 
     const stackedColumnPlot = new Column('container3', {
-      data: dati,
       isStack: true,
-      xField: 'date', 
-      yField: 'valore', 
+      data: dati,
+      xField: 'date',
+      yField: 'valore',
       seriesField: 'stage',
-      color: props.colors.reverse(),
+      color: props.colors.slice().reverse(),
       legend: false,
       meta: {
+        valore: {
+          formatter: (v: number) => `${Math.floor(v / 60)} h  ${v % 60} min`,
+        },
         stage: {
           type: "cat",
-          values: props.ordine.reverse(), 
+          values: props.ordine.reverse(),
         },
         date: {
           type: "cat",
@@ -40,12 +42,12 @@ function CreateStackedColumnPlot(props: GraphProps) {
             // Genera un intervallo completo di date tra la data di inizio e la data di fine
             const fullDateRange = [];
             for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
-                // Aggiungi ogni data nel formato ISO (YYYY-MM-DD) all'intervallo
+              // Aggiungi ogni data nel formato ISO (YYYY-MM-DD) all'intervallo
               fullDateRange.push(new Date(d).toISOString().split('T')[0]);
             }
 
             if (props.settMese) {
-                // Assicurati che il fullDateRange contenga sempre 7 date
+              // Assicurati che il fullDateRange contenga sempre 7 date
               if (fullDateRange.length < 7 && fullDateRange[0]) {
                 const missingDatesCount = 7 - fullDateRange.length;
                 const firstDate = new Date(fullDateRange[0]);
@@ -55,8 +57,8 @@ function CreateStackedColumnPlot(props: GraphProps) {
                   fullDateRange.unshift(newDate.toISOString().split('T')[0]);
                 }
               }
-            }else{
-                // Assicurati che il fullDateRange contenga sempre 30 date
+            } else {
+              // Assicurati che il fullDateRange contenga sempre 30 date
               if (fullDateRange.length < 30 && fullDateRange[0]) {
                 const missingDatesCount = 30 - fullDateRange.length;
                 const firstDate = new Date(fullDateRange[0]);
@@ -70,9 +72,9 @@ function CreateStackedColumnPlot(props: GraphProps) {
 
             // Restituisci l'intero intervallo di date, assicurandoti che le date mancanti siano riempite
             return fullDateRange;
-          })()
-        }
-      }
+          })(),
+        },
+      },
     });
 
     stackedColumnPlot.render();
