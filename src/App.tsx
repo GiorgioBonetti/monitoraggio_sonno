@@ -325,7 +325,24 @@ function App() {
                                                 onClick={() =>
                                                     setsettMese(true)
                                                 }
-                                                className="btn btn-primary px-4"
+                                                className="btn px-4"
+                                                style={{
+                                                    backgroundColor: "#14bdad",
+                                                    color: "white",
+                                                    transition: "all 0.2s ease",
+                                                }}
+                                                onMouseDown={(e) => {
+                                                    e.currentTarget.style.boxShadow =
+                                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                                    e.currentTarget.style.transform =
+                                                        "scale(0.95)";
+                                                }}
+                                                onMouseUp={(e) => {
+                                                    e.currentTarget.style.boxShadow =
+                                                        "none";
+                                                    e.currentTarget.style.transform =
+                                                        "scale(1)";
+                                                }}
                                             >
                                                 SETTIMANA
                                             </button>
@@ -335,7 +352,24 @@ function App() {
                                                 onClick={() =>
                                                     setsettMese(false)
                                                 }
-                                                className="btn btn-primary px-5"
+                                                className="btn px-5"
+                                                style={{
+                                                    backgroundColor: "#14bdad",
+                                                    color: "white",
+                                                    transition: "all 0.2s ease",
+                                                }}
+                                                onMouseDown={(e) => {
+                                                    e.currentTarget.style.boxShadow =
+                                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                                    e.currentTarget.style.transform =
+                                                        "scale(0.95)";
+                                                }}
+                                                onMouseUp={(e) => {
+                                                    e.currentTarget.style.boxShadow =
+                                                        "none";
+                                                    e.currentTarget.style.transform =
+                                                        "scale(1)";
+                                                }}
                                             >
                                                 MESE
                                             </button>

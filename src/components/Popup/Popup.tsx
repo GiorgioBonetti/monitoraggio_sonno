@@ -27,9 +27,23 @@ function Popup(prpos: PopupProps) {
                             </h1>
                             <button
                                 type="button"
-                                className="btn-close"
+                                className="btn-close me-2"
                                 data-bs-dismiss="modal"
                                 aria-label="Chiudi"
+                                style={{
+                                    transition: "all 0.2s ease",
+                                }}
+                                onMouseDown={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
                             ></button>
                         </div>
                         <div className="modal-body">{prpos.children}</div>
@@ -39,7 +53,21 @@ function Popup(prpos: PopupProps) {
 
             <button
                 type="button"
-                className="btn btn-primary"
+                className="btn"
+                style={{
+                    backgroundColor: "#14bdad",
+                    color: "white",
+                    transition: "all 0.2s ease",
+                }}
+                onMouseDown={(e) => {
+                    e.currentTarget.style.boxShadow =
+                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                    e.currentTarget.style.transform = "scale(0.95)";
+                }}
+                onMouseUp={(e) => {
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.transform = "scale(1)";
+                }}
                 data-bs-toggle="modal"
                 data-bs-target={`#${prpos.modalId}`}
             >

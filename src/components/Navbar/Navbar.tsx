@@ -31,7 +31,24 @@ function Navbar(props: NavbarProps) {
     return (
         <nav className="row gx-3 gx-sm-5">
             <div className="col">
-                <button className="btn btn-primary" onClick={previousDate}>
+                <button
+                    className="btn"
+                    onClick={previousDate}
+                    style={{
+                        backgroundColor: "#14bdad",
+                        color: "white",
+                        transition: "all 0.2s ease",
+                    }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
+                >
                     &lt;
                 </button>
             </div>
@@ -41,10 +58,39 @@ function Navbar(props: NavbarProps) {
                     type="date"
                     value={props.currentDate.toISOString().split("T")[0]}
                     onChange={(e) => checkDate(new Date(e.target.value))}
+                    style={{
+                        transition: "all 0.2s ease",
+                    }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
                 />
             </div>
             <div className="col">
-                <button className="btn btn-primary col" onClick={nextDate}>
+                <button
+                    className="btn col"
+                    onClick={nextDate}
+                    style={{
+                        backgroundColor: "#14bdad",
+                        color: "white",
+                        transition: "all 0.2s ease",
+                    }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
+                >
                     &gt;
                 </button>
             </div>
