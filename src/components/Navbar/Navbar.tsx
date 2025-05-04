@@ -1,5 +1,3 @@
-// import "./Navbar.css";
-
 type NavbarProps = {
     currentDate: Date;
     setCurrentDate: (date: Date) => void;
@@ -74,7 +72,7 @@ function Navbar(props: NavbarProps) {
             </div>
             <div className="col">
                 <button
-                    className="btn col"
+                    className="btn"
                     onClick={nextDate}
                     style={{
                         backgroundColor: "#14bdad",

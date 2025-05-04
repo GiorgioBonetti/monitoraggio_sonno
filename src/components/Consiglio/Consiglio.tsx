@@ -1,7 +1,5 @@
-// import Information from "../Information/Information.tsx";
 import { ConsiglioType } from "../../App.tsx";
 import Card from "../Card/Card.tsx";
-// import "./Consiglio.css";
 
 type ConsiglioProps = {
     articolo: ConsiglioType;

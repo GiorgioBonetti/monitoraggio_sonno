@@ -1,4 +1,3 @@
-// import "./PieGraph.css";
 import { SleepStageType } from "../../../scripts/extractSleepStages";
 import { useEffect } from "react";
 import { Pie } from "@antv/g2plot";
@@ -31,21 +30,21 @@ function PieGraph(props: PieGraphProps) {
             statistic: {
                 title: false,
                 content: {
-                    // 👇 Funzione personalizzata per il contenuto centrale
-                    customHtml: (container, view, datum, data) => {
+                    // Funzione personalizzata per il contenuto centrale
+                    customHtml: (_container, _view, datum, _data) => {
                         if (datum) {
-                          return `
-                            <div style="text-align: center;">
-                              <div>${datum.nome}</div>
-                              <div>${Math.floor(datum.number / 60) !== 0 ? Math.floor(datum.number / 60) + "h" : ""} ${Math.floor(datum.number % 60)} min</div>
-                            </div>`;
+                            return `<div style="text-align: center;">
+                                  <div>${datum.nome}</div>
+                                  <div>${Math.floor(datum.number / 60) !== 0 ? Math.floor(datum.number / 60) + "h" : ""} ${Math.floor(datum.number % 60)} min</div>
+                                </div>`;
                         }
-                      }
+                        return ""; // Restituisce una stringa vuota se datum è undefined
+                    },
                 },
             },
             interactions: [
                 { type: "element-active" },
-                { type: "pie-statistic-active" }, // 👉 dinamica centrale!
+                { type: "pie-statistic-active" },
             ],
         });
         piePlot.render();

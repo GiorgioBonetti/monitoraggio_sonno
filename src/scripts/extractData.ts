@@ -1,7 +1,8 @@
 import Papa from "papaparse";
 
 export interface SleepDataInterface {
-    forEach(arg0: ({ stage }: { stage: any; }) => void): unknown;
+    forEach(arg0: ({ stage }: { stage: any }) => void): unknown;
+
     date: string; // Data del dato di sonno
     timestamp: string; // Ora del dato di sonno
     stage: string; // Fase del sonno (es. Light, Deep, REM, Awake)
@@ -29,14 +30,24 @@ export async function extractData(
             skipEmptyLines: true, // Salta le righe vuote nel file CSV
             complete: (result) => {
                 try {
-                    const transformedData = result.data.map((entry: any) => {
-                        const [date, time] = entry.Timestamp.split(" ");
-                        return {
-                            date,
-                            timestamp: time,
-                            stage: entry["Sleep Stage"] || "Unknown",
-                        };
-                    });
+                    const transformedData: SleepDataInterface[] =
+                        result.data.map((entry: any) => {
+                            const [date, time] = entry.Timestamp.split(" ");
+                            return {
+                                date,
+                                timestamp: time,
+                                stage: entry["Sleep Stage"] || "Unknown",
+                                forEach: function (
+                                    callback: ({
+                                        stage,
+                                    }: {
+                                        stage: any;
+                                    }) => void,
+                                ): void {
+                                    callback({ stage: this.stage });
+                                },
+                            };
+                        });
                     resolve(transformedData);
                 } catch (error) {
                     reject(

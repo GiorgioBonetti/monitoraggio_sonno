@@ -84,8 +84,6 @@ function App() {
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
     const [data, setData] = useState<Date>(new Date());
 
-    // variabili di loading - se false, i dati sono stati caricati
-    const [loading, setLoading] = useState<boolean>(true);
     const [settMese, setsettMese] = useState<boolean>(false);
 
     const [sleepDataWeek, setSleepDataWeek] = useState<
@@ -120,8 +118,10 @@ function App() {
                     setSleepDataWeek(datiSettimana);
                 }
             } catch (err) {
-                console.log("Errore durante il caricamento dei dati dal csv.");
-                console.error(err);
+                console.error(
+                    "Errore durante il fetch dei dati. Potrebbero essere mancanti, oppure errati.\n\n",
+                    err,
+                );
                 setSleepData(null);
             }
         };
@@ -130,7 +130,7 @@ function App() {
     }, [data]); // fetch del csv
 
     useEffect(() => {
-        if (sleepData) {
+        if (sleepData != null) {
             try {
                 setSleepStages(extractSleepStages(sleepData));
 
@@ -140,32 +140,17 @@ function App() {
 
                 setoreNelLetto(extractOreLetto(sleepData));
             } catch (err) {
-                console.log(
-                    "Errore durante il calcolo dei dati degli stadi del sonno.",
-                );
-                console.error(err);
+                // errore sicuramente gia' stampato dal catch dello useEffect precedente
             }
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno
-
-    useEffect(() => {
-        if (sleepData != null && sleepStages != null) {
-            setLoading(false);
-        }
-    }, [sleepData, sleepStages]); // controllo se i dati sono stati caricati
-
-    useEffect(() => {
-        if (!loading) {
-            return;
-        }
-    }, [loading]); // semplice stampa dei dati caricati ---- da togliere
 
     return (
         <div className="bg-dark-subtle">
             {/* Navbar */}
             <div className="container-fluid mb-1 fixed-top">
                 <div className="row">
-                    <div className="card bg-dark-subtle justify-content-center align-items-center border-0 border-bottom border-1 border-light rounded-0">
+                    <div className="card bg-dark-subtle align-items-center border-0 border-bottom border-1 border-light rounded-0">
                         <Card>
                             <Navbar
                                 currentDate={data || new Date()}
@@ -191,8 +176,8 @@ function App() {
                 <div>
                     {/* Titolo */}
                     <div className="container-lg">
-                        <div className="riga2 justify-content-center align-items-center row">
-                            <div className="card text-center border-4 rounded-4">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
                                 <Card>
                                     <Punteggio
                                         punteggio={punteggio[0]}
@@ -204,7 +189,7 @@ function App() {
                     </div>
                     {/* Scritta 'hai dormito' */}
                     <div className="container-lg">
-                        <div className="riga3 row">
+                        <div className="row">
                             <div className="card col-12 col-md-6 border-4 rounded-4">
                                 <Card>
                                     <div
@@ -213,23 +198,19 @@ function App() {
                                     >
                                         {oreDormite.length === 2 && (
                                             <div>
-                                                <h1 className="title align-middle">
+                                                <h1 className="title">
                                                     Hai dormito
                                                 </h1>
-                                                <div className="row text-center align-middle">
+                                                <div className="row">
                                                     <div className="dormito col-12">
-                                                        <div className="grande mx-1 text-center">
+                                                        <div className="grande mx-1">
                                                             {oreDormite[0]}
                                                         </div>
-                                                        <div className="text-center">
-                                                            h
-                                                        </div>
-                                                        <div className="grande mx-1 text-center">
+                                                        <div>h</div>
+                                                        <div className="grande mx-1">
                                                             {oreDormite[1]}
                                                         </div>
-                                                        <div className="text-center">
-                                                            min
-                                                        </div>
+                                                        <div>min</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -238,23 +219,19 @@ function App() {
                                         <div className="pt-5"></div>
                                         {oreNelLetto.length === 2 && (
                                             <div>
-                                                <h1 className="title align-middle">
+                                                <h1 className="title">
                                                     Sei stato nel letto
                                                 </h1>
-                                                <div className="row text-center align-middle">
+                                                <div className="row">
                                                     <div className="dormito col-12 px-5">
                                                         <div className="grande">
                                                             {oreNelLetto[0]}
                                                         </div>
-                                                        <div className="">
-                                                            h
-                                                        </div>
+                                                        <div>h</div>
                                                         <div className="grande">
                                                             {oreNelLetto[1]}
                                                         </div>
-                                                        <div className="">
-                                                            min
-                                                        </div>
+                                                        <div>min</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,7 +257,7 @@ function App() {
                     </div>
                     {/* Grafico a dispersione */}
                     <div className="container-lg">
-                        <div className="riga4 row">
+                        <div className="row">
                             <div className="card border-4 rounded-4 py-1 px-2">
                                 <Card>
                                     <CreateScatterPlot
@@ -294,11 +271,11 @@ function App() {
                     </div>
                     {/* Consiglio */}
                     <div className="container-lg">
-                        <div className="riga2 justify-content-center row">
+                        <div className="row">
                             <div className="card border-4 rounded-4 py-1">
                                 <Card>
                                     <h1>Consigli</h1>
-                                    <div className="text-start">
+                                    <div>
                                         <Consiglio
                                             articolo={
                                                 consigli[
@@ -316,7 +293,7 @@ function App() {
                     </div>
                     {/* Grafico a barre */}
                     <div className="container-lg">
-                        <div className="riga4 justify-content-center align-items-center row">
+                        <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
                                     <div className="row px-5 mt-2 mb-4">
@@ -375,7 +352,6 @@ function App() {
                                             </button>
                                         </div>
                                     </div>
-
                                     <CreateStackedColumnPlot
                                         dati={sleepDataWeek || []}
                                         colors={COLORS}
@@ -388,7 +364,7 @@ function App() {
                     </div>
                     {/* Articoli */}
                     <div className="container-lg">
-                        <div className="riga4 row">
+                        <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
                                     <h1 className="py-1">Articoli</h1>
@@ -403,7 +379,7 @@ function App() {
                                                         <h2 className="col-10 col-md-10 col-sm-9">
                                                             {articolo.titolo}
                                                         </h2>
-                                                        <div className="col-1 offset-0 offset-sm-1 align-self-center">
+                                                        <div className="col-1 offset-0 offset-sm-1">
                                                             <ButtonArticolo
                                                                 target={
                                                                     articolo.target
@@ -436,11 +412,13 @@ function App() {
             ) : (
                 // Se non ci sono dati, mostra un messaggio
                 <div
-                    style={{ minHeight: "100vh" }}
-                    className="d-flex justify-content-center"
+                    style={{
+                        minHeight:
+                            "100vh" /* necessario per espandere il bg a tutta la pagina */,
+                    }}
                 >
                     <div className="container-lg">
-                        <div className=" justify-content-center align-items-center row">
+                        <div className="row">
                             <div className="card text-center border-4 rounded-4">
                                 <Card>
                                     <h1>Nessun dato presente</h1>

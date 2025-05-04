@@ -1,5 +1,4 @@
 import React from "react";
-// import "./Card.css";
 
 type CardProps = {
     children?: React.ReactNode;
