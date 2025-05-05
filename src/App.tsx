@@ -14,63 +14,15 @@ import {
 } from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
-import Articolo from "./components/Articolo/Articolo.tsx";
-import ButtonArticolo from "./components/Articolo/button/ButtonArticolo.tsx";
-import CreateStackedColumnPlot from "./components/Chart/BarChart/StackedColumnPlot.tsx";
-import timestampToSleep from "./scripts/timestampToSleep.ts";
-
-type ArticoloType = {
-    target: string;
-    titolo: string;
-    testo: string;
-};
-
-export type ConsiglioType = {
-    titolo: string;
-};
+import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
+import GraficoBarre from "./components/GraficoBarre/GraficoBarre.tsx";
+import Articoli from "./components/Articoli/Articoli.tsx";
+import MissingData from "./components/MissingData/MissingData.tsx";
+import { articoli, consigli } from "./scripts/dataConsigliArticoli.ts";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
-
-    const articoli: ArticoloType[] = [
-        {
-            target: "1",
-            titolo: "Reset Sonno: Sincronizza il Tuo Orario",
-            testo: "Stabilire una routine di sonno regolare è come accordare uno strumento musicale: quando ogni parte è in sintonia, l'armonia che ne deriva è palpabile. Andare a letto e svegliarsi alla stessa ora ogni giorno, fine settimana inclusi, rafforza il tuo orologio biologico interno, il direttore d'orchestra del tuo ciclo sonno-veglia. Questa coerenza segnala al tuo corpo quando è il momento di rilassarsi e prepararsi per il riposo e quando è il momento di attivarsi. Un ritmo circadiano ben regolato non solo facilita l'addormentamento e un risveglio più agevole, ma contribuisce anche a una maggiore stabilità delle fasi del sonno, migliorando significativamente la durata e la qualità complessiva del tuo riposo notturno, come la tua app ben evidenzia attraverso i grafici dettagliati.",
-        },
-        {
-            target: "2",
-            titolo: "Termo-Relax: Ottimizza la Temperatura per un Sonno Profondo",
-            testo: 'La temperatura della tua camera da letto gioca un ruolo cruciale nella qualità del tuo sonno. Immagina di avvolgerti in un fresco abbraccio anziché lottare contro un ambiente surriscaldato. Idealmente, la temperatura dovrebbe mantenersi tra i 18 e i 22 gradi Celsius. Questo intervallo favorisce un abbassamento della temperatura corporea interna, un processo naturale che precede l\'addormentamento. Una stanza troppo calda può ostacolare questo processo, rendendo il sonno più leggero e frammentato. Considera di utilizzare lenzuola traspiranti, regolare il termostato o aprire una finestra per creare la tua personale "oasi di freschezza", un ambiente che inviti al riposo profondo e rigenerante che la tua app saprà quantificare in termini di miglioramento delle fasi di sonno profondo.',
-        },
-        {
-            target: "3",
-            titolo: "Bye Bye Schermo: Libera la Tua Notte e Dormi Meglio",
-            testo: 'La luce brillante emessa dagli schermi dei nostri dispositivi elettronici è un potente interferente con la nostra naturale preparazione al sonno. Questa "luce blu" inganna il cervello facendogli credere che sia ancora giorno, sopprimendo la produzione di melatonina, l\'ormone chiave che segnala al corpo che è ora di dormire. Stabilire una "zona libera da schermi" almeno un\'ora prima di coricarsi può fare una differenza significativa. Invece di scorrere feed infiniti, prova attività rilassanti come leggere un libro cartaceo, ascoltare musica dolce o dedicarti a esercizi di respirazione. Proteggere la tua melatonina è un investimento diretto nella qualità del tuo sonno, permettendo al tuo corpo di entrare naturalmente nelle fasi di riposo profondo e REM che la tua app analizza minuziosamente.',
-        },
-    ];
-
-    const consigli: ConsiglioType[] = [
-        {
-            titolo: "Orario Fisso: Vai a letto e svegliati alla stessa ora ogni giorno per regolare il tuo orologio biologico",
-        },
-        {
-            titolo: "Camera Fresca e Buia: Ottimizza l'ambiente della tua stanza per favorire il rilassamento notturno",
-        },
-        {
-            titolo: "Stop Schermi: Evita l'uso di dispositivi elettronici almeno un'ora prima di dormire per proteggere la melatonina",
-        },
-        {
-            titolo: "Cena Leggera: Non appesantirti con pasti abbondanti o troppo tardi la sera",
-        },
-        {
-            titolo: "Movimento OK, Eccesso KO: Fai attività fisica regolarmente, ma evita allenamenti intensi vicino all'ora di andare a letto",
-        },
-        {
-            titolo: "Rilassati Prima: Crea una routine serale distensiva, come leggere o fare un bagno caldo",
-        },
-    ];
 
     // variabili per i dati
     const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
@@ -162,7 +114,7 @@ function App() {
                 </div>
             </div>
 
-            {/*Spacer tra il navbar e i componenti della pagina. Quando non ci sono dati, viene nascosto. */}
+            {/* Spacer tra il navbar e i componenti della pagina. Quando non ci sono dati, viene nascosto. */}
             <div
                 className="pt-5 mt-4"
                 style={{
@@ -173,7 +125,7 @@ function App() {
                 }}
             ></div>
 
-            {sleepData && sleepData.length > 0 ? (
+            {sleepData && sleepData.length > 0 ? ( // Se ci sono dati, mostra i componenti
                 <div>
                     {/* Titolo */}
                     <div className="container-lg">
@@ -188,73 +140,16 @@ function App() {
                             </div>
                         </div>
                     </div>
-                    {/* Scritta 'hai dormito' */}
                     <div className="container-lg">
                         <div className="row">
+                            {/* Scritta 'hai dormito' */}
                             <div className="card col-12 col-md-6 border-4 rounded-4">
                                 <Card>
-                                    <div
-                                        className="d-flex flex-column justify-content-center align-items-center"
-                                        style={{ height: "100%" }}
-                                    >
-                                        {oreDormite.length === 2 && (
-                                            <div>
-                                                <h1 className="title">
-                                                    Hai dormito
-                                                </h1>
-                                                <div className="row">
-                                                    <div className="dormito col-12">
-                                                        <div className="grande mx-1">
-                                                            {oreDormite[0]}
-                                                        </div>
-                                                        <div>h</div>
-                                                        <div className="grande mx-1">
-                                                            {oreDormite[1]}
-                                                        </div>
-                                                        <div>min</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {/* spacer tra i due orari */}
-                                        <div className="pt-5"></div>
-                                        {oreNelLetto.length === 2 && (
-                                            <div>
-                                                <h1 className="title">
-                                                    Sei stato nel letto
-                                                </h1>
-                                                <div className="row">
-                                                    <div className="dormito col-12 px-5">
-                                                        <div className="grande">
-                                                            {oreNelLetto[0]}
-                                                        </div>
-                                                        <div>h</div>
-                                                        <div className="grande">
-                                                            {oreNelLetto[1]}
-                                                        </div>
-                                                        <div>min</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        {/* spacer tra i due orari */}
-                                        {Number(oreDormite[0]) < 8 && (
-                                            <div
-                                                className="alert alert-warning mt-3"
-                                                role="alert"
-                                            >
-                                                Hai dormito meno di 8 ore. Ti
-                                                consiglio di andare a letto
-                                                prima delle
-                                                {" " +
-                                                    timestampToSleep(
-                                                        sleepData[0].timestamp,
-                                                        oreDormite,
-                                                    )}
-                                                .
-                                            </div>
-                                        )}
-                                    </div>
+                                    <TempoDormito
+                                        oreDormite={oreDormite}
+                                        oreNelLetto={oreNelLetto}
+                                        sleepData={sleepData}
+                                    />
                                 </Card>
                             </div>
                             {/* Grafico a torta */}
@@ -276,7 +171,7 @@ function App() {
                     {/* Grafico a dispersione */}
                     <div className="container-lg">
                         <div className="row">
-                            <div className="card border-4 rounded-4 py-1 px-2">
+                            <div className="card border-4 rounded-4">
                                 <Card>
                                     <CreateScatterPlot
                                         dati={sleepData}
@@ -290,21 +185,18 @@ function App() {
                     {/* Consiglio */}
                     <div className="container-lg">
                         <div className="row">
-                            <div className="card border-4 rounded-4 py-1">
+                            <div className="card border-4 rounded-4">
                                 <Card>
-                                    <h1>Consigli</h1>
-                                    <div>
-                                        <Consiglio
-                                            articolo={
-                                                consigli[
-                                                    Math.floor(
-                                                        Math.random() *
-                                                            consigli.length,
-                                                    )
-                                                ]
-                                            }
-                                        />
-                                    </div>
+                                    <Consiglio
+                                        articolo={
+                                            consigli[
+                                                Math.floor(
+                                                    Math.random() *
+                                                        consigli.length,
+                                                )
+                                            ]
+                                        }
+                                    />
                                 </Card>
                             </div>
                         </div>
@@ -314,67 +206,12 @@ function App() {
                         <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <div className="row px-5 mt-2 mb-4">
-                                        <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
-                                            <button
-                                                onClick={() =>
-                                                    setsettMese(true)
-                                                }
-                                                className="btn px-4"
-                                                style={{
-                                                    backgroundColor: "#14bdad",
-                                                    color: "white",
-                                                    transition: "all 0.2s ease",
-                                                }}
-                                                onMouseDown={(e) => {
-                                                    e.currentTarget.style.boxShadow =
-                                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                                    e.currentTarget.style.transform =
-                                                        "scale(0.95)";
-                                                }}
-                                                onMouseUp={(e) => {
-                                                    e.currentTarget.style.boxShadow =
-                                                        "none";
-                                                    e.currentTarget.style.transform =
-                                                        "scale(1)";
-                                                }}
-                                            >
-                                                SETTIMANA
-                                            </button>
-                                        </div>
-                                        <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
-                                            <button
-                                                onClick={() =>
-                                                    setsettMese(false)
-                                                }
-                                                className="btn px-5"
-                                                style={{
-                                                    backgroundColor: "#14bdad",
-                                                    color: "white",
-                                                    transition: "all 0.2s ease",
-                                                }}
-                                                onMouseDown={(e) => {
-                                                    e.currentTarget.style.boxShadow =
-                                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                                    e.currentTarget.style.transform =
-                                                        "scale(0.95)";
-                                                }}
-                                                onMouseUp={(e) => {
-                                                    e.currentTarget.style.boxShadow =
-                                                        "none";
-                                                    e.currentTarget.style.transform =
-                                                        "scale(1)";
-                                                }}
-                                            >
-                                                MESE
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <CreateStackedColumnPlot
-                                        dati={sleepDataWeek || []}
+                                    <GraficoBarre
+                                        sleepDataWeek={sleepDataWeek || []}
                                         colors={COLORS}
-                                        ordine={stageOrder}
+                                        stageOrder={stageOrder}
                                         settMese={settMese}
+                                        setSettMese={setsettMese}
                                     />
                                 </Card>
                             </div>
@@ -385,43 +222,7 @@ function App() {
                         <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <h1 className="py-1">Articoli</h1>
-                                    {articoli.map((articolo) => (
-                                        <div
-                                            key={articolo.target}
-                                            className="container my-3"
-                                        >
-                                            <div className="card border-4 rounded-4">
-                                                <Card>
-                                                    <div className="text-start row">
-                                                        <h2 className="col-10 col-md-10 col-sm-9">
-                                                            {articolo.titolo}
-                                                        </h2>
-                                                        <div className="col-1 offset-0 offset-sm-1">
-                                                            <ButtonArticolo
-                                                                target={
-                                                                    articolo.target
-                                                                }
-                                                            />
-                                                        </div>
-                                                        <Articolo
-                                                            target={
-                                                                articolo.target
-                                                            }
-                                                        >
-                                                            <p className="pt-2">
-                                                                <small>
-                                                                    {
-                                                                        articolo.testo
-                                                                    }
-                                                                </small>
-                                                            </p>
-                                                        </Articolo>
-                                                    </div>
-                                                </Card>
-                                            </div>
-                                        </div>
-                                    ))}
+                                    <Articoli articoli={articoli} />
                                 </Card>
                             </div>
                         </div>
@@ -436,71 +237,10 @@ function App() {
                     }}
                 >
                     <div className="container-lg">
-                        <div className="row">
-                            <div className="card text-center border-4 rounded-4">
+                        <div className="row text-center">
+                            <div className="card border-4 rounded-4">
                                 <Card>
-                                    <h1>Nessun dato presente</h1>
-                                    <div
-                                        className="alert alert-info mt-3 pt-3"
-                                        role="alert"
-                                    >
-                                        <div className="row gy-2 justify-content-between">
-                                            <div className="col-12">
-                                                <h3>Carica il tuo file qui</h3>
-                                            </div>
-                                            <form className="form-group col-12">
-                                                <div className="input-group">
-                                                    <input
-                                                        type="file"
-                                                        className="form-control"
-                                                        id="inputGroupFile04"
-                                                        aria-describedby="inputGroupFileAddon04"
-                                                        aria-label="Upload"
-                                                        style={{
-                                                            transition:
-                                                                "all 0.2s ease",
-                                                        }}
-                                                        onMouseDown={(e) => {
-                                                            e.currentTarget.style.boxShadow =
-                                                                "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                                            e.currentTarget.style.transform =
-                                                                "scale(0.95)";
-                                                        }}
-                                                        onMouseUp={(e) => {
-                                                            e.currentTarget.style.boxShadow =
-                                                                "none";
-                                                            e.currentTarget.style.transform =
-                                                                "scale(1)";
-                                                        }}
-                                                        required
-                                                    />
-                                                    <button
-                                                        className="btn btn-primary"
-                                                        type="button"
-                                                        id="inputGroupFileAddon04"
-                                                        style={{
-                                                            transition:
-                                                                "all 0.2s ease",
-                                                        }}
-                                                        onMouseDown={(e) => {
-                                                            e.currentTarget.style.boxShadow =
-                                                                "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                                            e.currentTarget.style.transform =
-                                                                "scale(0.95)";
-                                                        }}
-                                                        onMouseUp={(e) => {
-                                                            e.currentTarget.style.boxShadow =
-                                                                "none";
-                                                            e.currentTarget.style.transform =
-                                                                "scale(1)";
-                                                        }}
-                                                    >
-                                                        <i className="bi bi-file-earmark-arrow-up"></i>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <MissingData />
                                 </Card>
                             </div>
                         </div>
