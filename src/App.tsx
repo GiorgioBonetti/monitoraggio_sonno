@@ -8,17 +8,14 @@ import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { extractData, SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
-import {
-    extractSleepStages,
-    SleepStageType,
-} from "./scripts/extractSleepStages.ts";
+import {extractSleepStages, SleepStageType} from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
 import GraficoBarre from "./components/GraficoBarre/GraficoBarre.tsx";
 import Articoli from "./components/Articoli/Articoli.tsx";
 import MissingData from "./components/MissingData/MissingData.tsx";
-import { articoli, consigli } from "./scripts/dataConsigliArticoli.ts";
+import { articoli, consigli, ConsiglioType } from "./scripts/dataConsigliArticoli.ts";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -33,6 +30,8 @@ function App() {
     );
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
+    const [consiglioSelected, setConsiglioSelected] = useState<ConsiglioType>();
+
 
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
     const [data, setData] = useState<Date>(new Date());
@@ -70,21 +69,24 @@ function App() {
                     }
                     setSleepDataWeek(datiSettimana);
                 }
-            } catch (err) {
-                console.error(
-                    "Errore durante il fetch dei dati. Potrebbero essere mancanti, oppure errati.\n\n",
-                    err,
-                );
+            } catch {
                 setSleepData(null);
             }
         };
 
-        fetchData().then(() => {});
+        fetchData().then(() => { });
     }, [data]); // fetch del csv
 
     useEffect(() => {
+        const interval = setInterval(() => {
+            setConsiglioSelected(consigli[Math.floor(Math.random() * consigli.length)]);
+        }, 20000);
+
+        return () => clearInterval(interval); // Cleanup the interval on component unmount
+    }, [consiglioSelected]); 
+
+    useEffect(() => {
         if (sleepData != null) {
-            try {
                 setSleepStages(extractSleepStages(sleepData));
 
                 setOreDormite(extractOreDormite(sleepData));
@@ -92,9 +94,7 @@ function App() {
                 setPunteggio(extractPunteggioSonno(sleepData));
 
                 setoreNelLetto(extractOreLetto(sleepData));
-            } catch (err) {
-                // errore sicuramente gia' stampato dal catch dello useEffect precedente
-            }
+
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno
 
@@ -188,14 +188,7 @@ function App() {
                             <div className="card border-4 rounded-4">
                                 <Card>
                                     <Consiglio
-                                        articolo={
-                                            consigli[
-                                                Math.floor(
-                                                    Math.random() *
-                                                        consigli.length,
-                                                )
-                                            ]
-                                        }
+                                        articolo={consiglioSelected ? consiglioSelected : consigli[0]}
                                     />
                                 </Card>
                             </div>
@@ -232,8 +225,7 @@ function App() {
                 // Se non ci sono dati, mostra un messaggio
                 <div
                     style={{
-                        minHeight:
-                            "100vh" /* necessario per espandere il bg a tutta la pagina */,
+                        minHeight:"100vh" /* necessario per espandere il bg a tutta la pagina */,
                     }}
                 >
                     <div className="container-lg">
