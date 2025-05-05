@@ -17,6 +17,7 @@ import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import Articolo from "./components/Articolo/Articolo.tsx";
 import ButtonArticolo from "./components/Articolo/button/ButtonArticolo.tsx";
 import CreateStackedColumnPlot from "./components/Chart/BarChart/StackedColumnPlot.tsx";
+import timestampToSleep from "./scripts/timestampToSleep.ts";
 
 type ArticoloType = {
     target: string;
@@ -234,6 +235,23 @@ function App() {
                                                         <div>min</div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        )}
+                                        {/* spacer tra i due orari */}
+                                        {Number(oreDormite[0]) < 8 && (
+                                            <div
+                                                className="alert alert-warning mt-3"
+                                                role="alert"
+                                            >
+                                                Hai dormito meno di 8 ore. Ti
+                                                consiglio di andare a letto
+                                                prima delle
+                                                {" " +
+                                                    timestampToSleep(
+                                                        sleepData[0].timestamp,
+                                                        oreDormite,
+                                                    )}
+                                                .
                                             </div>
                                         )}
                                     </div>
