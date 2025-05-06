@@ -8,14 +8,21 @@ import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { extractData, SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
-import {extractSleepStages, SleepStageType} from "./scripts/extractSleepStages.ts";
+import {
+    extractSleepStages,
+    SleepStageType,
+} from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
 import GraficoBarre from "./components/GraficoBarre/GraficoBarre.tsx";
 import Articoli from "./components/Articoli/Articoli.tsx";
 import MissingData from "./components/MissingData/MissingData.tsx";
-import { articoli, consigli, ConsiglioType } from "./scripts/dataConsigliArticoli.ts";
+import {
+    articoli,
+    consigli,
+    ConsiglioType,
+} from "./scripts/dataConsigliArticoli.ts";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -32,11 +39,10 @@ function App() {
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
     const [consiglioSelected, setConsiglioSelected] = useState<ConsiglioType>();
 
-
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
     const [data, setData] = useState<Date>(new Date());
 
-    const [settMese, setsettMese] = useState<boolean>(false);
+    const [settMese, setsettMese] = useState<boolean>(true);
 
     const [sleepDataWeek, setSleepDataWeek] = useState<
         SleepDataInterface[][] | null
@@ -74,27 +80,28 @@ function App() {
             }
         };
 
-        fetchData().then(() => { });
+        fetchData().then(() => {});
     }, [data, settMese]); // fetch del csv
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setConsiglioSelected(consigli[Math.floor(Math.random() * consigli.length)]);
+            setConsiglioSelected(
+                consigli[Math.floor(Math.random() * consigli.length)],
+            );
         }, 20000);
 
-        return () => clearInterval(interval); // Cleanup the interval on component unmount
-    }, [consiglioSelected]); 
+        return () => clearInterval(interval);
+    }, [consiglioSelected]);
 
     useEffect(() => {
         if (sleepData != null) {
-                setSleepStages(extractSleepStages(sleepData));
+            setSleepStages(extractSleepStages(sleepData));
 
-                setOreDormite(extractOreDormite(sleepData));
+            setOreDormite(extractOreDormite(sleepData));
 
-                setPunteggio(extractPunteggioSonno(sleepData));
+            setPunteggio(extractPunteggioSonno(sleepData));
 
-                setoreNelLetto(extractOreLetto(sleepData));
-
+            setoreNelLetto(extractOreLetto(sleepData));
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno
 
@@ -188,7 +195,11 @@ function App() {
                             <div className="card border-4 rounded-4">
                                 <Card>
                                     <Consiglio
-                                        articolo={consiglioSelected ? consiglioSelected : consigli[0]}
+                                        articolo={
+                                            consiglioSelected
+                                                ? consiglioSelected
+                                                : consigli[0]
+                                        }
                                     />
                                 </Card>
                             </div>
@@ -225,7 +236,8 @@ function App() {
                 // Se non ci sono dati, mostra un messaggio
                 <div
                     style={{
-                        minHeight:"100vh" /* necessario per espandere il bg a tutta la pagina */,
+                        minHeight:
+                            "100vh" /* necessario per espandere il bg a tutta la pagina */,
                     }}
                 >
                     <div className="container-lg">

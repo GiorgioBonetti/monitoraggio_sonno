@@ -14,7 +14,17 @@ export const getDatiDivisi = (
 
     data.forEach((group) => {
         const groupId = group[0]?.date;
-        const date = group[0]?.date || "";
+
+        const startOra = Number(group[0]?.timestamp?.substring(0, 2));
+        let date = group[0]?.date || "";
+        if (startOra >= 0 && startOra <= 12) {
+            // vado indietro di un giorno su date nel caso in cui la notte sia partita dopo la mezzanotte
+            const newDate = new Date(date);
+            date = new Date(newDate.getTime() - 24 * 60 * 60 * 1000)
+                .toISOString()
+                .split("T")[0];
+        }
+
         const stageCount: { [stage: string]: number } = {};
 
         group.forEach((item) => {

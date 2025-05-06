@@ -1,7 +1,34 @@
-Per eseguire questo progetto basta eseguire nel terminale:
+# Guida Rapida per Eseguire l'App React
 
-***`npm install`*** per installare le librerie
+Questa guida riassume i passaggi essenziali per eseguire l'applicazione React.
 
-***`npm run dev`*** per eseguire il progetto
+## Prerequisiti: Installazione degli Strumenti
 
-Il progetto si apre in ***`localhost`*** sulla porta ***`5173`***
+1. **Installa Node.js e npm:**
+    * Vai su [https://nodejs.org/](https://nodejs.org/) e scarica l'installer per il tuo sistema operativo.
+    * Esegui l'installer e segui le istruzioni.
+    * Apri il terminale e verifica l'installazione con:
+        ```bash
+        node -v
+        npm -v
+        ```
+
+## Esecuzione del Progetto
+
+1. **Naviga alla cartella del progetto:**
+   ```bash
+   cd [percorso/alla/cartella/del/progetto]
+   ```
+
+2. **Installa le librerie:**
+   ```bash
+   npm install
+   ```
+
+3. **Avvia il progetto:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Apri l'applicazione nel browser:**
+    * L'indirizzo sarà indicato nel terminale, solitamente `http://localhost:5173/`.
