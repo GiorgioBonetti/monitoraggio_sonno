@@ -24,7 +24,8 @@ function PieGraph(props: PieGraphProps) {
                 offset: "-50%",
                 autoRotate: false,
                 style: { textAlign: "center" },
-                formatter: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+                formatter: ({ percent }) =>
+                    percent === 0 ? "" : `${(percent * 100).toFixed(0)}%`,
             },
             legend: false,
             statistic: {
