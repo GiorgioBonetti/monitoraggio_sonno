@@ -5,8 +5,18 @@ Questa guida riassume i passaggi essenziali per eseguire l'applicazione React.
 ## Prerequisiti: Installazione degli Strumenti
 
 1. **Installa Node.js e npm:**
-    * Vai su [https://nodejs.org/](https://nodejs.org/) e scarica l'installer per il tuo sistema operativo.
+    * Se sei su windows, apri il terminale ed esegui:
     * Esegui l'installer e segui le istruzioni.
+      ```# Download and install fnm:
+      winget install Schniz.fnm
+      # Download and install Node.js:
+      fnm install 22
+      # Verify the Node.js version:
+      node -v # Should print "v22.15.0".
+      # Verify npm version:
+      npm -v # Should print "10.9.2".
+      ```
+    * Se sei da mac / linux, vai su [https://nodejs.org/](https://nodejs.org/) e scarica l'installer per il tuo sistema operativo.
     * Apri il terminale e verifica l'installazione con:
         ```bash
         node -v
