@@ -1,40 +1,34 @@
 // funzione che, in base al timestamp in cui si è andati a letto (una stringa)
 function timestampToSleep(timestamp: string, timeSlept: string[]): string {
-    // Converto timestamp es. '23:00:00' in ['23', '00'] togliendo i secondi
     const time = timestamp.split(":").slice(0, 2);
-
-    // converto entrambi gli array in array di numeri
     const timeNum = time.map((el) => parseInt(el));
     const timeSleptNum = timeSlept.map((el) => parseInt(el));
 
-    // calcolo l'orario di sveglia aggiungendo a timeNum, timeSleptNum
-    const wakeUpTime = timeNum.map((el, index) => {
-        // sommo i due array
-        return el + timeSleptNum[index];
-    });
+    // Calcolo l'orario di sveglia
+    let wakeUpMinutes = timeNum[1] + timeSleptNum[1];
+    let wakeUpHours =
+        timeNum[0] + timeSleptNum[0] + Math.floor(wakeUpMinutes / 60);
+    wakeUpMinutes %= 60;
+    wakeUpHours %= 24;
 
-    // aggiusto l'ora
-    if (wakeUpTime[0] > 23) {
-        wakeUpTime[0] = wakeUpTime[0] - 24;
-    }
-
-    // ora sottraggo a wakeUpTime il tempo che avrebbe dovuto dormire, in modo da ottenere l'orario corretto in cui andare a letto
+    // Calcolo l'orario ideale per andare a letto
     const idealSleepTime = [8, 0];
-    const bedTime = wakeUpTime.map((el, index) => {
-        // sottraggo i due array
-        return el - idealSleepTime[index];
-    });
+    let bedMinutes = wakeUpMinutes - idealSleepTime[1];
+    let bedHours = wakeUpHours - idealSleepTime[0];
 
-    // aggiusto l'ora
-    if (bedTime[0] < 0) {
-        bedTime[0] = bedTime[0] + 24;
+    if (bedMinutes < 0) {
+        bedMinutes += 60;
+        bedHours -= 1;
+    }
+    if (bedHours < 0) {
+        bedHours += 24;
     }
 
-    // converto l'array in stringa es. [23, 00] in '23:00'
-    const bedTimeString = bedTime.map((el) => {
-        // aggiungo lo zero davanti se il numero e' minore di 10
-        return el < 10 ? "0" + el : el;
-    });
+    // Converto l'orario in stringa
+    const bedTimeString = [
+        bedHours < 10 ? "0" + bedHours : bedHours,
+        bedMinutes < 10 ? "0" + bedMinutes : bedMinutes,
+    ];
 
     return bedTimeString.join(":");
 }
