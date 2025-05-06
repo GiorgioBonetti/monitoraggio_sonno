@@ -75,7 +75,7 @@ function App() {
         };
 
         fetchData().then(() => { });
-    }, [data]); // fetch del csv
+    }, [data, settMese]); // fetch del csv
 
     useEffect(() => {
         const interval = setInterval(() => {
