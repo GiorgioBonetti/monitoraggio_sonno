@@ -6,7 +6,6 @@ Questa guida riassume i passaggi essenziali per eseguire l'applicazione React.
 
 1. **Installa Node.js e npm:**
     * Se sei su windows, apri il terminale ed esegui:
-    * Esegui l'installer e segui le istruzioni.
       ```# Download and install fnm:
       winget install Schniz.fnm
       # Download and install Node.js:
@@ -17,6 +16,7 @@ Questa guida riassume i passaggi essenziali per eseguire l'applicazione React.
       npm -v # Should print "10.9.2".
       ```
     * Se sei da mac / linux, vai su [https://nodejs.org/](https://nodejs.org/) e scarica l'installer per il tuo sistema operativo.
+    * Esegui l'installer e segui le istruzioni.
     * Apri il terminale e verifica l'installazione con:
         ```bash
         node -v
