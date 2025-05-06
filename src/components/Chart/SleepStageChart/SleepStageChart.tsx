@@ -26,7 +26,7 @@ function CreateScatterPlot(props: GraphProps) {
             shape: "circle",
             pointStyle: {
                 fillOpacity: 0.8,
-                stroke: null, // Removed stroke
+                stroke: null, // linea rimossa
             },
             legend: false,
             yAxis: {

@@ -3,7 +3,7 @@ import timestampToSleep from "../../scripts/timestampToSleep.ts";
 type TempoDormitoProps = {
     oreDormite: string[];
     oreNelLetto: string[];
-    sleepData: any; // Sostituisci `any` con il tipo corretto se disponibile
+    sleepData: any;
 };
 
 function TempoDormito({

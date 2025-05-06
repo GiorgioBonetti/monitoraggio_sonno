@@ -48,6 +48,7 @@ function App() {
         SleepDataInterface[][] | null
     >(null);
 
+    // use effect
     useEffect(() => {
         const fetchData = async () => {
             try {

@@ -8,7 +8,7 @@ export interface SleepDataInterface {
     stage: string; // Fase del sonno (es. Light, Deep, REM, Awake)
 }
 
-// Funzione asincrona per estrarre i dati da un file CSV
+// Funzione per estrarre i dati da un file CSV
 export async function extractData(
     filePath: string,
 ): Promise<SleepDataInterface[]> {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import CreateStackedColumnPlot from "../Chart/BarChart/StackedColumnPlot";
 
 type GraficoBarreProps = {
-    sleepDataWeek: any[][]; // Sostituisci `any` con il tipo corretto se disponibile
+    sleepDataWeek: any[][];
     colors: string[];
     stageOrder: string[];
     settMese: boolean;

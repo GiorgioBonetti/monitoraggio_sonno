@@ -1,6 +1,6 @@
-// funzione che, in base al timestamp in cui si e' andati a letto (una stringa)
+// funzione che, in base al timestamp in cui si è andati a letto (una stringa)
 function timestampToSleep(timestamp: string, timeSlept: string[]): string {
-    // converto timestamp es. '23:00:00' in ['23', '00'] togliendo i secondi
+    // Converto timestamp es. '23:00:00' in ['23', '00'] togliendo i secondi
     const time = timestamp.split(":").slice(0, 2);
 
     // converto entrambi gli array in array di numeri
