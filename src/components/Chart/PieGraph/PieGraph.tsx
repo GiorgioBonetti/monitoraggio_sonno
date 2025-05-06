@@ -24,8 +24,12 @@ function PieGraph(props: PieGraphProps) {
                 offset: "-50%",
                 autoRotate: false,
                 style: { textAlign: "center" },
-                formatter: ({ percent }) =>
-                    percent === 0 ? "" : `${(percent * 100).toFixed(0)}%`,
+                formatter: (
+                    { percent }, // Funzione per far vedere la percentuale solo se è maggiore di 1.5%
+                ) =>
+                    percent && percent * 100 > 1.5
+                        ? `${(percent * 100).toFixed(0)}%`
+                        : "",
             },
             legend: false,
             statistic: {
