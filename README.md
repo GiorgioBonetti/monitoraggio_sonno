@@ -10,10 +10,6 @@ Questa guida riassume i passaggi essenziali per eseguire l'applicazione React.
       winget install Schniz.fnm
       # Download and install Node.js:
       fnm install 22
-      # Verify the Node.js version:
-      node -v # Should print "v22.15.0".
-      # Verify npm version:
-      npm -v # Should print "10.9.2".
       ```
     * Se sei da mac / linux, vai su [https://nodejs.org/](https://nodejs.org/) e scarica l'installer per il tuo sistema operativo.
     * Esegui l'installer e segui le istruzioni.
