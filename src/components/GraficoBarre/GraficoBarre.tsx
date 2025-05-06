@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import CreateStackedColumnPlot from "../Chart/BarChart/StackedColumnPlot";
 
 type GraficoBarreProps = {
@@ -15,6 +16,16 @@ function GraficoBarre({
     settMese,
     setSettMese,
 }: GraficoBarreProps) {
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setIsLoading(true);
+        const timeout = setTimeout(() => {
+            setIsLoading(false); // Simula il caricamento dei dati
+        }, 500);
+        return () => clearTimeout(timeout);
+    }, [settMese, sleepDataWeek]);
+
     return (
         <div>
             <div className="row px-5 mt-2 mb-4">
@@ -63,12 +74,22 @@ function GraficoBarre({
                     </button>
                 </div>
             </div>
-            <CreateStackedColumnPlot
-                dati={sleepDataWeek || []}
-                colors={colors}
-                ordine={stageOrder}
-                settMese={settMese}
-            />
+            {isLoading ? (
+                <div
+                    className="spinner-border m-5"
+                    style={{ width: "3rem", height: "3rem" }}
+                    role="status"
+                >
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            ) : (
+                <CreateStackedColumnPlot
+                    dati={sleepDataWeek || []}
+                    colors={colors}
+                    ordine={stageOrder}
+                    settMese={settMese}
+                />
+            )}
         </div>
     );
 }
