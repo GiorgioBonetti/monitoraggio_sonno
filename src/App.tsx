@@ -58,6 +58,7 @@ function App() {
                 setSleepData(dati);
 
                 if (settMese) {
+                    // carica dati settimana
                     const datiSettimana = [dati];
                     for (let i = 1; i <= 6; i++) {
                         const datiGiorno = await extractData(
@@ -67,6 +68,7 @@ function App() {
                     }
                     setSleepDataWeek(datiSettimana);
                 } else {
+                    // carica dati mese
                     const datiSettimana = [dati];
                     for (let i = 1; i <= 30; i++) {
                         const datiGiorno = await extractData(
@@ -92,7 +94,7 @@ function App() {
         }, 20000);
 
         return () => clearInterval(interval);
-    }, [consiglioSelected]);
+    }, [consiglioSelected]); // change del consiglio ogni 20 secondi
 
     useEffect(() => {
         if (sleepData != null) {
@@ -104,7 +106,7 @@ function App() {
 
             setoreNelLetto(extractOreLetto(sleepData));
         }
-    }, [sleepData]); // fetch dei dati degli stadi del sonno
+    }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
     return (
         <div className="bg-dark-subtle">

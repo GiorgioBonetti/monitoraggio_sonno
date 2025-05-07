@@ -20,6 +20,7 @@ function Navbar(props: NavbarProps) {
         props.setCurrentDate(prev);
     }
 
+    // controllo che la data inserita sia valida (ovvero che non sia futura)
     function checkDate(date: Date) {
         if (date <= new Date()) {
             props.setCurrentDate(date);

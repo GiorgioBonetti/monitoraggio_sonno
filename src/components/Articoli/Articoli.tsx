@@ -27,6 +27,7 @@ function Articoli({ articoli }: ArticoliProps) {
                                 <div className="col-1 offset-0 offset-sm-1">
                                     <ButtonArticolo target={articolo.target} />
                                 </div>
+                                {/* target serve a dare il componente su cui fare l'azione del bottone */}
                                 <Articolo target={articolo.target}>
                                     <p className="pt-2">
                                         <small>{articolo.testo}</small>

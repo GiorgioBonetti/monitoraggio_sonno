@@ -19,20 +19,23 @@ function CreateStackedColumnPlot(props: GraphProps) {
             data: dati,
             xField: "date",
             yField: "valore",
-            seriesField: "stage",
+            seriesField: "stage", // in base a che valori dividerlo
             color: [...props.colors].reverse(), // Crea una copia prima di invertire
             legend: false,
             meta: {
                 valore: {
+                    // dove trasformo i minuti in ore
                     formatter: (v: number) =>
                         `${Math.floor(v / 60)} h  ${v % 60} min`,
                 },
                 stage: {
+                    // ordine in cui mettere i dati
                     type: "cat",
                     values: [...props.ordine].reverse(), // Crea una copia prima di invertire
                 },
                 date: {
                     type: "cat",
+                    // in pratica, fa in modo che, se scelgo la settimana, vengano renderizzate esattamente 7 colonne
                     values: (() => {
                         // Estrai tutte le date uniche dai dati e ordinale in ordine crescente
                         const allDates = [
@@ -99,15 +102,16 @@ function CreateStackedColumnPlot(props: GraphProps) {
                 },
             },
         });
-
+        // render del grafico
         stackedColumnPlot.render();
         return () => {
-            stackedColumnPlot.destroy();
+            stackedColumnPlot.destroy(); // distrugge il grafico quando il componente viene smontato
         };
     }, [props.dati, props.settMese]);
 
     return (
         <div>
+            {/* dando lo stesso id della new Column che crea lo useEffect sopra, questo div viene rimpiazzato dal grafico */}
             <div id="container3" style={{ padding: "5px" }}></div>
         </div>
     );

@@ -9,6 +9,7 @@ type PieGraphProps = {
 };
 
 function PieGraph(props: PieGraphProps) {
+    // questo componente calcola da solo la percentuale di ogni fase di sonno
     useEffect(() => {
         const piePlot = new Pie("contenitore", {
             appendPadding: 0,
@@ -54,10 +55,10 @@ function PieGraph(props: PieGraphProps) {
         });
         piePlot.render();
         return () => {
-            piePlot.destroy();
+            piePlot.destroy(); // distrugge il grafico quando il componente viene smontato
         };
     }, [props.data]);
-
+    // dando lo stesso id della new Column che crea lo useEffect sopra, questo div viene rimpiazzato dal grafico
     return <div id="contenitore" style={{ padding: "5px" }}></div>;
 }
 

@@ -1,8 +1,6 @@
 import Papa from "papaparse";
 
 export interface SleepDataInterface {
-    forEach(arg0: ({ stage }: { stage: any }) => void): unknown;
-
     date: string; // Data del dato di sonno
     timestamp: string; // Ora del dato di sonno
     stage: string; // Fase del sonno (es. Light, Deep, REM, Awake)
@@ -32,23 +30,15 @@ export async function extractData(
                 try {
                     const transformedData: SleepDataInterface[] =
                         result.data.map((entry: any) => {
+                            // 2025-02-01 21:05:00 -> 2025-02-01, 21:05:00
                             const [date, time] = entry.Timestamp.split(" ");
                             return {
                                 date,
                                 timestamp: time,
-                                stage: entry["Sleep Stage"] || "Unknown",
-                                forEach: function (
-                                    callback: ({
-                                        stage,
-                                    }: {
-                                        stage: any;
-                                    }) => void,
-                                ): void {
-                                    callback({ stage: this.stage });
-                                },
+                                stage: entry["Sleep Stage"],
                             };
                         });
-                    resolve(transformedData);
+                    resolve(transformedData); // Do come risultato della Promise l'array ottenuto
                 } catch (error) {
                     reject(
                         "Errore durante la trasformazione dei dati: " + error,

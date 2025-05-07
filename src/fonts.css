@@ -9,8 +9,7 @@
     src: url("https://raw.githubusercontent.com/blaisck/sfwin/master/SFPro/TrueType/SFProText-Medium.ttf");
 }
 
-/* Applicazione del font con fallback */
+/* Applicazione del font con fallback, ovvero nel caso in cui il font primario non fosse scaricabile dall'url */
 body {
     font-family: "SF Pro Text", "Roboto", sans-serif;
 }
-
