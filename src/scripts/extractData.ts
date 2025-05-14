@@ -31,7 +31,7 @@ export async function extractData(
                     const transformedData: SleepDataInterface[] =
                         result.data.map((entry: any) => {
                             // 2025-02-01 21:05:00 -> 2025-02-01, 21:05:00
-                            const [date, time] = entry.Timestamp.split(" ");
+                            const [date, time] = entry["Timestamp"].split(" ");
                             return {
                                 date,
                                 timestamp: time,

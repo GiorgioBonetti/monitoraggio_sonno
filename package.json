@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@antv/g2plot": "^2.4.33",
+    "@supabase/supabase-js": "^2.49.4",
     "@types/papaparse": "^5.3.15",
     "bootstrap": "^5.3.5",
     "bootstrap-icons": "^1.11.3",
