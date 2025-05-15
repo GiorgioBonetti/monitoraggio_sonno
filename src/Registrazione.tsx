@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Registrazione() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // navigazione
     const navigate = useNavigate();
@@ -16,7 +17,11 @@ function Registrazione() {
         e.preventDefault();
 
         // FARE LA REGISTRAZIONE ECC
-        navigate("/");
+        if (email && password) {
+            sessionStorage.setItem("isLoggedIn", "true");
+            setIsLoggedIn(true);
+            navigate("/");
+        }
     };
 
     return (
