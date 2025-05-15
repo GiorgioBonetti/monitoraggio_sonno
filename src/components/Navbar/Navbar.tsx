@@ -34,7 +34,8 @@ function Navbar(props: NavbarProps) {
 
     // LOGOUT
     const handleLogout = () => {
-        sessionStorage.removeItem("isLoggedIn");
+        sessionStorage.clear();
+
         navigate("/login"); // Reindirizza alla pagina di login
     };
 
@@ -43,7 +44,7 @@ function Navbar(props: NavbarProps) {
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">
                     <img
-                        src="../../../public/icon/moon.png"
+                        src="/icon/moon.png"
                         alt="Logo"
                         width="24"
                         height="24"

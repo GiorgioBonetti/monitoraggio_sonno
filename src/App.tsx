@@ -24,9 +24,10 @@ import {
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
 import { createClient } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
 // Initialize Supabase client
-const supabase = createClient(
+export const supabase = createClient(
     "https://ushxldxcwcylubwpvgdi.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzaHhsZHhjd2N5bHVid3B2Z2RpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzAxMTk0NiwiZXhwIjoyMDYyNTg3OTQ2fQ._5UDv3DipeSwda5t9YnIxTXwQckvr1P1ZCKCl1kY4Ts",
 );
@@ -55,13 +56,20 @@ function App() {
         SleepDataInterface[][] | null
     >(null);
 
+    const navigate = useNavigate();
+    
     // use effect
     useEffect(() => {
+        if (sessionStorage.getItem("Utente") == null) {
+            navigate("/login");
+        }
+
         const fetchData = async () => {
             try {
                 const { data: datiGiorno, error } = await supabase
                     .from("dati")
                     .select("Sleep, Timestamp")
+                    .eq("FkUtente", sessionStorage.getItem("Utente"))
                     .eq("night_reference", data.toISOString().split("T")[0]);
 
                 if (datiGiorno) {
@@ -85,6 +93,7 @@ function App() {
                     const { data: dati } = await supabase
                         .from("dati")
                         .select("Sleep, Timestamp")
+                        .eq("FkUtente", sessionStorage.getItem("Utente"))
                         .eq(
                             "night_reference",
                             new Date(data.getTime() - i * 24 * 60 * 60 * 1000)
@@ -108,7 +117,7 @@ function App() {
             }
         };
 
-        fetchData().then(() => {});
+        fetchData().then(() => { });
     }, [data, settMese]); // fetch del csv
 
     useEffect(() => {

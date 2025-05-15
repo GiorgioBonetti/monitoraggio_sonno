@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "./App";
+import SHA256 from "crypto-js/sha256";
 
 function Registrazione() {
     const [email, setEmail] = useState("");
@@ -18,9 +20,21 @@ function Registrazione() {
 
         // FARE LA REGISTRAZIONE ECC
         if (email && password) {
-            sessionStorage.setItem("isLoggedIn", "true");
-            setIsLoggedIn(true);
-            navigate("/");
+            const fetchData = async () => {
+                try {
+                    const{data} = await supabase
+                        .from("Utenti")
+                        .insert([{ "Nome": email, "pwd": SHA256(password).toString() }])
+                        .select();
+                    
+                    navigate("/login");
+                    
+                } catch {
+                    alert("Si è verificato un errore durante il login.");
+                }
+            }
+            fetchData().then(() => { });
+
         }
     };
 
@@ -71,6 +85,14 @@ function Registrazione() {
                             </button>
                         </div>
                     </form>
+                     <button
+                        className="btn mt-1 btn-outline-primary"
+                        onClick={() => {
+                            navigate("/login"); // Reindirizza alla pagina di login
+                        }}
+                    >
+                        Login
+                    </button>
                 </div>
             </div>
         </div>
