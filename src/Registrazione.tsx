@@ -6,7 +6,7 @@ import SHA256 from "crypto-js/sha256";
 function Registrazione() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // navigazione
     const navigate = useNavigate();
@@ -20,9 +20,12 @@ function Registrazione() {
 
         // FARE LA REGISTRAZIONE ECC
         if (email && password) {
+            // Controlla se l'email è già registrata
+
+
             const fetchData = async () => {
                 try {
-                    const{data} = await supabase
+                     await supabase
                         .from("Utenti")
                         .insert([{ "Nome": email, "pwd": SHA256(password).toString() }])
                         .select();

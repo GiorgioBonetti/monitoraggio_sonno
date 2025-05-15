@@ -85,7 +85,7 @@ function Login() {
                                 Email address
                             </label>
                             <input
-                                required
+                                
                                 type="email"
                                 className="form-control"
                                 id="inputEmail1"
@@ -101,7 +101,7 @@ function Login() {
                                 Password
                             </label>
                             <input
-                                required
+                                
                                 type="password"
                                 className="form-control"
                                 id="inputPassword"

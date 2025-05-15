@@ -57,13 +57,9 @@ function App() {
     >(null);
 
     const navigate = useNavigate();
-    
+
     // use effect
     useEffect(() => {
-        if (sessionStorage.getItem("Utente") == null) {
-            navigate("/login");
-        }
-
         const fetchData = async () => {
             try {
                 const { data: datiGiorno, error } = await supabase
@@ -118,6 +114,7 @@ function App() {
         };
 
         fetchData().then(() => { });
+
     }, [data, settMese]); // fetch del csv
 
     useEffect(() => {
@@ -131,6 +128,12 @@ function App() {
     }, [consiglioSelected]); // change del consiglio ogni 20 secondi
 
     useEffect(() => {
+        if (sessionStorage.getItem("Utente") === null) {
+            navigate("/login");
+        }
+    }, []); // reindirizza alla pagina di login se non c'è un utente loggato
+
+    useEffect(() => {
         if (sleepData != null) {
             setSleepStages(extractSleepStages(sleepData));
 
@@ -142,7 +145,9 @@ function App() {
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
-    return (
+    return sessionStorage.getItem("Utente") === null ? (
+        <div className="bg-dark-subtle">
+        </div>) : (
         <div className="bg-dark-subtle">
             {/* Navbar */}
             <Navbar
