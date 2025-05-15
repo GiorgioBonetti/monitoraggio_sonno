@@ -28,11 +28,10 @@ import { createClient } from "@supabase/supabase-js";
 // Initialize Supabase client
 const supabase = createClient(
     "https://ushxldxcwcylubwpvgdi.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzaHhsZHhjd2N5bHVid3B2Z2RpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzAxMTk0NiwiZXhwIjoyMDYyNTg3OTQ2fQ._5UDv3DipeSwda5t9YnIxTXwQckvr1P1ZCKCl1kY4Ts"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzaHhsZHhjd2N5bHVid3B2Z2RpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzAxMTk0NiwiZXhwIjoyMDYyNTg3OTQ2fQ._5UDv3DipeSwda5t9YnIxTXwQckvr1P1ZCKCl1kY4Ts",
 );
 
 function App() {
-
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
 
@@ -65,13 +64,14 @@ function App() {
                     .select("Sleep, Timestamp")
                     .eq("night_reference", data.toISOString().split("T")[0]);
 
-
                 if (datiGiorno) {
-                    setSleepData(datiGiorno.map((d) => ({
-                        date: d.Timestamp.split("T")[0],
-                        timestamp: d.Timestamp.split("T")[1],
-                        stage: d.Sleep,
-                    })));
+                    setSleepData(
+                        datiGiorno.map((d) => ({
+                            date: d.Timestamp.split("T")[0],
+                            timestamp: d.Timestamp.split("T")[1],
+                            stage: d.Sleep,
+                        })),
+                    );
                 }
                 if (error) {
                     setSleepData([]);
@@ -85,111 +85,112 @@ function App() {
                     const { data: dati } = await supabase
                         .from("dati")
                         .select("Sleep, Timestamp")
-                        .eq("night_reference", new Date(data.getTime() - i * 24 * 60 * 60 * 1000).toISOString().split("T")[0]);
+                        .eq(
+                            "night_reference",
+                            new Date(data.getTime() - i * 24 * 60 * 60 * 1000)
+                                .toISOString()
+                                .split("T")[0],
+                        );
 
                     if (dati) {
-                        datiSettimana.push(dati.map((d) => ({
-                            timestamp: d.Timestamp.split("T")[1],
-                            date: d.Timestamp.split("T")[0],
-                            stage: d.Sleep,
-                        })));
+                        datiSettimana.push(
+                            dati.map((d) => ({
+                                timestamp: d.Timestamp.split("T")[1],
+                                date: d.Timestamp.split("T")[0],
+                                stage: d.Sleep,
+                            })),
+                        );
                     }
                 }
                 setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
+            } catch {
+                setSleepData(null);
+            }
+        };
 
-            
-        } catch {
-            setSleepData(null);
+        fetchData().then(() => {});
+    }, [data, settMese]); // fetch del csv
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setConsiglioSelected(
+                consigli[Math.floor(Math.random() * consigli.length)],
+            );
+        }, 20000);
+
+        return () => clearInterval(interval);
+    }, [consiglioSelected]); // change del consiglio ogni 20 secondi
+
+    useEffect(() => {
+        if (sleepData != null) {
+            setSleepStages(extractSleepStages(sleepData));
+
+            setOreDormite(extractOreDormite(sleepData));
+
+            setPunteggio(extractPunteggioSonno(sleepData));
+
+            setoreNelLetto(extractOreLetto(sleepData));
         }
-    };
+    }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
-    fetchData().then(() => { });
-}, [data, settMese]); // fetch del csv
+    return (
+        <div className="bg-dark-subtle">
+            {/* Navbar */}
+            <Navbar
+                currentDate={data || new Date()}
+                setCurrentDate={setData}
+            ></Navbar>
 
-useEffect(() => {
-    const interval = setInterval(() => {
-        setConsiglioSelected(
-            consigli[Math.floor(Math.random() * consigli.length)],
-        );
-    }, 20000);
-
-    return () => clearInterval(interval);
-}, [consiglioSelected]); // change del consiglio ogni 20 secondi
-
-useEffect(() => {
-    if (sleepData != null) {
-        setSleepStages(extractSleepStages(sleepData));
-
-        setOreDormite(extractOreDormite(sleepData));
-
-        setPunteggio(extractPunteggioSonno(sleepData));
-
-        setoreNelLetto(extractOreLetto(sleepData));
-    }
-}, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
-
-return (
-    <div className="bg-dark-subtle">
-        {/* Navbar */}
-        <div className="container-fluid mb-1 fixed-top">
-            <div className="row">
-                <div className="card bg-dark-subtle align-items-center border-0 border-bottom border-1 border-light rounded-0">
-                    <Card>
-                        <Navbar
-                            currentDate={data || new Date()}
-                            setCurrentDate={setData}
-                        ></Navbar>
-                    </Card>
-                </div>
-            </div>
-        </div>
-
-        {/* Spacer tra il navbar e i componenti della pagina. Quando non ci sono dati, viene nascosto. */}
-        <div
-            className="pt-5 mt-4"
-            style={{
-                visibility:
-                    sleepData && sleepData.length > 0
-                        ? "visible"
-                        : "hidden",
-            }}
-        ></div>
-
-        {sleepData && sleepData.length > 0 ? ( // Se ci sono dati, mostra i componenti
-            <div>
-                {/* Titolo */}
-                <div className="container-lg">
-                    <div className="row">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <Punteggio
-                                    punteggio={punteggio[0]}
-                                    testo={punteggio[1]}
-                                ></Punteggio>
-                            </Card>
+            {sleepData && sleepData.length > 0 ? ( // Se ci sono dati, mostra i componenti
+                <div>
+                    {/* Titolo */}
+                    <div className="container-lg">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <Punteggio
+                                        punteggio={punteggio[0]}
+                                        testo={punteggio[1]}
+                                    ></Punteggio>
+                                </Card>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="container-lg">
-                    <div className="row">
-                        {/* Scritta 'hai dormito' */}
-                        <div className="card col-12 col-md-6 border-4 rounded-4">
-                            <Card>
-                                <TempoDormito
-                                    oreDormite={oreDormite}
-                                    oreNelLetto={oreNelLetto}
-                                    sleepData={sleepData}
-                                />
-                            </Card>
-                        </div>
-                        {/* Grafico a torta */}
-                        <div className="card col-12 col-md-6 border-4 rounded-4">
-                            <div className="pt-1">
+                    <div className="container-lg">
+                        <div className="row">
+                            {/* Scritta 'hai dormito' */}
+                            <div className="card col-12 col-md-6 border-4 rounded-4">
                                 <Card>
-                                    <PieGraph
-                                        data={
-                                            sleepStages ? sleepStages : []
-                                        }
+                                    <TempoDormito
+                                        oreDormite={oreDormite}
+                                        oreNelLetto={oreNelLetto}
+                                        sleepData={sleepData}
+                                    />
+                                </Card>
+                            </div>
+                            {/* Grafico a torta */}
+                            <div className="card col-12 col-md-6 border-4 rounded-4">
+                                <div className="pt-1">
+                                    <Card>
+                                        <PieGraph
+                                            data={
+                                                sleepStages ? sleepStages : []
+                                            }
+                                            colors={COLORS}
+                                            ordine={stageOrder}
+                                        />
+                                    </Card>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Grafico a dispersione */}
+                    <div className="container-lg">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <CreateScatterPlot
+                                        dati={sleepData}
                                         colors={COLORS}
                                         ordine={stageOrder}
                                     />
@@ -197,85 +198,70 @@ return (
                             </div>
                         </div>
                     </div>
-                </div>
-                {/* Grafico a dispersione */}
-                <div className="container-lg">
-                    <div className="row">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <CreateScatterPlot
-                                    dati={sleepData}
-                                    colors={COLORS}
-                                    ordine={stageOrder}
-                                />
-                            </Card>
+                    {/* Consiglio */}
+                    <div className="container-lg">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <Consiglio
+                                        articolo={
+                                            consiglioSelected
+                                                ? consiglioSelected
+                                                : consigli[0]
+                                        }
+                                    />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Grafico a barre */}
+                    <div className="container-lg">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <GraficoBarre
+                                        sleepDataWeek={sleepDataWeek || []}
+                                        colors={COLORS}
+                                        stageOrder={stageOrder}
+                                        settMese={settMese}
+                                        setSettMese={setsettMese}
+                                    />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Articoli */}
+                    <div className="container-lg">
+                        <div className="row">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <Articoli articoli={articoli} />
+                                </Card>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {/* Consiglio */}
-                <div className="container-lg">
-                    <div className="row">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <Consiglio
-                                    articolo={
-                                        consiglioSelected
-                                            ? consiglioSelected
-                                            : consigli[0]
-                                    }
-                                />
-                            </Card>
+            ) : (
+                // Se non ci sono dati, mostra un messaggio
+                <div
+                    style={{
+                        minHeight:
+                            "100vh" /* necessario per espandere il bg a tutta la pagina */,
+                    }}
+                >
+                    <div className="container-lg">
+                        <div className="row text-center">
+                            <div className="card border-4 rounded-4">
+                                <Card>
+                                    <MissingData />
+                                </Card>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {/* Grafico a barre */}
-                <div className="container-lg">
-                    <div className="row">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <GraficoBarre
-                                    sleepDataWeek={sleepDataWeek || []}
-                                    colors={COLORS}
-                                    stageOrder={stageOrder}
-                                    settMese={settMese}
-                                    setSettMese={setsettMese}
-                                />
-                            </Card>
-                        </div>
-                    </div>
-                </div>
-                {/* Articoli */}
-                <div className="container-lg">
-                    <div className="row">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <Articoli articoli={articoli} />
-                            </Card>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        ) : (
-            // Se non ci sono dati, mostra un messaggio
-            <div
-                style={{
-                    minHeight:
-                        "100vh" /* necessario per espandere il bg a tutta la pagina */,
-                }}
-            >
-                <div className="container-lg">
-                    <div className="row text-center">
-                        <div className="card border-4 rounded-4">
-                            <Card>
-                                <MissingData />
-                            </Card>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )}
-    </div>
-);
+            )}
+        </div>
+    );
 }
 
 export default App;
