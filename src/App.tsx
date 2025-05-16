@@ -25,12 +25,9 @@ import {
 } from "./scripts/dataConsigliArticoli.ts";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
-
-
 import supabase from "../Supabase.ts";
 
 function App() {
-
     const { user } = useUser();
 
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -67,7 +64,10 @@ function App() {
                         .from("dati")
                         .select("Sleep, Timestamp")
                         .eq("FkUtente", user?.id)
-                        .eq("night_reference", data.toISOString().split("T")[0]);
+                        .eq(
+                            "night_reference",
+                            data.toISOString().split("T")[0],
+                        );
 
                     if (datiGiorno) {
                         setSleepData(
@@ -93,7 +93,9 @@ function App() {
                             .eq("FkUtente", user?.id)
                             .eq(
                                 "night_reference",
-                                new Date(data.getTime() - i * 24 * 60 * 60 * 1000)
+                                new Date(
+                                    data.getTime() - i * 24 * 60 * 60 * 1000,
+                                )
                                     .toISOString()
                                     .split("T")[0],
                             );
@@ -114,7 +116,7 @@ function App() {
                 }
             };
 
-            fetchData().then(() => { });
+            fetchData().then(() => {});
         }
     }, [data, settMese]); // fetch del csv
 
@@ -147,9 +149,9 @@ function App() {
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
     return user == null ? (
-        <div >
-        </div>) : (
-        <div >
+        <div></div>
+    ) : (
+        <div>
             {/* Navbar */}
             <Navbar
                 currentDate={data || new Date()}

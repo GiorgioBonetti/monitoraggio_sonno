@@ -8,7 +8,6 @@ type NavbarProps = {
 };
 
 function Navbar(props: NavbarProps) {
-
     const { logout } = useUser();
 
     // funzione per passare al giorno successivo
@@ -61,6 +60,18 @@ function Navbar(props: NavbarProps) {
                 <button
                     onClick={handleLogout}
                     className="btn btn-outline-danger d-sm-none"
+                    style={{
+                        transition: "all 0.2s ease",
+                    }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
                 >
                     Logout
                 </button>
@@ -72,6 +83,18 @@ function Navbar(props: NavbarProps) {
                     aria-controls="navbarNav"
                     aria-expanded="false"
                     aria-label="Toggle navigation"
+                    style={{
+                        transition: "all 0.2s ease",
+                    }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -131,6 +154,20 @@ function Navbar(props: NavbarProps) {
                             <button
                                 onClick={handleLogout}
                                 className="btn btn-outline-danger mx-3 my-2 my-sm-0"
+                                style={{
+                                    transition: "all 0.2s ease",
+                                }}
+                                onMouseDown={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
                             >
                                 Logout
                             </button>
