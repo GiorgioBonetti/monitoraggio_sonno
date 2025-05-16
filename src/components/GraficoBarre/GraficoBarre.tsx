@@ -34,7 +34,7 @@ function GraficoBarre({
                         onClick={() => setSettMese(true)}
                         className="btn px-4"
                         style={{
-                            backgroundColor: "#14bdad",
+                            backgroundColor: "#18c599",
                             color: "white",
                             transition: "all 0.2s ease",
                         }}
@@ -56,7 +56,7 @@ function GraficoBarre({
                         onClick={() => setSettMese(false)}
                         className="btn px-5"
                         style={{
-                            backgroundColor: "#14bdad",
+                            backgroundColor: "#18c599",
                             color: "white",
                             transition: "all 0.2s ease",
                         }}

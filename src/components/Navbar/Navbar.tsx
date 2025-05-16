@@ -40,7 +40,7 @@ function Navbar(props: NavbarProps) {
     };
 
     return (
-        <nav className="navbar navbar-expand-sm bg-light">
+        <nav className="navbar navbar-expand-sm bg-light mb-1">
             <div className="container-fluid justify-content-between">
                 <a className="navbar-brand" href="/">
                     <img
@@ -83,7 +83,7 @@ function Navbar(props: NavbarProps) {
                                     className="btn me-2"
                                     onClick={previousDate}
                                     style={{
-                                        backgroundColor: "#14bdad",
+                                        backgroundColor: "#18c599",
                                         color: "white",
                                         transition: "all 0.2s ease",
                                     }}
@@ -91,7 +91,7 @@ function Navbar(props: NavbarProps) {
                                     &lt;
                                 </button>
                                 <input
-                                    className="form-control mx-2"
+                                    className="form-control mx-2 border-2"
                                     type="date"
                                     value={
                                         props.currentDate
@@ -104,13 +104,14 @@ function Navbar(props: NavbarProps) {
                                     style={{
                                         transition: "all 0.2s ease",
                                         maxWidth: "200px",
+                                        borderColor: "#18c599",
                                     }}
                                 />
                                 <button
                                     className="btn ms-2"
                                     onClick={nextDate}
                                     style={{
-                                        backgroundColor: "#14bdad",
+                                        backgroundColor: "#18c599",
                                         color: "white",
                                         transition: "all 0.2s ease",
                                     }}
