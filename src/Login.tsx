@@ -2,30 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../Supabase.ts";
 import SHA256 from "crypto-js/sha256";
+import { useUser } from "./contesto/UserContext";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    // const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const { user, login, logout } = useUser();
 
     // navigazione
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
-    }, []); // titolo della pagina
-
-    useEffect(() => {
-        const sessionStatus = sessionStorage.getItem("isLoggedIn");
-        if (sessionStatus === "true") {
-            setIsLoggedIn(true);
-        }
-    }, []); // Controlla se l'utente è già loggato
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
+
         e.preventDefault();
 
-        // Simula il login (aggiungi qui la logica di autenticazione)
         if (email && password) {
             const fetchData = async () => {
                 try {
@@ -37,38 +33,40 @@ function Login() {
                     if (data && data.length === 1) {
                         const user = data[0];
                         if (user.pwd === SHA256(password).toString()) {
-                            setIsLoggedIn(true);
-                            navigate("/"); // Reindirizza alla pagina principale
-                            sessionStorage.setItem(
-                                "Utente",
-                                JSON.stringify(user.id),
-                            );
+                            // setIsLoggedIn(true);
+                            login({ id: user.id, email: email }); // Passa l'oggetto utente al contesto
+                             // Reindirizza alla pagina principale
                         } else {
                             alert("Password errata.");
-                            setIsLoggedIn(false);
+                            // setIsLoggedIn(false);
+                            logout(); // Logout in caso di password errata
                         }
                     } else {
-                        alert("Utente non trovato.");
-                        setIsLoggedIn(false);
+                        alert("Controlla meglio user e pasword");
+                        // setIsLoggedIn(false);
+                        logout();
                     }
                 } catch {
-                    setIsLoggedIn(false);
+                    alert("Si è verificato un errore durante il login.");
+                    // setIsLoggedIn(false);
+                    logout();
                 }
             };
             fetchData().then(() => {});
         } else {
-            alert("Non hai inserito la password.");
-            setIsLoggedIn(false);
+            alert("Si è verificato un errore durante il login.");
+            logout();
         }
     };
 
     useEffect(() => {
-        if (isLoggedIn) {
+        // Reindirizza alla pagina principale se l'utente è già loggato
+        if (user) {
             navigate("/"); // Reindirizza alla pagina principale
         } else {
             navigate("/login"); // Reindirizza alla pagina di login
         }
-    }, []); // Reindirizza alla pagina principale se l'utente è già loggato
+    },[] );
 
     return (
         <div style={{ minHeight: "100vh" }}>
@@ -94,6 +92,7 @@ function Login() {
                                 Indirizzo email
                             </label>
                             <input
+
                                 type="email"
                                 className="form-control"
                                 id="inputEmail1"
@@ -114,6 +113,7 @@ function Login() {
                                 Password
                             </label>
                             <input
+
                                 type="password"
                                 className="form-control"
                                 id="inputPassword"

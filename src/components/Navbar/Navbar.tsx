@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+// Update the import path below to the correct relative location of UserContext
+import { useUser } from "../../contesto/UserContext";
 
 type NavbarProps = {
     currentDate: Date;
@@ -6,6 +8,9 @@ type NavbarProps = {
 };
 
 function Navbar(props: NavbarProps) {
+
+    const { logout } = useUser();
+
     // funzione per passare al giorno successivo
     function nextDate() {
         const next = new Date(props.currentDate);
@@ -34,7 +39,7 @@ function Navbar(props: NavbarProps) {
 
     // LOGOUT
     const handleLogout = () => {
-        sessionStorage.clear();
+        logout(); // Esegui il logout
 
         navigate("/login"); // Reindirizza alla pagina di login
     };

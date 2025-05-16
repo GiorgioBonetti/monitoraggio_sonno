@@ -24,9 +24,15 @@ import {
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./contesto/UserContext";
+
+
 import supabase from "../Supabase.ts";
 
 function App() {
+
+    const { user } = useUser();
+
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
 
@@ -54,60 +60,62 @@ function App() {
 
     // use effect
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { data: datiGiorno, error } = await supabase
-                    .from("dati")
-                    .select("Sleep, Timestamp")
-                    .eq("FkUtente", sessionStorage.getItem("Utente"))
-                    .eq("night_reference", data.toISOString().split("T")[0]);
-
-                if (datiGiorno) {
-                    setSleepData(
-                        datiGiorno.map((d) => ({
-                            date: d.Timestamp.split("T")[0],
-                            timestamp: d.Timestamp.split("T")[1],
-                            stage: d.Sleep,
-                        })),
-                    );
-                }
-                if (error) {
-                    setSleepData([]);
-                }
-
-                const max = settMese ? 6 : 30;
-
-                const datiSettimana = [];
-
-                for (let i = 0; i <= max; i++) {
-                    const { data: dati } = await supabase
+        if (user) {
+            const fetchData = async () => {
+                try {
+                    const { data: datiGiorno, error } = await supabase
                         .from("dati")
                         .select("Sleep, Timestamp")
-                        .eq("FkUtente", sessionStorage.getItem("Utente"))
-                        .eq(
-                            "night_reference",
-                            new Date(data.getTime() - i * 24 * 60 * 60 * 1000)
-                                .toISOString()
-                                .split("T")[0],
-                        );
+                        .eq("FkUtente", user?.id)
+                        .eq("night_reference", data.toISOString().split("T")[0]);
 
-                    if (dati) {
-                        datiSettimana.push(
-                            dati.map((d) => ({
-                                timestamp: d.Timestamp.split("T")[1],
+                    if (datiGiorno) {
+                        setSleepData(
+                            datiGiorno.map((d) => ({
                                 date: d.Timestamp.split("T")[0],
+                                timestamp: d.Timestamp.split("T")[1],
                                 stage: d.Sleep,
                             })),
                         );
                     }
-                }
-                setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
-            } catch {
-                setSleepData(null);
-            }
-        };
+                    if (error) {
+                        setSleepData([]);
+                    }
 
-        fetchData().then(() => {});
+                    const max = settMese ? 6 : 30;
+
+                    const datiSettimana = [];
+
+                    for (let i = 0; i <= max; i++) {
+                        const { data: dati } = await supabase
+                            .from("dati")
+                            .select("Sleep, Timestamp")
+                            .eq("FkUtente", user?.id)
+                            .eq(
+                                "night_reference",
+                                new Date(data.getTime() - i * 24 * 60 * 60 * 1000)
+                                    .toISOString()
+                                    .split("T")[0],
+                            );
+
+                        if (dati) {
+                            datiSettimana.push(
+                                dati.map((d) => ({
+                                    timestamp: d.Timestamp.split("T")[1],
+                                    date: d.Timestamp.split("T")[0],
+                                    stage: d.Sleep,
+                                })),
+                            );
+                        }
+                    }
+                    setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
+                } catch {
+                    setSleepData(null);
+                }
+            };
+
+            fetchData().then(() => { });
+        }
     }, [data, settMese]); // fetch del csv
 
     useEffect(() => {
@@ -121,7 +129,7 @@ function App() {
     }, [consiglioSelected]); // change del consiglio ogni 20 secondi
 
     useEffect(() => {
-        if (sessionStorage.getItem("Utente") === null) {
+        if (user === null) {
             navigate("/login");
         }
     }, []); // reindirizza alla pagina di login se non c'è un utente loggato
@@ -138,10 +146,10 @@ function App() {
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
-    return sessionStorage.getItem("Utente") === null ? (
-        <div></div>
-    ) : (
-        <div>
+    return user == null ? (
+        <div >
+        </div>) : (
+        <div >
             {/* Navbar */}
             <Navbar
                 currentDate={data || new Date()}
