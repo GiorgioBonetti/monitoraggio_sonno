@@ -55,7 +55,7 @@ function Popup(prpos: PopupProps) {
                 type="button"
                 className="btn"
                 style={{
-                    backgroundColor: "#14bdad",
+                    backgroundColor: "#18c599",
                     color: "white",
                     transition: "all 0.2s ease",
                 }}
