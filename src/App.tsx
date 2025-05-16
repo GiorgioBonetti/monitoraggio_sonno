@@ -23,14 +23,8 @@ import {
     consigli,
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
-import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-
-// Initialize Supabase client
-export const supabase = createClient(
-    "https://ushxldxcwcylubwpvgdi.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVzaHhsZHhjd2N5bHVid3B2Z2RpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzAxMTk0NiwiZXhwIjoyMDYyNTg3OTQ2fQ._5UDv3DipeSwda5t9YnIxTXwQckvr1P1ZCKCl1kY4Ts",
-);
+import supabase from "../Supabase.ts";
 
 function App() {
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -113,8 +107,7 @@ function App() {
             }
         };
 
-        fetchData().then(() => { });
-
+        fetchData().then(() => {});
     }, [data, settMese]); // fetch del csv
 
     useEffect(() => {
@@ -146,9 +139,9 @@ function App() {
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
     return sessionStorage.getItem("Utente") === null ? (
-        <div className="bg-dark-subtle">
-        </div>) : (
-        <div className="bg-dark-subtle">
+        <div></div>
+    ) : (
+        <div>
             {/* Navbar */}
             <Navbar
                 currentDate={data || new Date()}

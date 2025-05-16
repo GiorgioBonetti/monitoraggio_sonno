@@ -1,5 +1,4 @@
 /* CSS per card contente ore e minuti dormiti / a letto */
-
 .dormito {
     display: flex;
     flex-direction: row;
@@ -9,4 +8,14 @@
 
 .grande {
     font-size: 50px;
+}
+
+/* Sovrascrive il colore del bordo per le card */
+.card {
+    border-color: rgba(
+        57,
+        79,
+        225,
+        0.67
+    ) !important; /* Cambia il colore del bordo */
 }

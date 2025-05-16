@@ -59,7 +59,7 @@ function PieGraph(props: PieGraphProps) {
         };
     }, [props.data]);
     // dando lo stesso id della new Column che crea lo useEffect sopra, questo div viene rimpiazzato dal grafico
-    return <div id="contenitore" style={{ padding: "5px" }}></div>;
+    return <div id="contenitore"></div>;
 }
 
 export default PieGraph;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./App";
+import supabase from "../Supabase.ts";
 import SHA256 from "crypto-js/sha256";
 
 function Login() {
@@ -13,14 +13,14 @@ function Login() {
 
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
+    }, []); // titolo della pagina
 
-
-        // Controlla se l'utente è già loggato
+    useEffect(() => {
         const sessionStatus = sessionStorage.getItem("isLoggedIn");
         if (sessionStatus === "true") {
             setIsLoggedIn(true);
         }
-    }, []);
+    }, []); // Controlla se l'utente è già loggato
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -39,59 +39,72 @@ function Login() {
                         if (user.pwd === SHA256(password).toString()) {
                             setIsLoggedIn(true);
                             navigate("/"); // Reindirizza alla pagina principale
-                            sessionStorage.setItem("Utente", JSON.stringify(user.id));
+                            sessionStorage.setItem(
+                                "Utente",
+                                JSON.stringify(user.id),
+                            );
                         } else {
                             alert("Password errata.");
                             setIsLoggedIn(false);
                         }
                     } else {
-                        alert("Controlla meglio user e pasword");
+                        alert("Utente non trovato.");
                         setIsLoggedIn(false);
-
                     }
                 } catch {
-                    alert("Si è verificato un errore durante il login.");
                     setIsLoggedIn(false);
                 }
-            }
-            fetchData().then(() => { });
+            };
+            fetchData().then(() => {});
         } else {
-            alert("Si è verificato un errore durante il login.");
+            alert("Non hai inserito la password.");
             setIsLoggedIn(false);
         }
     };
 
     useEffect(() => {
-        // Reindirizza alla pagina principale se l'utente è già loggato
         if (isLoggedIn) {
             navigate("/"); // Reindirizza alla pagina principale
-        }
-        else {
+        } else {
             navigate("/login"); // Reindirizza alla pagina di login
         }
-    }, []);
+    }, []); // Reindirizza alla pagina principale se l'utente è già loggato
 
     return (
-        <div className="bg-dark-subtle" style={{ minHeight: "100vh" }}>
+        <div style={{ minHeight: "100vh" }}>
             <div
                 className="container-lg position-absolute top-50 start-50 translate-middle"
                 style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
             >
-                <h1 className="m-4">Login</h1>
+                <h1 className="m-4">
+                    <img
+                        src="/icon/moon.png"
+                        alt="Logo"
+                        width="48"
+                        height="48"
+                        className="d-inline-block align-text-top mx-3"
+                    />
+                    Sleep Monitor
+                </h1>
                 <div className="card rounded-4 p-4">
+                    <h2 className="text-center">Login</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="inputEmail1" className="form-label">
-                                Email address
+                                Indirizzo email
                             </label>
                             <input
-                                
                                 type="email"
                                 className="form-control"
                                 id="inputEmail1"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
+                            <div id="emailHelp" className="form-text">
+                                Se hai dimenticato la tua email, contatta un
+                                amministratore.
+                            </div>
                         </div>
                         <div className="mb-3">
                             <label
@@ -101,7 +114,6 @@ function Login() {
                                 Password
                             </label>
                             <input
-                                
                                 type="password"
                                 className="form-control"
                                 id="inputPassword"
@@ -113,7 +125,6 @@ function Login() {
                             <button type="submit" className="btn btn-primary">
                                 Login
                             </button>
-
                         </div>
                     </form>
                     <button

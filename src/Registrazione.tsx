@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./App";
+import supabase from "../Supabase.ts";
 import SHA256 from "crypto-js/sha256";
 
 function Registrazione() {
@@ -13,7 +13,7 @@ function Registrazione() {
 
     useEffect(() => {
         document.title = "Sleep Monitor - Registrazione";
-    }, []);
+    }, []); // titolo della pagina
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,38 +21,58 @@ function Registrazione() {
         // FARE LA REGISTRAZIONE ECC
         if (email && password) {
             // Controlla se l'email è già registrata
+            // DA FARE
 
+            // Controlla se la password è valida
+            const passwordRegex =
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert(
+                    "La password deve contenere almeno 8 caratteri, una maiuscola, una minuscola, un numero e un simbolo (es. !, @, #, $).",
+                );
+                return;
+            }
 
             const fetchData = async () => {
                 try {
-                     await supabase
+                    await supabase
                         .from("Utenti")
-                        .insert([{ "Nome": email, "pwd": SHA256(password).toString() }])
+                        .insert([
+                            { Nome: email, pwd: SHA256(password).toString() },
+                        ])
                         .select();
-                    
+
                     navigate("/login");
-                    
                 } catch {
                     alert("Si è verificato un errore durante il login.");
                 }
-            }
-            fetchData().then(() => { });
-
+            };
+            fetchData().then(() => {});
         }
     };
 
     return (
-        <div className="bg-dark-subtle" style={{ minHeight: "100vh" }}>
+        <div style={{ minHeight: "100vh" }}>
             <div
                 className="container-lg position-absolute top-50 start-50 translate-middle"
                 style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
             >
-                <h1 className="m-4">Registrazione</h1>
+                <h1 className="m-4">
+                    <img
+                        src="/icon/moon.png"
+                        alt="Logo"
+                        width="48"
+                        height="48"
+                        className="d-inline-block align-text-top mx-3"
+                    />
+                    Sleep Monitor
+                </h1>
                 <div className="card rounded-4 p-4">
+                    <h2 className="text-center">Registrazione</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="inputEmail1" className="form-label">
-                                Email address
+                                Indirizzo email
                             </label>
                             <input
                                 type="email"
@@ -60,6 +80,7 @@ function Registrazione() {
                                 id="inputEmail1"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                required
                             />
                         </div>
                         <div className="mb-3">
@@ -88,13 +109,13 @@ function Registrazione() {
                             </button>
                         </div>
                     </form>
-                     <button
-                        className="btn mt-1 btn-outline-primary"
+                    <button
+                        className="btn mt-1 btn-link"
                         onClick={() => {
                             navigate("/login"); // Reindirizza alla pagina di login
                         }}
                     >
-                        Login
+                        Indietro
                     </button>
                 </div>
             </div>

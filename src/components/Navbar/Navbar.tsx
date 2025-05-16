@@ -40,8 +40,8 @@ function Navbar(props: NavbarProps) {
     };
 
     return (
-        <nav className="navbar navbar-expand-sm">
-            <div className="container-fluid">
+        <nav className="navbar navbar-expand-sm bg-light">
+            <div className="container-fluid justify-content-between">
                 <a className="navbar-brand" href="/">
                     <img
                         src="/icon/moon.png"
@@ -52,8 +52,15 @@ function Navbar(props: NavbarProps) {
                     />
                     Sleep Monitor
                 </a>
+                {/* Bottone di logout visibile solo sotto i 576px */}
                 <button
-                    className="navbar-toggler ms-auto"
+                    onClick={handleLogout}
+                    className="btn btn-outline-danger d-sm-none"
+                >
+                    Logout
+                </button>
+                <button
+                    className="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNav"
@@ -63,8 +70,13 @@ function Navbar(props: NavbarProps) {
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
+
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav">
+                    <ul
+                        className="navbar-nav justify-content-around"
+                        style={{ width: "100%" }}
+                    >
+                        <li className="nav-item mx-0 mx-md-3 mx-lg-5"></li>
                         <li className="nav-item">
                             <div className="d-flex justify-content-center my-2 my-sm-0">
                                 <button
@@ -74,18 +86,6 @@ function Navbar(props: NavbarProps) {
                                         backgroundColor: "#14bdad",
                                         color: "white",
                                         transition: "all 0.2s ease",
-                                    }}
-                                    onMouseDown={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                        e.currentTarget.style.transform =
-                                            "scale(0.95)";
-                                    }}
-                                    onMouseUp={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "none";
-                                        e.currentTarget.style.transform =
-                                            "scale(1)";
                                     }}
                                 >
                                     &lt;
@@ -105,18 +105,6 @@ function Navbar(props: NavbarProps) {
                                         transition: "all 0.2s ease",
                                         maxWidth: "200px",
                                     }}
-                                    onMouseDown={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                        e.currentTarget.style.transform =
-                                            "scale(0.95)";
-                                    }}
-                                    onMouseUp={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "none";
-                                        e.currentTarget.style.transform =
-                                            "scale(1)";
-                                    }}
                                 />
                                 <button
                                     className="btn ms-2"
@@ -126,27 +114,17 @@ function Navbar(props: NavbarProps) {
                                         color: "white",
                                         transition: "all 0.2s ease",
                                     }}
-                                    onMouseDown={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
-                                        e.currentTarget.style.transform =
-                                            "scale(0.95)";
-                                    }}
-                                    onMouseUp={(e) => {
-                                        e.currentTarget.style.boxShadow =
-                                            "none";
-                                        e.currentTarget.style.transform =
-                                            "scale(1)";
-                                    }}
                                 >
                                     &gt;
                                 </button>
                             </div>
                         </li>
-                        <li className="nav-item">
+                        <li className="nav-item"></li>
+                        {/* Bottone di logout visibile sopra i 576px */}
+                        <li className="nav-item align-self-end d-none d-sm-block">
                             <button
                                 onClick={handleLogout}
-                                className="btn btn-danger mx-3 my-2 my-sm-0"
+                                className="btn btn-outline-danger mx-3 my-2 my-sm-0"
                             >
                                 Logout
                             </button>
