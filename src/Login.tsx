@@ -9,14 +9,22 @@ function Login() {
     const [password, setPassword] = useState("");
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const { user, login, logout } = useUser();
+    const { login, logout } = useUser();
 
     // navigazione
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
-    }, []);
+        if(localStorage.getItem("user")) {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                login(parsedUser);
+                navigate("/");
+            } 
+        }
+    }, [ ]);
 
     const handleSubmit = (e: React.FormEvent) => {
 
@@ -58,15 +66,6 @@ function Login() {
             logout();
         }
     };
-
-    useEffect(() => {
-        // Reindirizza alla pagina principale se l'utente è già loggato
-        if (user) {
-            navigate("/"); // Reindirizza alla pagina principale
-        } else {
-            navigate("/login"); // Reindirizza alla pagina di login
-        }
-    },[] );
 
     return (
         <div style={{ minHeight: "100vh" }}>

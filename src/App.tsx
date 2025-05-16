@@ -28,7 +28,7 @@ import { useUser } from "./contesto/UserContext";
 import supabase from "../Supabase.ts";
 
 function App() {
-    const { user } = useUser();
+    const { user, login } = useUser();
 
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
@@ -55,8 +55,24 @@ function App() {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        
+        if (localStorage.getItem("user") && user == null) {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                login(parsedUser);
+                navigate("/");
+            }
+        }
+        else if (localStorage.getItem("user") == null) {
+            navigate("/login");
+        }
+    }, [user]); // cambia il titolo della pagina
+
     // use effect
     useEffect(() => {
+        document.title = "Sleep Monitor - Home";
         if (user) {
             const fetchData = async () => {
                 try {
@@ -116,7 +132,7 @@ function App() {
                 }
             };
 
-            fetchData().then(() => {});
+            fetchData().then(() => { });
         }
     }, [data, settMese]); // fetch del csv
 
@@ -130,11 +146,6 @@ function App() {
         return () => clearInterval(interval);
     }, [consiglioSelected]); // change del consiglio ogni 20 secondi
 
-    useEffect(() => {
-        if (user === null) {
-            navigate("/login");
-        }
-    }, []); // reindirizza alla pagina di login se non c'è un utente loggato
 
     useEffect(() => {
         if (sleepData != null) {

@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, { createContext, useState, ReactNode, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -23,17 +23,27 @@ interface UserProviderProps {
   children: ReactNode;
 }
 
+
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const login = (userData: User) => {
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
     navigate("/");
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.clear();
     navigate("/login");
   };
 
