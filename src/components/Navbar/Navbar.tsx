@@ -1,37 +1,43 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 // Update the import path below to the correct relative location of UserContext
 import { useUser } from "../../contesto/UserContext";
+import { useEffect } from "react";
 
-type NavbarProps = {
-    currentDate: Date;
-    setCurrentDate: (date: Date) => void;
-};
-
-function Navbar(props: NavbarProps) {
+function Navbar() {
     const { logout } = useUser();
+
+    // Hooks
+    const [searchParams] = useSearchParams();
 
     // funzione per passare al giorno successivo
     function nextDate() {
-        const next = new Date(props.currentDate);
+        const next = new Date(searchParams.get("date") || new Date());
         next.setDate(next.getDate() + 1);
         if (next <= new Date()) {
-            props.setCurrentDate(next);
+            navigate(`/?date=${next.toISOString().split("T")[0]}`);
         }
     }
 
     // funzione per passare al giorno precedente
     function previousDate() {
-        const prev = new Date(props.currentDate);
+        const prev = new Date(searchParams.get("date") || new Date());
         prev.setDate(prev.getDate() - 1);
-        props.setCurrentDate(prev);
+        navigate(`/?date=${prev.toISOString().split("T")[0]}`);
     }
 
     // controllo che la data inserita sia valida (ovvero che non sia futura)
     function checkDate(date: Date) {
         if (date <= new Date()) {
-            props.setCurrentDate(date);
-        } else props.setCurrentDate(new Date());
+            navigate(`/?date=${date.toISOString().split("T")[0]}`);
+        } else navigate(`/?date=${new Date().toISOString().split("T")[0]}`);
     }
+
+    useEffect(() => {
+        if (!searchParams.get("date")) {
+            const today = new Date();
+            navigate(`/?date=${today.toISOString().split("T")[0]}`);
+        }
+    }, []); // Imposta la data di default al giorno corrente se non è presente nei parametri di ricerca
 
     // navigazione
     const navigate = useNavigate();
@@ -122,9 +128,8 @@ function Navbar(props: NavbarProps) {
                                     className="form-control mx-2 border-2"
                                     type="date"
                                     value={
-                                        props.currentDate
-                                            .toISOString()
-                                            .split("T")[0]
+                                        searchParams.get("date") ||
+                                        new Date().toISOString().split("T")[0]
                                     }
                                     onChange={(e) =>
                                         checkDate(new Date(e.target.value))

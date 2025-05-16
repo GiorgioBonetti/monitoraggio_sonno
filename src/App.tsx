@@ -23,7 +23,7 @@ import {
     consigli,
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
 import supabase from "../Supabase.ts";
 
@@ -45,7 +45,6 @@ function App() {
     const [consiglioSelected, setConsiglioSelected] = useState<ConsiglioType>();
 
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
-    const [data, setData] = useState<Date>(new Date());
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
@@ -55,8 +54,10 @@ function App() {
 
     const navigate = useNavigate();
 
+    // Hooks
+    const [searchParams] = useSearchParams();
+
     useEffect(() => {
-        
         if (localStorage.getItem("user") && user == null) {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
@@ -64,8 +65,7 @@ function App() {
                 login(parsedUser);
                 navigate("/");
             }
-        }
-        else if (localStorage.getItem("user") == null) {
+        } else if (localStorage.getItem("user") == null) {
             navigate("/login");
         }
     }, [user]); // cambia il titolo della pagina
@@ -82,7 +82,8 @@ function App() {
                         .eq("FkUtente", user?.id)
                         .eq(
                             "night_reference",
-                            data.toISOString().split("T")[0],
+                            searchParams.get("date") ||
+                                new Date().toISOString().split("T")[0],
                         );
 
                     if (datiGiorno) {
@@ -110,7 +111,9 @@ function App() {
                             .eq(
                                 "night_reference",
                                 new Date(
-                                    data.getTime() - i * 24 * 60 * 60 * 1000,
+                                    searchParams.get("date") ||
+                                        new Date().getTime() -
+                                            i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -132,9 +135,9 @@ function App() {
                 }
             };
 
-            fetchData().then(() => { });
+            fetchData().then(() => {});
         }
-    }, [data, settMese]); // fetch del csv
+    }, [searchParams.get("date"), settMese]); // fetch del csv
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -145,7 +148,6 @@ function App() {
 
         return () => clearInterval(interval);
     }, [consiglioSelected]); // change del consiglio ogni 20 secondi
-
 
     useEffect(() => {
         if (sleepData != null) {
@@ -164,11 +166,7 @@ function App() {
     ) : (
         <div>
             {/* Navbar */}
-            <Navbar
-                currentDate={data || new Date()}
-                setCurrentDate={setData}
-            ></Navbar>
-
+            <Navbar />
             {sleepData && sleepData.length > 0 ? ( // Se ci sono dati, mostra i componenti
                 <div>
                     {/* Titolo */}
