@@ -6,6 +6,10 @@ import SHA256 from "crypto-js/sha256";
 function Registrazione() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [birthday, setBirthday] = useState("");
+    const [sex, setSex] = useState("");
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // navigazione
@@ -57,19 +61,87 @@ function Registrazione() {
                 className="container-lg position-absolute top-50 start-50 translate-middle"
                 style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
             >
-                <h1 className="m-4">
+                <h1 className="m-4 text-center">
                     <img
                         src="/icon/moon.png"
                         alt="Logo"
                         width="48"
                         height="48"
-                        className="d-inline-block align-text-top mx-3"
+                        className="d-inline-block align-text-top mx-2"
                     />
                     Sleep Monitor
                 </h1>
                 <div className="card rounded-4 p-4">
-                    <h2 className="text-center">Registrazione</h2>
+                    <h2 className="text-center pb-2">Registrazione</h2>
                     <form onSubmit={handleSubmit}>
+                        <div className="mb-3 row">
+                            <div className="col-md-6">
+                                <label
+                                    htmlFor="inputNome"
+                                    className="form-label"
+                                >
+                                    Nome
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="inputNome"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required
+                                />
+                            </div>
+                            <div className="col-md-6">
+                                <label
+                                    htmlFor="inputCognome"
+                                    className="form-label"
+                                >
+                                    Cognome
+                                </label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="inputCognome"
+                                    value={surname}
+                                    onChange={(e) => setSurname(e.target.value)}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="mb-3">
+                            <label
+                                htmlFor="inputDataNascita"
+                                className="form-label"
+                            >
+                                Data di nascita
+                            </label>
+                            <input
+                                type="date"
+                                className="form-control"
+                                id="inputDataNascita"
+                                value={birthday}
+                                onChange={(e) => setBirthday(e.target.value)}
+                                required
+                                max={new Date().toISOString().split("T")[0]}
+                            />
+                            {/* metto un massimo in modo che l'utente non possa inserire una data oltre quella odierna */}
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="inputSesso" className="form-label">
+                                Sesso
+                            </label>
+                            <select
+                                className="form-select"
+                                id="inputSesso"
+                                value={sex}
+                                onChange={(e) => setSex(e.target.value)}
+                                required
+                            >
+                                <option value="">-</option>
+                                <option value="M">Maschio</option>
+                                <option value="F">Femmina</option>
+                            </select>
+                        </div>
                         <div className="mb-3">
                             <label htmlFor="inputEmail1" className="form-label">
                                 Indirizzo email

@@ -29,6 +29,7 @@ import supabase from "../Supabase.ts";
 
 function App() {
     const { user, login } = useUser();
+    const [loading, setLoading] = useState(true);
 
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
@@ -57,7 +58,13 @@ function App() {
     // Hooks
     const [searchParams] = useSearchParams();
 
+    const dateParam = (
+        searchParams.get("date") || new Date().toISOString().split("T")[0]
+    ).slice(0, 10);
+
     useEffect(() => {
+        document.title = "Sleep Monitor - Home";
+
         if (localStorage.getItem("user") && user == null) {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
@@ -72,19 +79,15 @@ function App() {
 
     // use effect
     useEffect(() => {
-        document.title = "Sleep Monitor - Home";
         if (user) {
+            setLoading(true);
             const fetchData = async () => {
                 try {
                     const { data: datiGiorno, error } = await supabase
                         .from("dati")
                         .select("Sleep, Timestamp")
                         .eq("FkUtente", user?.id)
-                        .eq(
-                            "night_reference",
-                            searchParams.get("date") ||
-                                new Date().toISOString().split("T")[0],
-                        );
+                        .eq("night_reference", dateParam);
 
                     if (datiGiorno) {
                         setSleepData(
@@ -111,9 +114,8 @@ function App() {
                             .eq(
                                 "night_reference",
                                 new Date(
-                                    searchParams.get("date") ||
-                                        new Date().getTime() -
-                                            i * 24 * 60 * 60 * 1000,
+                                    new Date(dateParam).getTime() -
+                                        i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -132,12 +134,13 @@ function App() {
                     setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
                 } catch {
                     setSleepData(null);
-                }
+                } finally {
+                    setTimeout(() => setLoading(false), 500);
+                } // 1 secondo dopo il caricamento dei dati
             };
-
             fetchData().then(() => {});
         }
-    }, [searchParams.get("date"), settMese]); // fetch del csv
+    }, [user, dateParam, settMese]); // fetch del csv
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -160,6 +163,35 @@ function App() {
             setoreNelLetto(extractOreLetto(sleepData));
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
+
+    if (loading) {
+        // Se i dati sono in fase di caricamento, mostra un caricamento
+        return (
+            <div>
+                <Navbar />
+                <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ height: "100vh" }}
+                >
+                    <div className="card border-4 rounded-4">
+                        <Card>
+                            <div className="d-flex aligin-items-center justify-content-center gap-3">
+                                <div
+                                    className="spinner-border text-primary"
+                                    role="status"
+                                >
+                                    <span className="visually-hidden">
+                                        Caricamento...
+                                    </span>
+                                </div>
+                                <label className="mt-1">Benvenuto, user</label>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return user == null ? (
         <div></div>

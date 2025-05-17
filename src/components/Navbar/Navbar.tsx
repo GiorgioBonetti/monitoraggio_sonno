@@ -1,51 +1,57 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-// Update the import path below to the correct relative location of UserContext
 import { useUser } from "../../contesto/UserContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Navbar() {
-    const { logout } = useUser();
-
-    // Hooks
     const [searchParams] = useSearchParams();
+
+    const { logout } = useUser();
+    const navigate = useNavigate();
+
+    const [date, setDate] = useState<Date>(() => {
+        const param = searchParams.get("date");
+        return param ? new Date(param) : new Date();
+    });
+
+    useEffect(() => {
+        const param = searchParams.get("date");
+        if (param) {
+            const newDate = new Date(param);
+            if (!isNaN(newDate.getTime())) {
+                setDate(newDate);
+            }
+        }
+    }, [searchParams]);
+
+    useEffect(() => {
+        navigate(`/?date=${date.toISOString().split("T")[0]}`);
+    }, [date]);
 
     // funzione per passare al giorno successivo
     function nextDate() {
-        const next = new Date(searchParams.get("date") || new Date());
+        const next = new Date(date);
         next.setDate(next.getDate() + 1);
         if (next <= new Date()) {
-            navigate(`/?date=${next.toISOString().split("T")[0]}`);
+            setDate(next);
         }
     }
 
-    // funzione per passare al giorno precedente
     function previousDate() {
-        const prev = new Date(searchParams.get("date") || new Date());
+        const prev = new Date(date); // crea una nuova istanza per non mutare lo stato direttamente
         prev.setDate(prev.getDate() - 1);
-        navigate(`/?date=${prev.toISOString().split("T")[0]}`);
+        setDate(prev);
     }
 
     // controllo che la data inserita sia valida (ovvero che non sia futura)
     function checkDate(date: Date) {
         if (date <= new Date()) {
-            navigate(`/?date=${date.toISOString().split("T")[0]}`);
-        } else navigate(`/?date=${new Date().toISOString().split("T")[0]}`);
+            setDate(date);
+        } else setDate(new Date());
     }
-
-    useEffect(() => {
-        if (!searchParams.get("date")) {
-            const today = new Date();
-            navigate(`/?date=${today.toISOString().split("T")[0]}`);
-        }
-    }, []); // Imposta la data di default al giorno corrente se non è presente nei parametri di ricerca
-
-    // navigazione
-    const navigate = useNavigate();
 
     // LOGOUT
     const handleLogout = () => {
         logout(); // Esegui il logout
-
         navigate("/login"); // Reindirizza alla pagina di login
     };
 
@@ -65,7 +71,7 @@ function Navbar() {
                 {/* Bottone di logout visibile solo sotto i 576px */}
                 <button
                     onClick={handleLogout}
-                    className="btn btn-outline-danger d-sm-none"
+                    className="btn btn-outline-danger d-sm-none border-2"
                     style={{
                         transition: "all 0.2s ease",
                     }}
@@ -82,7 +88,7 @@ function Navbar() {
                     Logout
                 </button>
                 <button
-                    className="navbar-toggler"
+                    className="navbar-toggler border-2"
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#navbarNav"
@@ -91,6 +97,7 @@ function Navbar() {
                     aria-label="Toggle navigation"
                     style={{
                         transition: "all 0.2s ease",
+                        borderColor: "#000000",
                     }}
                     onMouseDown={(e) => {
                         e.currentTarget.style.boxShadow =
@@ -127,10 +134,7 @@ function Navbar() {
                                 <input
                                     className="form-control mx-2 border-2"
                                     type="date"
-                                    value={
-                                        searchParams.get("date") ||
-                                        new Date().toISOString().split("T")[0]
-                                    }
+                                    value={date.toISOString().split("T")[0]}
                                     onChange={(e) =>
                                         checkDate(new Date(e.target.value))
                                     }
@@ -158,7 +162,7 @@ function Navbar() {
                         <li className="nav-item align-self-end d-none d-sm-block">
                             <button
                                 onClick={handleLogout}
-                                className="btn btn-outline-danger mx-3 my-2 my-sm-0"
+                                className="btn btn-outline-danger mx-3 my-2 my-sm-0 border-2"
                                 style={{
                                     transition: "all 0.2s ease",
                                 }}

@@ -11,7 +11,22 @@ function Punteggio(props: PunteggioProps) {
     return (
         <div className="d-flex align-items-center">
             <h1 className="col-11 pt-2">
-                {props.punteggio} - {props.testo}
+                <span
+                    style={{
+                        color:
+                            props.punteggio >= 80
+                                ? "blue"
+                                : props.punteggio >= 60
+                                  ? "rgb(37,188,105)"
+                                  : props.punteggio >= 40
+                                    ? "#e8ae00"
+                                    : "#dc3545",
+                    }}
+                >
+                    {props.punteggio}
+                </span>
+                {" - "}
+                <span style={{ color: "inherit" }}>{props.testo}</span>
             </h1>
             <div className="col-1">
                 <Popup

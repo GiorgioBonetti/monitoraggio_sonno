@@ -1,0 +1,25 @@
+.punteggio-range,
+.punteggio-paragrafo {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 1000px) and (min-width: 769px) {
+    .punteggio-range,
+    .punteggio-paragrafo {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .punteggio-range,
+    .punteggio-paragrafo {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .punteggio-range,
+    .punteggio-paragrafo {
+        font-size: 0.95rem;
+    }
+}

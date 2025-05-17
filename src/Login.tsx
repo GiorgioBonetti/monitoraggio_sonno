@@ -16,18 +16,17 @@ function Login() {
 
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
-        if(localStorage.getItem("user")) {
+        if (localStorage.getItem("user")) {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 const parsedUser = JSON.parse(storedUser);
                 login(parsedUser);
                 navigate("/");
-            } 
+            }
         }
-    }, [ ]);
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
-
         e.preventDefault();
 
         if (email && password) {
@@ -43,7 +42,7 @@ function Login() {
                         if (user.pwd === SHA256(password).toString()) {
                             // setIsLoggedIn(true);
                             login({ id: user.id, email: email }); // Passa l'oggetto utente al contesto
-                             // Reindirizza alla pagina principale
+                            // Reindirizza alla pagina principale
                         } else {
                             alert("Password errata.");
                             // setIsLoggedIn(false);
@@ -73,13 +72,13 @@ function Login() {
                 className="container-lg position-absolute top-50 start-50 translate-middle"
                 style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
             >
-                <h1 className="m-4">
+                <h1 className="m-4 text-center">
                     <img
                         src="/icon/moon.png"
                         alt="Logo"
                         width="48"
                         height="48"
-                        className="d-inline-block align-text-top mx-3"
+                        className="d-inline-block align-text-top mx-2"
                     />
                     Sleep Monitor
                 </h1>
@@ -91,7 +90,6 @@ function Login() {
                                 Indirizzo email
                             </label>
                             <input
-
                                 type="email"
                                 className="form-control"
                                 id="inputEmail1"
@@ -112,7 +110,6 @@ function Login() {
                                 Password
                             </label>
                             <input
-
                                 type="password"
                                 className="form-control"
                                 id="inputPassword"
