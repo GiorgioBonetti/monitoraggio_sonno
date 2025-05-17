@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "../Supabase.ts";
+import supabase from "./scripts/Supabase.ts";
 import SHA256 from "crypto-js/sha256";
 
 function Registrazione() {

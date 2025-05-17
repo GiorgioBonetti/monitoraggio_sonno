@@ -1,5 +1,5 @@
 
-import supabase from "../../Supabase";
+import supabase from "./Supabase";
 import { User } from "../contesto/UserContext";
 
 export async function ControllaUser(user: User): Promise<boolean> {

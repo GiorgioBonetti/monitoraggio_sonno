@@ -25,7 +25,7 @@ import {
 } from "./scripts/dataConsigliArticoli.ts";
 import { useSearchParams } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
-import supabase from "../Supabase.ts";
+import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
 
 function App() {
