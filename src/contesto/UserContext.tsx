@@ -1,5 +1,5 @@
 import SHA256 from "crypto-js/sha256";
-import React, { createContext, useState, ReactNode, useContext, useEffect } from "react";
+import { createContext, useState, ReactNode, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../scripts/Supabase";
 
