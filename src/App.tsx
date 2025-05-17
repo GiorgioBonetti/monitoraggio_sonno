@@ -7,7 +7,7 @@ import Card from "./components/Card/Card.tsx";
 import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { SleepDataInterface } from "./scripts/extractData.ts";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
     extractSleepStages,
     SleepStageType,
