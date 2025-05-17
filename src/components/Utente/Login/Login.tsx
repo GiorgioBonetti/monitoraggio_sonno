@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "./scripts/Supabase.ts";
+import supabase from "../../.././scripts/Supabase.ts";
 import SHA256 from "crypto-js/sha256";
-import { useUser } from "./contesto/UserContext";
+import { useUser } from "../../../contesto/UserContext";
 
 function Login() {
-    const [email, setEmail] = useState("gio@gmail.com");
+    const [email, setEmail] = useState("123@gmail.com");
     const [password, setPassword] = useState("123");
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
 

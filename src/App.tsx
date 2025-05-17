@@ -7,7 +7,7 @@ import Card from "./components/Card/Card.tsx";
 import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { SleepDataInterface } from "./scripts/extractData.ts";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import {
     extractSleepStages,
     SleepStageType,
@@ -29,6 +29,7 @@ import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
 
 function App() {
+
     const { user, login, logout } = useUser();
     const [loading, setLoading] = useState(true);
 
@@ -74,7 +75,7 @@ function App() {
         }
         else {
             ControllaUser(user).then((res) => {
-                if (!res) 
+                if (!res)
                     logout();
             });
         }
@@ -85,7 +86,7 @@ function App() {
 
     useEffect(() => {
         // Controlla se l'utente è loggato
-        if (user ) {
+        if (user) {
 
             setLoading(true);
             const fetchData = async () => {
@@ -172,6 +173,8 @@ function App() {
             setoreNelLetto(extractOreLetto(sleepData));
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
+
+
 
     if (loading) {
         // Se i dati sono in fase di caricamento, mostra un caricamento
@@ -320,7 +323,7 @@ function App() {
                         <div className="row text-center">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <MissingData />
+                                    <MissingData dataRiferimento={dateParam} idUtente={user.id} />
                                 </Card>
                             </div>
                         </div>

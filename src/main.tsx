@@ -1,8 +1,8 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import App from "./App.tsx";
-import Login from "./Login.tsx";
-import Registrazione from "./Registrazione.tsx";
+import Login from "./components/Utente/Login/Login.tsx";
+import Registrazione from "./components/Utente/Registrazione/Registrazione.tsx";
 import { UserProvider } from "./contesto/UserContext.tsx";
 // rendering della app
 

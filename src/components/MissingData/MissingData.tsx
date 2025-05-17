@@ -1,4 +1,12 @@
-function MissingData() {
+import { uploadFile } from "../../scripts/uploadFile";
+
+type MissingDataProps = {
+    idUtente: number,
+    dataRiferimento: string,
+};
+
+
+function MissingData(props: MissingDataProps) {
     return (
         <div>
             <h1>Nessun dato presente</h1>
@@ -39,6 +47,24 @@ function MissingData() {
                                     transition: "all 0.2s ease",
                                     backgroundColor: "#18c599",
                                     // backgroundColor: "rgba(57, 79, 225, 0.67)",
+                                }}
+                                onClick={(e) => {
+
+                                    e.preventDefault();
+                                    console.log("Carica file");
+
+                                    const fileInput = document.getElementById(
+                                        "inputGroupFile04"
+                                    ) as HTMLInputElement;
+                                    const file = fileInput.files?.[0];
+                                    if (!file) {
+                                        alert("Nessun file selezionato");
+                                        return;
+                                    }
+
+                                    uploadFile(file, props.dataRiferimento, props.idUtente)
+                                    
+
                                 }}
                                 onMouseDown={(e) => {
                                     e.currentTarget.style.boxShadow =

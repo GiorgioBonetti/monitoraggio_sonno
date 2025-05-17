@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import supabase from "./scripts/Supabase.ts";
+import supabase from "../../../scripts/Supabase.ts";
 import SHA256 from "crypto-js/sha256";
 
 function Registrazione() {
@@ -42,7 +42,7 @@ function Registrazione() {
                     await supabase
                         .from("Utenti")
                         .insert([
-                            { Nome: email, pwd: SHA256(password).toString(), },
+                            { email: email, pwd: SHA256(password).toString(), Nome: name, Cognome: surname, DataNascita: birthday, sesso: sex },
                         ])
                         .select();
 
@@ -51,7 +51,7 @@ function Registrazione() {
                     alert("Si è verificato un errore durante il login.");
                 }
             };
-            fetchData().then(() => {});
+            fetchData().then(() => { });
         }
     };
 
@@ -137,9 +137,9 @@ function Registrazione() {
                                 onChange={(e) => setSex(e.target.value)}
                                 required
                             >
-                                <option value="">-</option>
-                                <option value="M">Maschio</option>
-                                <option value="F">Femmina</option>
+                                <option value="-">-</option>
+                                <option value="Maschio">Maschio</option>
+                                <option value="Femmina">Femmina</option>
                             </select>
                         </div>
                         <div className="mb-3">
