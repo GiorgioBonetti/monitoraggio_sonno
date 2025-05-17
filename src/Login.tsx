@@ -5,8 +5,8 @@ import SHA256 from "crypto-js/sha256";
 import { useUser } from "./contesto/UserContext";
 
 function Login() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("gio@gmail.com");
+    const [password, setPassword] = useState("123");
     // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const { login, logout } = useUser();
@@ -14,127 +14,130 @@ function Login() {
     // navigazione
     const navigate = useNavigate();
 
+    // Recupera l'utente memorizzato (se presente)
+
+
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
-        if (localStorage.getItem("user")) {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const parsedUser = JSON.parse(storedUser);
-                login(parsedUser);
-                navigate("/");
-            }
+
+        const storedUser = localStorage.getItem("user");
+        const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+        if (parsedUser) {
+            login(parsedUser);
         }
+    
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-        if (email && password) {
-            const fetchData = async () => {
-                try {
-                    const { data } = await supabase
-                        .from("Utenti")
-                        .select("id, pwd")
-                        .eq("Nome", email);
+    if (email && password) {
+        const fetchData = async () => {
+            try {
+                const { data } = await supabase
+                    .from("Utenti")
+                    .select("*")
+                    .eq("Email", email);
 
-                    if (data && data.length === 1) {
-                        const user = data[0];
-                        if (user.pwd === SHA256(password).toString()) {
-                            // setIsLoggedIn(true);
-                            login({ id: user.id, email: email }); // Passa l'oggetto utente al contesto
-                            // Reindirizza alla pagina principale
-                        } else {
-                            alert("Password errata.");
-                            // setIsLoggedIn(false);
-                            logout(); // Logout in caso di password errata
-                        }
+                if (data && data.length === 1) {
+                    const user = data[0];
+                    if (user.pwd === SHA256(password).toString()) {
+                        // setIsLoggedIn(true);
+                        login({ id: user.id, email: email, pwd: user.pwd, Nome: user.Nome, Cognome: user.cognome }); // Passa l'oggetto utente al contesto
+                        // Reindirizza alla pagina principale
                     } else {
-                        alert("Controlla meglio user e pasword");
+                        alert("Password errata.");
                         // setIsLoggedIn(false);
-                        logout();
+                        logout(); // Logout in caso di password errata
                     }
-                } catch {
-                    alert("Si è verificato un errore durante il login.");
+                } else {
+                    alert("Controlla meglio user e pasword");
                     // setIsLoggedIn(false);
                     logout();
                 }
-            };
-            fetchData().then(() => {});
-        } else {
-            alert("Si è verificato un errore durante il login.");
-            logout();
-        }
-    };
+            } catch {
+                alert("Si è verificato un errore durante il login.");
+                // setIsLoggedIn(false);
+                logout();
+            }
+        };
+        fetchData().then(() => { });
+    } else {
+        alert("Si è verificato un errore durante il login.");
+        logout();
+    }
+};
 
-    return (
-        <div style={{ minHeight: "100vh" }}>
-            <div
-                className="container-lg position-absolute top-50 start-50 translate-middle"
-                style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
-            >
-                <h1 className="m-4 text-center">
-                    <img
-                        src="/icon/moon.png"
-                        alt="Logo"
-                        width="48"
-                        height="48"
-                        className="d-inline-block align-text-top mx-2"
-                    />
-                    Sleep Monitor
-                </h1>
-                <div className="card rounded-4 p-4">
-                    <h2 className="text-center">Login</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="inputEmail1" className="form-label">
-                                Indirizzo email
-                            </label>
-                            <input
-                                type="email"
-                                className="form-control"
-                                id="inputEmail1"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <div id="emailHelp" className="form-text">
-                                Se hai dimenticato la tua email, contatta un
-                                amministratore.
-                            </div>
+return (
+    <div style={{ minHeight: "100vh" }}>
+        <div
+            className="container-lg position-absolute top-50 start-50 translate-middle"
+            style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
+        >
+            <h1 className="m-4 text-center">
+                <img
+                    src="/icon/moon.png"
+                    alt="Logo"
+                    width="48"
+                    height="48"
+                    className="d-inline-block align-text-top mx-2"
+                />
+                Sleep Monitor
+            </h1>
+            <div className="card rounded-4 p-4">
+                <h2 className="text-center">Login</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label htmlFor="inputEmail1" className="form-label">
+                            Indirizzo email
+                        </label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="inputEmail1"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <div id="emailHelp" className="form-text">
+                            Se hai dimenticato la tua email, contatta un
+                            amministratore.
                         </div>
-                        <div className="mb-3">
-                            <label
-                                htmlFor="inputPassword"
-                                className="form-label"
-                            >
-                                Password
-                            </label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="inputPassword"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <div className="d-grid gap-2 mx-auto">
-                            <button type="submit" className="btn btn-primary">
-                                Login
-                            </button>
-                        </div>
-                    </form>
-                    <button
-                        className="btn mt-1 btn-outline-primary"
-                        onClick={() => {
-                            navigate("/registrazione"); // Reindirizza alla pagina di login
-                        }}
-                    >
-                        Registrati
-                    </button>
-                </div>
+                    </div>
+                    <div className="mb-3">
+                        <label
+                            htmlFor="inputPassword"
+                            className="form-label"
+                        >
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="inputPassword"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <div className="d-grid gap-2 mx-auto">
+                        <button type="submit" className="btn btn-primary">
+                            Login
+                        </button>
+                    </div>
+                </form>
+                <button
+                    className="btn mt-1 btn-outline-primary"
+                    onClick={() => {
+                        navigate("/registrazione"); // Reindirizza alla pagina di login
+                    }}
+                >
+                    Registrati
+                </button>
             </div>
         </div>
-    );
+    </div>
+);
 }
 
 export default Login;

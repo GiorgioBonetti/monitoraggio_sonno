@@ -23,12 +23,13 @@ import {
     consigli,
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
 import supabase from "../Supabase.ts";
+import { ControllaUser } from "./scripts/ControllaUser.ts";
 
 function App() {
-    const { user, login } = useUser();
+    const { user, login, logout } = useUser();
     const [loading, setLoading] = useState(true);
 
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
@@ -49,44 +50,50 @@ function App() {
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
-    const [sleepDataWeek, setSleepDataWeek] = useState<
-        SleepDataInterface[][] | null
-    >(null);
+    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null);
 
-    const navigate = useNavigate();
 
-    // Hooks
     const [searchParams] = useSearchParams();
 
-    const dateParam = (
-        searchParams.get("date") || new Date().toISOString().split("T")[0]
-    ).slice(0, 10);
+    const dateParam = (searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
 
-        if (localStorage.getItem("user") && user == null) {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const parsedUser = JSON.parse(storedUser);
-                login(parsedUser);
-                navigate("/");
-            }
-        } else if (localStorage.getItem("user") == null) {
-            navigate("/login");
+        const storedUser = localStorage.getItem("user");
+        const parsedUser = JSON.parse(storedUser ? storedUser : "{}");
+        if (!user) {
+            ControllaUser(parsedUser).then((res) => {
+                if (res) {
+                    login(parsedUser);
+                }
+                else {
+                    logout();
+                }
+            });
         }
-    }, [user]); // cambia il titolo della pagina
+        else {
+            ControllaUser(user).then((res) => {
+                if (!res) 
+                    logout();
+            });
+        }
+    }, []); // cambia il titolo della pagina
 
     // use effect
+    // Call the custom hook at the top level
+
     useEffect(() => {
-        if (user) {
+        // Controlla se l'utente è loggato
+        if (user ) {
+
             setLoading(true);
             const fetchData = async () => {
                 try {
                     const { data: datiGiorno, error } = await supabase
                         .from("dati")
                         .select("Sleep, Timestamp")
-                        .eq("FkUtente", user?.id)
+                        .eq("FkUtente", user.id)
                         .eq("night_reference", dateParam);
 
                     if (datiGiorno) {
@@ -115,7 +122,7 @@ function App() {
                                 "night_reference",
                                 new Date(
                                     new Date(dateParam).getTime() -
-                                        i * 24 * 60 * 60 * 1000,
+                                    i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -132,14 +139,16 @@ function App() {
                         }
                     }
                     setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
+
                 } catch {
                     setSleepData(null);
                 } finally {
                     setTimeout(() => setLoading(false), 500);
                 } // 1 secondo dopo il caricamento dei dati
             };
-            fetchData().then(() => {});
+            fetchData().then(() => { });
         }
+
     }, [user, dateParam, settMese]); // fetch del csv
 
     useEffect(() => {
@@ -184,7 +193,7 @@ function App() {
                                         Caricamento...
                                     </span>
                                 </div>
-                                <label className="mt-1">Benvenuto, user</label>
+                                <label className="mt-1">Benvenuto, {user?.Nome}</label>
                             </div>
                         </Card>
                     </div>

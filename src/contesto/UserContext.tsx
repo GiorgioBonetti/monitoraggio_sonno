@@ -1,11 +1,17 @@
+import SHA256 from "crypto-js/sha256";
 import React, { createContext, useState, ReactNode, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import supabase from "../../Supabase";
 
 
 // 1. Tipo per l'utente
-interface User {
+export interface User {
   id: number;
   email: string;
+  Nome: string;
+  Cognome: string;
+  pwd: string;
+  token?: string;
 }
 
 // 2. Tipo del valore del contesto
@@ -36,15 +42,38 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   }, []);
 
   const login = (userData: User) => {
+    const token = userData.token ? userData.token : SHA256(new Date().toISOString()).toString();
+    userData.token = token; 
+
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-    navigate("/");
+
+    const fetchData = async () => {
+      await supabase
+        .from("Utenti")
+        .update({ token })
+        .eq("id", userData.id)
+        .select();
+    }
+    navigate("/"); // Reindirizza alla pagina principale 
+    fetchData();
   };
 
   const logout = () => {
+    if (user?.id) {
+      const fetchData = async () => {
+        await supabase
+          .from("Utenti")
+          .update({ token: "NO" })
+          .eq("id", user.id)
+          .select();
+      }
+      fetchData();
+    }
     setUser(null);
+
     localStorage.clear();
-    navigate("/login");
+    navigate("/login"); // Reindirizza alla pagina di login
   };
 
   return (
