@@ -32,24 +32,24 @@ function Consiglio(props: ConsiglioProps) {
             const sleepStagesStr =
                 Array.isArray(props.sleepStages) && props.sleepStages.length > 0
                     ? props.sleepStages
-                        .map((s) => `${s.nome}: ${s.number}`)
-                        .join(", ")
+                          .map((s) => `${s.nome}: ${s.number}`)
+                          .join(", ")
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
             const sleepStagesWeekStr = sleepStages.length
                 ? sleepStages
-                    .slice(0, 7)
-                    .map(
-                        (nightStages, p) =>
-                            `${nightStages
-                                .map(
-                                    (stage) =>
-                                        ` ${stage.nome}: ${stage.number} minuti`,
-                                )
-                                .join(", ")} (${p} giorni fa)`,
-                    )
-                    .join(" | ")
+                      .slice(0, 7)
+                      .map(
+                          (nightStages, p) =>
+                              `${nightStages
+                                  .map(
+                                      (stage) =>
+                                          ` ${stage.nome}: ${stage.number} minuti`,
+                                  )
+                                  .join(", ")} (${p} giorni fa)`,
+                      )
+                      .join(" | ")
                 : "Nessun storico";
 
             const prompt = `Dati utente:
@@ -72,7 +72,7 @@ Usa emoji che siano inerenti al tema del sonno dentro la frase che componi. Cont
 
     return loading ? (
         <div>
-            <h1>Consigli</h1>
+            <h1>Consiglio</h1>
             <div className="card border-4 rounded-4 mt-3">
                 <Card>
                     <div className="d-flex aligin-items-center justify-content-center gap-3">
