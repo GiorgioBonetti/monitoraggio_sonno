@@ -19,37 +19,37 @@ function Consiglio(props: ConsiglioProps) {
     const [consiglio, setConsiglio] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
 
-     const [sleepStages] = useState<SleepStageType[][]>([]);
+    const sleepStages: SleepStageType[][] = [];
+    if (props.sleepDataWeek) {
 
-     if (props.sleepDataWeek) {
-         for (let i = 0; i < props.sleepDataWeek.length; i++) {
-             sleepStages.push(
-                 extractSleepStages(props.sleepDataWeek[i])
-             );
-         }
-     }
+        for (let i = 0; i < props.sleepDataWeek.length; i++) {
+            sleepStages.push(
+                extractSleepStages(props.sleepDataWeek[i])
+            );
+        }
+    }
 
     useEffect(() => {
         async function fetchConsiglio() {
             const sleepStagesStr =
                 Array.isArray(props.sleepStages) && props.sleepStages.length > 0
                     ? props.sleepStages
-                          .map((s) => `${s.nome}: ${s.number}`)
-                          .join(", ")
+                        .map((s) => `${s.nome}: ${s.number}`)
+                        .join(", ")
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
             const sleepStagesWeekStr = sleepStages.length
                 ? sleepStages
-                      .map((nightStages,p) =>
-                          nightStages
-                              .map(
-                                  (stage) =>
-                                      `giorni fa ${p},  ${stage.nome}: ${stage.number}`,
-                              )
-                              .join(", "),
-                      )
-                      .join(" | ")
+                    .map((nightStages, p) =>
+                        nightStages
+                            .map(
+                                (stage) =>
+                                    `giorni fa ${p},  ${stage.nome}: ${stage.number}`,
+                            )
+                            .join(", "),
+                    )
+                    .join(" | ")
                 : "Nessun storico";
 
             const prompt = `Dati utente:

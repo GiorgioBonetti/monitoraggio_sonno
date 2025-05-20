@@ -8,7 +8,7 @@ export async function generaConsiglio(prompt: string) {
             prompt,
         }),
     });
-    
+
     console.log("Full response:", prompt);
 
     const text = await response.text();
@@ -19,7 +19,7 @@ export async function generaConsiglio(prompt: string) {
         try {
             const obj = JSON.parse(line);
             if (obj.response) fullResponse += obj.response;
-        } catch (e) {
+        } catch  {
             // ignora errori di parsing
         }
     }
