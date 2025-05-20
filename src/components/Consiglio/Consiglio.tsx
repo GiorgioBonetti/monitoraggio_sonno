@@ -1,7 +1,7 @@
 import Card from "../Card/Card.tsx";
 import { generaConsiglio } from "../../scripts/ollamaApi.ts";
 import { useEffect, useState } from "react";
-import { SleepStageType } from "../../scripts/extractSleepStages.ts";
+import { extractSleepStages, SleepStageType } from "../../scripts/extractSleepStages.ts";
 import { SleepDataInterface } from "../../scripts/extractData.ts";
 
 type ConsiglioProps = {
@@ -13,9 +13,21 @@ type ConsiglioProps = {
     sleepDataWeek: SleepDataInterface[][] | null;
 };
 
+
+
 function Consiglio(props: ConsiglioProps) {
     const [consiglio, setConsiglio] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+
+     const [sleepStages] = useState<SleepStageType[][]>([]);
+
+     if (props.sleepDataWeek) {
+         for (let i = 0; i < props.sleepDataWeek.length; i++) {
+             sleepStages.push(
+                 extractSleepStages(props.sleepDataWeek[i])
+             );
+         }
+     }
 
     useEffect(() => {
         async function fetchConsiglio() {
@@ -27,17 +39,18 @@ function Consiglio(props: ConsiglioProps) {
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
-            // const storicoNottiStr = props.sleepDataWeek
-            //     ? props.sleepDataWeek
-            //           .map((notti) =>
-            //               notti
-            //                   .map(
-            //                       (n) => `${n.date} ${n.stage}: ${n.timestamp}`,
-            //                   )
-            //                   .join("; "),
-            //           )
-            //           .join(" | ")
-            //     : "Nessun storico";
+            const sleepStagesWeekStr = sleepStages.length
+                ? sleepStages
+                      .map((nightStages,p) =>
+                          nightStages
+                              .map(
+                                  (stage) =>
+                                      `giorni fa ${p},  ${stage.nome}: ${stage.number}`,
+                              )
+                              .join(", "),
+                      )
+                      .join(" | ")
+                : "Nessun storico";
 
             const prompt = `Dati utente:
 - Stadi del sonno suddivisi in minuti: [${sleepStagesStr}]
@@ -45,6 +58,7 @@ function Consiglio(props: ConsiglioProps) {
 - Ore nel letto: ${oreNelLettoStr}
 - Anno di nascita: ${"2004"}
 - Sesso: ${"Maschio"}
+- Stadi del sonno settimanali: [${sleepStagesWeekStr}]
 Genera un SOLO consiglio personalizzato per migliorare la qualità del sonno. In italiano. Genera SOLAMENTE una frase contente solamente il consiglio. Non aggiungere altro testo.`;
 
             const consiglio = await generaConsiglio(prompt);
