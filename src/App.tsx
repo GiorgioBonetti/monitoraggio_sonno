@@ -29,9 +29,9 @@ import { ControllaUser } from "./scripts/ControllaUser.ts";
 import { getArticoli } from "./scripts/GetArticoli.ts";
 
 function App() {
-
     const { user, login, logout } = useUser();
     const [loading, setLoading] = useState(true);
+    const [firstLoad, setFirstLoad] = useState(true);
 
     const COLORS = ["blue", "royalblue", "lightskyblue", "#FF8042"];
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
@@ -51,12 +51,15 @@ function App() {
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
-    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null);
-
+    const [sleepDataWeek, setSleepDataWeek] = useState<
+        SleepDataInterface[][] | null
+    >(null);
 
     const [searchParams] = useSearchParams();
 
-    const dateParam = (searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
+    const dateParam = (
+        searchParams.get("date") || new Date().toISOString().split("T")[0]
+    ).slice(0, 10);
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
@@ -67,16 +70,13 @@ function App() {
             ControllaUser(parsedUser).then((res) => {
                 if (res) {
                     login(parsedUser);
-                }
-                else {
+                } else {
                     logout();
                 }
             });
-        }
-        else {
+        } else {
             ControllaUser(user).then((res) => {
-                if (!res)
-                    logout();
+                if (!res) logout();
             });
         }
     }, []); // cambia il titolo della pagina
@@ -87,7 +87,6 @@ function App() {
     useEffect(() => {
         // Controlla se l'utente è loggato
         if (user) {
-
             setLoading(true);
             const fetchData = async () => {
                 try {
@@ -123,7 +122,7 @@ function App() {
                                 "night_reference",
                                 new Date(
                                     new Date(dateParam).getTime() -
-                                    i * 24 * 60 * 60 * 1000,
+                                        i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -140,16 +139,21 @@ function App() {
                         }
                     }
                     setSleepDataWeek(datiSettimana as SleepDataInterface[][]);
-
                 } catch {
                     setSleepData(null);
                 } finally {
-                    setTimeout(() => setLoading(false), 500);
-                } // 1 secondo dopo il caricamento dei dati
+                    if (firstLoad) {
+                        setTimeout(() => {
+                            setLoading(false);
+                            setFirstLoad(false);
+                        }, 1200); // Primo loading: 1.5 secondi in più
+                    } else {
+                        setLoading(false); // Loading normali: nessun timeout
+                    }
+                } // 0.5 secondo dopo il caricamento dei dati
             };
-            fetchData().then(() => { });
+            fetchData().then(() => {});
         }
-
     }, [user, dateParam, settMese]); // fetch del csv
 
     useEffect(() => {
@@ -174,8 +178,6 @@ function App() {
         }
     }, [sleepData]); // fetch dei dati degli stadi del sonno ogni volta che cambia la data
 
-
-
     if (loading) {
         // Se i dati sono in fase di caricamento, mostra un caricamento
         return (
@@ -196,7 +198,11 @@ function App() {
                                         Caricamento...
                                     </span>
                                 </div>
-                                <label className="mt-1">Benvenuto, {user?.Nome}</label>
+                                {firstLoad && (
+                                    <label className="mt-1">
+                                        Benvenuto, {user?.Nome}
+                                    </label>
+                                )}
                             </div>
                         </Card>
                     </div>
@@ -323,7 +329,10 @@ function App() {
                         <div className="row text-center">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <MissingData dataRiferimento={dateParam} idUtente={user.id} />
+                                    <MissingData
+                                        dataRiferimento={dateParam}
+                                        idUtente={user.id}
+                                    />
                                 </Card>
                             </div>
                         </div>
