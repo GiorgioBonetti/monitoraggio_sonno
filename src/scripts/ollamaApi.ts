@@ -21,8 +21,6 @@ export async function generaConsiglio(prompt: string) {
         }
     }
 
-    console.log(fullResponse.replace(/^"+|"+$/g, "").trim());
-
     // Rimuove eventuali virgolette doppie all'inizio/fine
     return fullResponse.replace(/^"+|"+$/g, "").trim();
 }
