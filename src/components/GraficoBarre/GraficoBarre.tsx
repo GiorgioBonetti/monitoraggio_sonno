@@ -1,21 +1,16 @@
 import { useState, useEffect } from "react";
 import CreateStackedColumnPlot from "../Chart/BarChart/StackedColumnPlot";
+import { SleepDataInterface } from "../../scripts/extractData";
 
 type GraficoBarreProps = {
-    sleepDataWeek: any[][];
+    sleepDataWeek: SleepDataInterface[][];
     colors: string[];
     stageOrder: string[];
     settMese: boolean;
     setSettMese: (value: boolean) => void;
 };
 
-function GraficoBarre({
-    sleepDataWeek,
-    colors,
-    stageOrder,
-    settMese,
-    setSettMese,
-}: GraficoBarreProps) {
+function GraficoBarre(props: GraficoBarreProps) {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -24,14 +19,14 @@ function GraficoBarre({
             setIsLoading(false); // Simula il caricamento dei dati
         }, 500);
         return () => clearTimeout(timeout);
-    }, [settMese, sleepDataWeek]);
+    }, [props.settMese, props.sleepDataWeek]);
 
     return (
         <div>
             <div className="row px-5 mt-2 mb-4">
                 <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
                     <button
-                        onClick={() => setSettMese(true)}
+                        onClick={() => props.setSettMese(true)}
                         className="btn px-4"
                         style={{
                             backgroundColor: "#18c599",
@@ -53,7 +48,7 @@ function GraficoBarre({
                 </div>
                 <div className="col col-sm-6 col-12 my-2 my-sm-0 mx-sm-0 mx-2">
                     <button
-                        onClick={() => setSettMese(false)}
+                        onClick={() => props.setSettMese(false)}
                         className="btn px-5"
                         style={{
                             backgroundColor: "#18c599",
@@ -84,10 +79,10 @@ function GraficoBarre({
                 </div>
             ) : (
                 <CreateStackedColumnPlot
-                    dati={sleepDataWeek || []}
-                    colors={colors}
-                    ordine={stageOrder}
-                    settMese={settMese}
+                    dati={props.sleepDataWeek || []}
+                    colors={props.colors}
+                    ordine={props.stageOrder}
+                    settMese={props.settMese}
                 />
             )}
         </div>

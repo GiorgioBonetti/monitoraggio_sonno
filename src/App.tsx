@@ -222,7 +222,7 @@ function App() {
                                     <TempoDormito
                                         oreDormite={oreDormite}
                                         oreNelLetto={oreNelLetto}
-                                        sleepData={sleepData}
+                                        sleepData={sleepStages}
                                     />
                                 </Card>
                             </div>

@@ -10,7 +10,7 @@ type ArticoliProps = {
     articoli: ArticoloType[];
 };
 
-function Articoli({ articoli }: ArticoliProps) {
+function Articoli( props : ArticoliProps) {
     return (
         <div>
             <h1 className="py-1">Articoli</h1>
@@ -22,7 +22,7 @@ function Articoli({ articoli }: ArticoliProps) {
                 style={{ borderColor: "rgba(57,79,225,0.67)" }}
             >
                 <div className="carousel-indicators">
-                    {articoli.map((_, idx) => (
+                    {props.articoli.map((_, idx) => (
                         <button
                             key={idx}
                             type="button"
@@ -35,7 +35,7 @@ function Articoli({ articoli }: ArticoliProps) {
                     ))}
                 </div>
                 <div className="carousel-inner ">
-                    {articoli.map((articolo, idx) => {
+                    {props.articoli.map((articolo, idx) => {
                         const [showBody, setShowBody] = useState(false);
                         return (
                             <div
@@ -43,7 +43,7 @@ function Articoli({ articoli }: ArticoliProps) {
                                 className={`carousel-item${idx === 0 ? " active" : ""}`}
                             >
                                 <img
-                                    src="../../../public/immagineArticolo.jpg"
+                                    src="/immagineArticolo.jpg"
                                     className="d-block w-100 rounded-4"
                                     alt="..."
                                     style={{
