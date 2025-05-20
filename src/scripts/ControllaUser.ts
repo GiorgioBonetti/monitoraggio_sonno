@@ -1,4 +1,3 @@
-
 import supabase from "./Supabase";
 import { User } from "../contesto/UserContext";
 
@@ -12,19 +11,14 @@ export async function ControllaUser(user: User): Promise<boolean> {
 
             if (ute?.length === 1) {
                 if (user.token === ute[0].token) {
-                    console.log("Token valido");
                     return true; // Token valido
                 }
             }
-            console.log("Token non valido");
             return false; // Password errata o utente non trovato
-
         } catch {
-            console.log("Token non valido");
-            return false;  // Errore durante il recupero dei dati
+            return false; // Errore durante il recupero dei dati
         }
-    }
-    else {
+    } else {
         return false; // Utente non valido
     }
 }

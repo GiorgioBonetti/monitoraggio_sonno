@@ -1,5 +1,4 @@
 export async function generaConsiglio(prompt: string) {
-
     const response = await fetch("http://localhost:11434/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -9,8 +8,6 @@ export async function generaConsiglio(prompt: string) {
         }),
     });
 
-    console.log("Full response:", prompt);
-
     const text = await response.text();
     const lines = text.split("\n").filter((line) => line.trim().length > 0);
 
@@ -19,7 +16,7 @@ export async function generaConsiglio(prompt: string) {
         try {
             const obj = JSON.parse(line);
             if (obj.response) fullResponse += obj.response;
-        } catch  {
+        } catch {
             // ignora errori di parsing
         }
     }

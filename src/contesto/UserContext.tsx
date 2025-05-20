@@ -47,24 +47,22 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         }
     }, []);
 
-    const login = (userData: User) => {
+    const login = async (userData: User) => {
         const token = userData.token
             ? userData.token
             : SHA256(new Date().toISOString()).toString();
-        userData.token = token;
+        const updatedUser = { ...userData, token };
 
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setUser(updatedUser);
 
-        const fetchData = async () => {
-            await supabase
-                .from("Utenti")
-                .update({ token })
-                .eq("id", userData.id)
-                .select();
-        };
-        navigate("/"); // Reindirizza alla pagina principale
-        fetchData();
+        await supabase
+            .from("Utenti")
+            .update({ token })
+            .eq("id", userData.id)
+            .select();
+
+        navigate("/"); // Reindirizza solo dopo che tutto è stato salvato
     };
 
     const logout = () => {
@@ -76,7 +74,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
                     .eq("id", user.id)
                     .select();
             };
-            fetchData();
+            fetchData().then();
         }
         setUser(null);
 

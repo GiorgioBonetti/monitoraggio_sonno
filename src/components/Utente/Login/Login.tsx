@@ -7,15 +7,9 @@ import { useUser } from "../../../contesto/UserContext";
 function Login() {
     const [email, setEmail] = useState("123@gmail.com");
     const [password, setPassword] = useState("123");
-    // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const { login, logout } = useUser();
-
-    // navigazione
     const navigate = useNavigate();
-
-    // Recupera l'utente memorizzato (se presente)
-
 
     useEffect(() => {
         document.title = "Sleep Monitor - Login";
@@ -26,7 +20,6 @@ function Login() {
         if (parsedUser) {
             login(parsedUser);
         }
-
     }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -35,30 +28,38 @@ function Login() {
         if (email && password) {
             const fetchData = async () => {
                 try {
-                    const { data } = await supabase
+                    const { data, error } = await supabase
                         .from("Utenti")
                         .select("*")
                         .eq("Email", email)
                         .eq("pwd", SHA256(password).toString());
 
+                    if (error) {
+                        logout();
+                        return;
+                    }
+
                     if (data && data.length === 1) {
                         const user = data[0];
-                        // setIsLoggedIn(true);
-                        login({ id: user.id, email: email, pwd: user.pwd, Nome: user.Nome, Cognome: user.cognome, dataNascita: user.dataNascita, Sesso: user.Sesso }); // Passa l'oggetto utente al contesto
-
-                    }
-                    else {
-                        alert("Controlla meglio user e pasword");
-                        // setIsLoggedIn(false);
+                        login({
+                            id: user.id,
+                            email: email,
+                            pwd: user.pwd,
+                            Nome: user.Nome,
+                            Cognome: user.cognome,
+                            dataNascita: user.dataNascita,
+                            Sesso: user.Sesso,
+                        });
+                    } else {
+                        alert("Controlla meglio user e password");
                         logout();
                     }
-                } catch {
+                } catch (err) {
                     alert("Si è verificato un errore durante il login.");
-                    // setIsLoggedIn(false);
                     logout();
                 }
             };
-            fetchData().then(() => { });
+            fetchData().then();
         } else {
             alert("Si è verificato un errore durante il login.");
             logout();
@@ -125,7 +126,7 @@ function Login() {
                     <button
                         className="btn mt-1 btn-outline-primary"
                         onClick={() => {
-                            navigate("/registrazione"); // Reindirizza alla pagina di login
+                            navigate("/registrazione");
                         }}
                     >
                         Registrati
