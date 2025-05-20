@@ -8,21 +8,17 @@ type TempoDormitoProps = {
     sleepData: SleepStageType[] | null;
 };
 
-
-
 function TempoDormito(props: TempoDormitoProps) {
     const [consiglio, setConsiglio] = useState<string>("");
-
-
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         async function fetchConsiglio() {
-
             const sleepStagesStr =
                 Array.isArray(props.sleepData) && props.sleepData.length > 0
                     ? props.sleepData
-                        .map((s) => `${s.nome}: ${s.number} min`)
-                        .join(", ")
+                          .map((s) => `${s.nome}: ${s.number} min`)
+                          .join(", ")
                     : "N/A";
 
             const prompt = `Dati utente:
@@ -30,23 +26,16 @@ function TempoDormito(props: TempoDormitoProps) {
 - Ore dormite: ${props.oreDormite[0]} ore ${props.oreDormite[1]} minuti
 - Ore nel letto: ${props.oreNelLetto[0]} ore ${props.oreNelLetto[1]} minuti
 
-VEDENDO QUESTI DATI, CREA UN CONSIGLIO PERSONALIZZATO PER L'UTENTE. NON SCRIVERE NULLA DI PIU' DEL CONSIGLIO, solo l'ORA DI ANDARE A DORMIRE IN MODO TALE CHE DORMA 8 ORE A NOTTE.`;
+VEDENDO QUESTI DATI, dimmi a che ora dovevo andare a dormire. NON SCRIVERE NULLA DI PIU', solo l'ORA DI ANDARE A DORMIRE in modo da dormire 8 ORE A NOTTE. scrivimi solamente l'ora. nessuna parola.`;
 
             console.log(prompt);
             const consiglio = await generaConsiglio(prompt);
             setConsiglio(consiglio);
+            setLoading(false);
         }
 
         fetchConsiglio().then();
     }, []); // generazione del consiglio tramite richiesta API ad una IA (ollama eseguita in locale sulla macchina)
-
-
-
-
-
-
-
-
 
     return (
         <div
@@ -58,9 +47,13 @@ VEDENDO QUESTI DATI, CREA UN CONSIGLIO PERSONALIZZATO PER L'UTENTE. NON SCRIVERE
                     <h1 className="title">Hai dormito</h1>
                     <div className="row">
                         <div className="dormito col-12">
-                            <div className="grande mx-1">{props.oreDormite[0]}</div>
+                            <div className="grande mx-1">
+                                {props.oreDormite[0]}
+                            </div>
                             <div>h</div>
-                            <div className="grande mx-1">{props.oreDormite[1]}</div>
+                            <div className="grande mx-1">
+                                {props.oreDormite[1]}
+                            </div>
                             <div>min</div>
                         </div>
                     </div>
@@ -84,7 +77,17 @@ VEDENDO QUESTI DATI, CREA UN CONSIGLIO PERSONALIZZATO PER L'UTENTE. NON SCRIVERE
                 <div className="alert alert-warning mt-3" role="alert">
                     Hai dormito meno di 8 ore. Ti consiglio di andare a letto
                     prima delle{" "}
-                    {consiglio}
+                    {loading ? (
+                        <div
+                            className="spinner-border text-secondary gx-1 align-self-center"
+                            role="status"
+                            style={{ width: "1.5rem", height: "1.5rem" }}
+                        >
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    ) : (
+                        consiglio
+                    )}
                     {/* {timestampToSleep(props.sleepData[0].timestamp, props.oreDormite)}. */}
                 </div>
             )}
