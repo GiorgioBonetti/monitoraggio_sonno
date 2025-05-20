@@ -265,8 +265,8 @@ function App() {
                                         sleepStages={sleepStages}
                                         oreDormite={oreDormite}
                                         oreNelLetto={oreNelLetto}
-                                        // bd={user?.annoNascita}
-                                        // sex={user?.sex}
+                                        dataNascita={user?.dataNascita}
+                                        sex={user?.Sesso}
                                         sleepDataWeek={sleepDataWeek || null}
                                     />
                                 </Card>

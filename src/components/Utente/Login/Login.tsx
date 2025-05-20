@@ -26,118 +26,114 @@ function Login() {
         if (parsedUser) {
             login(parsedUser);
         }
-    
+
     }, []);
 
-const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
-    if (email && password) {
-        const fetchData = async () => {
-            try {
-                const { data } = await supabase
-                    .from("Utenti")
-                    .select("*")
-                    .eq("Email", email);
+        if (email && password) {
+            const fetchData = async () => {
+                try {
+                    const { data } = await supabase
+                        .from("Utenti")
+                        .select("*")
+                        .eq("Email", email)
+                        .eq("pwd", SHA256(password).toString());
 
-                if (data && data.length === 1) {
-                    const user = data[0];
-                    if (user.pwd === SHA256(password).toString()) {
+                    if (data && data.length === 1) {
+                        const user = data[0];
                         // setIsLoggedIn(true);
-                        login({ id: user.id, email: email, pwd: user.pwd, Nome: user.Nome, Cognome: user.cognome }); // Passa l'oggetto utente al contesto
-                        // Reindirizza alla pagina principale
-                    } else {
-                        alert("Password errata.");
-                        // setIsLoggedIn(false);
-                        logout(); // Logout in caso di password errata
+                        login({ id: user.id, email: email, pwd: user.pwd, Nome: user.Nome, Cognome: user.cognome, dataNascita: user.dataNascita, Sesso: user.Sesso }); // Passa l'oggetto utente al contesto
+
                     }
-                } else {
-                    alert("Controlla meglio user e pasword");
+                    else {
+                        alert("Controlla meglio user e pasword");
+                        // setIsLoggedIn(false);
+                        logout();
+                    }
+                } catch {
+                    alert("Si è verificato un errore durante il login.");
                     // setIsLoggedIn(false);
                     logout();
                 }
-            } catch {
-                alert("Si è verificato un errore durante il login.");
-                // setIsLoggedIn(false);
-                logout();
-            }
-        };
-        fetchData().then(() => { });
-    } else {
-        alert("Si è verificato un errore durante il login.");
-        logout();
-    }
-};
+            };
+            fetchData().then(() => { });
+        } else {
+            alert("Si è verificato un errore durante il login.");
+            logout();
+        }
+    };
 
-return (
-    <div style={{ minHeight: "100vh" }}>
-        <div
-            className="container-lg position-absolute top-50 start-50 translate-middle"
-            style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
-        >
-            <h1 className="m-4 text-center">
-                <img
-                    src="/icon/moon.png"
-                    alt="Logo"
-                    width="48"
-                    height="48"
-                    className="d-inline-block align-text-top mx-2"
-                />
-                Sleep Monitor
-            </h1>
-            <div className="card rounded-4 p-4">
-                <h2 className="text-center">Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <label htmlFor="inputEmail1" className="form-label">
-                            Indirizzo email
-                        </label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="inputEmail1"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <div id="emailHelp" className="form-text">
-                            Se hai dimenticato la tua email, contatta un
-                            amministratore.
+    return (
+        <div style={{ minHeight: "100vh" }}>
+            <div
+                className="container-lg position-absolute top-50 start-50 translate-middle"
+                style={{ maxWidth: "600px", width: "100%", margin: "auto" }}
+            >
+                <h1 className="m-4 text-center">
+                    <img
+                        src="/icon/moon.png"
+                        alt="Logo"
+                        width="48"
+                        height="48"
+                        className="d-inline-block align-text-top mx-2"
+                    />
+                    Sleep Monitor
+                </h1>
+                <div className="card rounded-4 p-4">
+                    <h2 className="text-center">Login</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-3">
+                            <label htmlFor="inputEmail1" className="form-label">
+                                Indirizzo email
+                            </label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="inputEmail1"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <div id="emailHelp" className="form-text">
+                                Se hai dimenticato la tua email, contatta un
+                                amministratore.
+                            </div>
                         </div>
-                    </div>
-                    <div className="mb-3">
-                        <label
-                            htmlFor="inputPassword"
-                            className="form-label"
-                        >
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="inputPassword"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="d-grid gap-2 mx-auto">
-                        <button type="submit" className="btn btn-primary">
-                            Login
-                        </button>
-                    </div>
-                </form>
-                <button
-                    className="btn mt-1 btn-outline-primary"
-                    onClick={() => {
-                        navigate("/registrazione"); // Reindirizza alla pagina di login
-                    }}
-                >
-                    Registrati
-                </button>
+                        <div className="mb-3">
+                            <label
+                                htmlFor="inputPassword"
+                                className="form-label"
+                            >
+                                Password
+                            </label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="inputPassword"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        <div className="d-grid gap-2 mx-auto">
+                            <button type="submit" className="btn btn-primary">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                    <button
+                        className="btn mt-1 btn-outline-primary"
+                        onClick={() => {
+                            navigate("/registrazione"); // Reindirizza alla pagina di login
+                        }}
+                    >
+                        Registrati
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
 }
 
 export default Login;

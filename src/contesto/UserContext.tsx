@@ -17,6 +17,8 @@ export interface User {
     Cognome: string;
     pwd: string;
     token?: string;
+    dataNascita: string;
+    Sesso: string;
 }
 
 // 2. Tipo del valore del contesto

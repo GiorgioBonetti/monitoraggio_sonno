@@ -11,8 +11,8 @@ type ConsiglioProps = {
     sleepStages: SleepStageType[] | null;
     oreDormite: string[];
     oreNelLetto: string[];
-    // bd: User.annoNascita : ISO string;
-    // sex: User.sex : string;
+    dataNascita: string;
+    sex: string;
     sleepDataWeek: SleepDataInterface[][] | null;
 };
 
@@ -32,32 +32,32 @@ function Consiglio(props: ConsiglioProps) {
             const sleepStagesStr =
                 Array.isArray(props.sleepStages) && props.sleepStages.length > 0
                     ? props.sleepStages
-                          .map((s) => `${s.nome}: ${s.number}`)
-                          .join(", ")
+                        .map((s) => `${s.nome}: ${s.number}`)
+                        .join(", ")
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
             const sleepStagesWeekStr = sleepStages.length
                 ? sleepStages
-                      .slice(0, 7)
-                      .map(
-                          (nightStages, p) =>
-                              `${nightStages
-                                  .map(
-                                      (stage) =>
-                                          ` ${stage.nome}: ${stage.number} minuti`,
-                                  )
-                                  .join(", ")} (${p} giorni fa)`,
-                      )
-                      .join(" | ")
+                    .slice(0, 7)
+                    .map(
+                        (nightStages, p) =>
+                            `${nightStages
+                                .map(
+                                    (stage) =>
+                                        ` ${stage.nome}: ${stage.number} minuti`,
+                                )
+                                .join(", ")} (${p} giorni fa)`,
+                    )
+                    .join(" | ")
                 : "Nessun storico";
 
             const prompt = `Dati utente:
 - Stadi del sonno suddivisi in minuti: [${sleepStagesStr}]
 - Ore dormite: ${oreDormiteStr}
 - Ore nel letto: ${oreNelLettoStr}
-- Anno di nascita: ${"2004"}
-- Sesso: ${"Maschio"}
+- Data di nascita: ${props.dataNascita}
+- Sesso: ${props.sex}
 - Stadi del sonno settimanali: [${sleepStagesWeekStr}]
 Genera un SOLO consiglio personalizzato per migliorare la qualità del sonno. Genera SOLAMENTE una frase contente solamente il consiglio. Non aggiungere altro testo.
 Usa emoji che siano inerenti al tema del sonno dentro la frase che componi. Conta che le ore dormite totali ideali sono 8 ore. Traduci in italiano, in modo corretto.`;
