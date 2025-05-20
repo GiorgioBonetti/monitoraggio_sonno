@@ -15,7 +15,7 @@ function PunteggioInformation() {
                     abitudini!
                 </p>
             </div>
-            <hr className="pb-2" />
+            <hr className="pb-2 border-2" />
             <div className="row d-flex flex-column flex-sm-row align-items-start">
                 <p className="align-self-start align-self-sm-center gx-auto text-nowrap col-sm-4 col-md-3 col-lg-2 col-xl-2">
                     <span style={{ color: "rgb(37,188,105)" }}>60</span>
@@ -28,7 +28,7 @@ function PunteggioInformation() {
                     ancora più efficace per il tuo benessere.
                 </p>
             </div>
-            <hr className="pb-2" />
+            <hr className="pb-2 border-2" />
             <div className="row d-flex flex-column flex-sm-row align-items-start">
                 <p className="align-self-start align-self-sm-center gx-auto text-nowrap col-sm-4 col-md-3 col-lg-2 col-xl-2">
                     <span style={{ color: "#e8ae00" }}>40</span>
@@ -41,7 +41,7 @@ function PunteggioInformation() {
                     i consigli per dormire meglio.
                 </p>
             </div>
-            <hr className="pb-2" />
+            <hr className="pb-2 border-2" />
             <div className="row d-flex flex-column flex-sm-row align-items-start">
                 <p className="align-self-start align-self-sm-center gx-auto text-nowrap col-sm-4 col-md-3 col-lg-2 col-xl-2">
                     <span style={{ color: "#dc3545" }}>0</span>
