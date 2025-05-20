@@ -1,40 +1,47 @@
 import { useEffect, useState } from "react";
 import { generaConsiglio } from "../../scripts/ollamaApi.ts";
 import { SleepStageType } from "../../scripts/extractSleepStages.ts";
+import { SleepDataInterface } from "../../scripts/extractData.ts";
 
 type TempoDormitoProps = {
     oreDormite: string[];
     oreNelLetto: string[];
-    sleepData: SleepStageType[] | null;
+    sleepDataStage: SleepStageType[] | null;
+    sleepData: SleepDataInterface[];
+
 };
 
 function TempoDormito(props: TempoDormitoProps) {
+
     const [consiglio, setConsiglio] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        async function fetchConsiglio() {
-            const sleepStagesStr =
-                Array.isArray(props.sleepData) && props.sleepData.length > 0
-                    ? props.sleepData
-                          .map((s) => `${s.nome}: ${s.number} min`)
-                          .join(", ")
-                    : "N/A";
+        if (Number(props.oreDormite[0]) < 8) {
+            async function fetchConsiglio() {
+                const sleepStagesStr =
+                    Array.isArray(props.sleepDataStage) && props.sleepDataStage.length > 0
+                        ? props.sleepDataStage
+                            .map((s) => `${s.nome}: ${s.number} min`)
+                            .join(", ")
+                        : "N/A";
 
-            const prompt = `Dati utente:
+                const prompt = `Dati utente:
 - Stadi del sonno suddivisi in minuti: [${sleepStagesStr}]
 - Ore dormite: ${props.oreDormite[0]} ore ${props.oreDormite[1]} minuti
 - Ore nel letto: ${props.oreNelLetto[0]} ore ${props.oreNelLetto[1]} minuti
+- Timestamp di inizio sonno: ${props.sleepData[0].timestamp}
+- Timestamp di fine sonno: ${props.sleepData[props.sleepData.length - 1].timestamp}
 
 VEDENDO QUESTI DATI, dimmi a che ora dovevo andare a dormire. NON SCRIVERE NULLA DI PIU', solo l'ORA DI ANDARE A DORMIRE in modo da dormire 8 ORE A NOTTE. scrivimi solamente l'ora. nessuna parola.`;
 
-            console.log(prompt);
-            const consiglio = await generaConsiglio(prompt);
-            setConsiglio(consiglio);
-            setLoading(false);
-        }
+                const consiglio = await generaConsiglio(prompt);
+                setConsiglio(consiglio);
+                setLoading(false);
+            }
 
-        fetchConsiglio().then();
+            fetchConsiglio().then();
+        }
     }, []); // generazione del consiglio tramite richiesta API ad una IA (ollama eseguita in locale sulla macchina)
 
     return (

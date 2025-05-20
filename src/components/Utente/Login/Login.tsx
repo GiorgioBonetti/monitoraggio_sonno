@@ -54,7 +54,7 @@ function Login() {
                         alert("Controlla meglio user e password");
                         logout();
                     }
-                } catch (err) {
+                } catch {
                     alert("Si è verificato un errore durante il login.");
                     logout();
                 }

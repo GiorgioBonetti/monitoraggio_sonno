@@ -37,7 +37,7 @@ function PieGraph(props: PieGraphProps) {
                 title: false,
                 content: {
                     // Funzione personalizzata per il contenuto centrale
-                    customHtml: (_container, _view, datum, _data) => {
+                    customHtml: (_container, _view, datum) => {
                         if (datum) {
                             return `<div style="text-align: center;">
                                   <div>${datum.nome}</div>

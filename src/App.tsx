@@ -8,10 +8,7 @@ import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
-import {
-    extractSleepStages,
-    SleepStageType,
-} from "./scripts/extractSleepStages.ts";
+import {extractSleepStages,SleepStageType} from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
@@ -33,12 +30,8 @@ function App() {
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
-        null,
-    );
-    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
-        null,
-    );
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(null);
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(null);
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
 
@@ -46,15 +39,11 @@ function App() {
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
-    const [sleepDataWeek, setSleepDataWeek] = useState<
-        SleepDataInterface[][] | null
-    >(null);
+    const [sleepDataWeek, setSleepDataWeek] = useState< SleepDataInterface[][] | null>(null);
 
     const [searchParams] = useSearchParams();
 
-    const dateParam = (
-        searchParams.get("date") || new Date().toISOString().split("T")[0]
-    ).slice(0, 10);
+    const dateParam = ( searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
@@ -222,7 +211,8 @@ function App() {
                                     <TempoDormito
                                         oreDormite={oreDormite}
                                         oreNelLetto={oreNelLetto}
-                                        sleepData={sleepStages}
+                                        sleepData={sleepData}
+                                        sleepDataStage={sleepStages}
                                     />
                                 </Card>
                             </div>
