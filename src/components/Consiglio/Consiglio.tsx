@@ -1,7 +1,10 @@
 import Card from "../Card/Card.tsx";
 import { generaConsiglio } from "../../scripts/ollamaApi.ts";
 import { useEffect, useState } from "react";
-import { extractSleepStages, SleepStageType } from "../../scripts/extractSleepStages.ts";
+import {
+    extractSleepStages,
+    SleepStageType,
+} from "../../scripts/extractSleepStages.ts";
 import { SleepDataInterface } from "../../scripts/extractData.ts";
 
 type ConsiglioProps = {
@@ -13,19 +16,14 @@ type ConsiglioProps = {
     sleepDataWeek: SleepDataInterface[][] | null;
 };
 
-
-
 function Consiglio(props: ConsiglioProps) {
     const [consiglio, setConsiglio] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
 
     const sleepStages: SleepStageType[][] = [];
     if (props.sleepDataWeek) {
-
         for (let i = 0; i < props.sleepDataWeek.length; i++) {
-            sleepStages.push(
-                extractSleepStages(props.sleepDataWeek[i])
-            );
+            sleepStages.push(extractSleepStages(props.sleepDataWeek[i]));
         }
     }
 
@@ -34,22 +32,24 @@ function Consiglio(props: ConsiglioProps) {
             const sleepStagesStr =
                 Array.isArray(props.sleepStages) && props.sleepStages.length > 0
                     ? props.sleepStages
-                        .map((s) => `${s.nome}: ${s.number}`)
-                        .join(", ")
+                          .map((s) => `${s.nome}: ${s.number}`)
+                          .join(", ")
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
             const sleepStagesWeekStr = sleepStages.length
                 ? sleepStages
-                    .map((nightStages, p) =>
-                        nightStages
-                            .map(
-                                (stage) =>
-                                    `giorni fa ${p},  ${stage.nome}: ${stage.number}`,
-                            )
-                            .join(", "),
-                    )
-                    .join(" | ")
+                      .slice(0, 7)
+                      .map(
+                          (nightStages, p) =>
+                              `${nightStages
+                                  .map(
+                                      (stage) =>
+                                          ` ${stage.nome}: ${stage.number} minuti`,
+                                  )
+                                  .join(", ")} (${p} giorni fa)`,
+                      )
+                      .join(" | ")
                 : "Nessun storico";
 
             const prompt = `Dati utente:
@@ -59,7 +59,8 @@ function Consiglio(props: ConsiglioProps) {
 - Anno di nascita: ${"2004"}
 - Sesso: ${"Maschio"}
 - Stadi del sonno settimanali: [${sleepStagesWeekStr}]
-Genera un SOLO consiglio personalizzato per migliorare la qualità del sonno. In italiano. Genera SOLAMENTE una frase contente solamente il consiglio. Non aggiungere altro testo.`;
+Genera un SOLO consiglio personalizzato per migliorare la qualità del sonno. Genera SOLAMENTE una frase contente solamente il consiglio. Non aggiungere altro testo.
+Usa emoji che siano inerenti al tema del sonno dentro la frase che componi. Conta che le ore dormite totali ideali sono 8 ore. Traduci in italiano, in modo corretto.`;
 
             const consiglio = await generaConsiglio(prompt);
             setLoading(false);
