@@ -19,7 +19,6 @@ import GraficoBarre from "./components/GraficoBarre/GraficoBarre.tsx";
 import Articoli from "./components/Articoli/Articoli.tsx";
 import MissingData from "./components/MissingData/MissingData.tsx";
 import {
-    articoli,
     consigli,
     ConsiglioType,
 } from "./scripts/dataConsigliArticoli.ts";
@@ -27,6 +26,7 @@ import { useSearchParams } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
 import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
+import { getArticoli } from "./scripts/GetArticoli.ts";
 
 function App() {
 
@@ -305,7 +305,7 @@ function App() {
                         <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <Articoli articoli={articoli} />
+                                    <Articoli articoli={getArticoli(dateParam)} />
                                 </Card>
                             </div>
                         </div>

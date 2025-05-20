@@ -42,7 +42,7 @@ function Registrazione() {
                     await supabase
                         .from("Utenti")
                         .insert([
-                            { email: email, pwd: SHA256(password).toString(), Nome: name, Cognome: surname, DataNascita: birthday, sesso: sex },
+                            { Email: email, pwd: SHA256(password).toString(), Nome: name, Cognome: surname, dataNascita: birthday, Sesso: sex },
                         ])
                         .select();
 
