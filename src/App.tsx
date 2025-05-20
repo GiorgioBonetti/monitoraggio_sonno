@@ -18,10 +18,6 @@ import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
 import GraficoBarre from "./components/GraficoBarre/GraficoBarre.tsx";
 import Articoli from "./components/Articoli/Articoli.tsx";
 import MissingData from "./components/MissingData/MissingData.tsx";
-import {
-    consigli,
-    ConsiglioType,
-} from "./scripts/dataConsigliArticoli.ts";
 import { useSearchParams } from "react-router-dom";
 import { useUser } from "./contesto/UserContext";
 import supabase from "./scripts/Supabase.ts";
@@ -45,7 +41,6 @@ function App() {
     );
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
-    const [consiglioSelected, setConsiglioSelected] = useState<ConsiglioType>();
 
     const [punteggio, setPunteggio] = useState<[number, string]>([0, ""]);
 
@@ -80,9 +75,6 @@ function App() {
             });
         }
     }, []); // cambia il titolo della pagina
-
-    // use effect
-    // Call the custom hook at the top level
 
     useEffect(() => {
         // Controlla se l'utente è loggato
@@ -155,16 +147,6 @@ function App() {
             fetchData().then(() => {});
         }
     }, [user, dateParam, settMese]); // fetch del csv
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setConsiglioSelected(
-                consigli[Math.floor(Math.random() * consigli.length)],
-            );
-        }, 20000);
-
-        return () => clearInterval(interval);
-    }, [consiglioSelected]); // change del consiglio ogni 20 secondi
 
     useEffect(() => {
         if (sleepData != null) {
@@ -280,11 +262,12 @@ function App() {
                             <div className="card border-4 rounded-4">
                                 <Card>
                                     <Consiglio
-                                        articolo={
-                                            consiglioSelected
-                                                ? consiglioSelected
-                                                : consigli[0]
-                                        }
+                                        sleepStages={sleepStages}
+                                        oreDormite={oreDormite}
+                                        oreNelLetto={oreNelLetto}
+                                        // bd={user?.annoNascita}
+                                        // sex={user?.sex}
+                                        sleepDataWeek={sleepDataWeek || null}
                                     />
                                 </Card>
                             </div>
@@ -311,7 +294,9 @@ function App() {
                         <div className="row">
                             <div className="card border-4 rounded-4">
                                 <Card>
-                                    <Articoli articoli={getArticoli(dateParam)} />
+                                    <Articoli
+                                        articoli={getArticoli(dateParam)}
+                                    />
                                 </Card>
                             </div>
                         </div>
