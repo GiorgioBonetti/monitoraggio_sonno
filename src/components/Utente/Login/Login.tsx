@@ -46,7 +46,7 @@ function Login() {
                             email: email,
                             pwd: user.pwd,
                             Nome: user.Nome,
-                            Cognome: user.cognome,
+                            Cognome: user.Cognome,
                             dataNascita: user.dataNascita,
                             Sesso: user.Sesso,
                         });

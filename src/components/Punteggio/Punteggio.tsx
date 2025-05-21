@@ -10,8 +10,8 @@ function Punteggio(props: PunteggioProps) {
     //Render
     return (
         <div className="d-flex align-items-center">
-            <h1 className="col-11 pt-2">
-                <span
+            <h1 className="col-11 pt-2" id="punteggio">
+                <span 
                     style={{
                         color:
                             props.punteggio >= 80
