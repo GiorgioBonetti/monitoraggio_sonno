@@ -4,30 +4,28 @@ import { useEffect, useState } from "react";
 
 function Navbar() {
     const [searchParams] = useSearchParams();
-
     const { logout } = useUser();
     const navigate = useNavigate();
 
+    // Stato iniziale di `date` basato sui parametri dell'URL
     const [date, setDate] = useState<Date>(() => {
         const param = searchParams.get("date");
         return param ? new Date(param) : new Date();
     });
 
+    // Aggiorna il parametro `date` nell'URL solo se cambia
     useEffect(() => {
-        const param = searchParams.get("date");
-        if (param) {
-            const newDate = new Date(param);
-            if (!isNaN(newDate.getTime())) {
-                setDate(newDate);
-            }
+        const currentDate = searchParams.get("date");
+        const formattedDate = date.toISOString().split("T")[0];
+
+        if (currentDate !== formattedDate) {
+            const params = new URLSearchParams(searchParams);
+            params.set("date", formattedDate); // Aggiorna solo il parametro `date`
+            navigate(`/?${params.toString()}`, { replace: true }); // Usa `replace` per evitare di aggiungere una nuova voce nella cronologia
         }
-    }, [searchParams]);
+    }, [date, searchParams, navigate]);
 
-    useEffect(() => {
-        navigate(`/?date=${date.toISOString().split("T")[0]}`);
-    }, [date]);
-
-    // funzione per passare al giorno successivo
+    // Funzioni per cambiare la data
     function nextDate() {
         const next = new Date(date);
         next.setDate(next.getDate() + 1);
@@ -37,29 +35,31 @@ function Navbar() {
     }
 
     function previousDate() {
-        const prev = new Date(date); // crea una nuova istanza per non mutare lo stato direttamente
+        const prev = new Date(date);
         prev.setDate(prev.getDate() - 1);
         setDate(prev);
     }
 
-    // controllo che la data inserita sia valida (ovvero che non sia futura)
-    function checkDate(date: Date) {
-        if (date <= new Date()) {
-            setDate(date);
-        } else setDate(new Date());
+    function checkDate(newDate: Date) {
+        if (newDate <= new Date()) {
+            setDate(newDate);
+        } else {
+            setDate(new Date());
+        }
     }
 
-    // LOGOUT
     const handleLogout = () => {
-        logout(); // Esegui il logout
-        navigate("/login"); // Reindirizza alla pagina di login
+        logout();
+        navigate("/login");
     };
 
     return (
         <nav className="navbar navbar-expand-sm bg-light mb-1">
             <div className="container-fluid justify-content-between">
+                {/* Logo */}
                 <a className="navbar-brand" href="/">
                     <img
+                        id="logo"
                         src="/icon/moon.png"
                         alt="Logo"
                         width="24"
@@ -68,7 +68,8 @@ function Navbar() {
                     />
                     Sleep Monitor
                 </a>
-                {/* Bottone di logout visibile solo sotto i 576px */}
+
+                {/* Logout per schermi piccoli */}
                 <button
                     onClick={handleLogout}
                     className="btn btn-outline-danger d-sm-none border-2"
@@ -87,6 +88,8 @@ function Navbar() {
                 >
                     Logout
                 </button>
+
+                {/* Pulsante per espandere/collassare la navbar in modalità mobile */}
                 <button
                     className="navbar-toggler border-2"
                     type="button"
@@ -112,6 +115,7 @@ function Navbar() {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
+                {/* Contenuto della navbar */}
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul
                         className="navbar-nav justify-content-around"
@@ -120,6 +124,7 @@ function Navbar() {
                         <li className="nav-item mx-0 mx-md-3 mx-lg-5"></li>
                         <li className="nav-item">
                             <div className="d-flex justify-content-center my-2 my-sm-0">
+                                {/* Pulsante per data precedente */}
                                 <button
                                     className="btn me-2"
                                     onClick={previousDate}
@@ -131,6 +136,8 @@ function Navbar() {
                                 >
                                     &lt;
                                 </button>
+
+                                {/* Input per selezionare la data */}
                                 <input
                                     className="form-control mx-2 border-2"
                                     type="date"
@@ -144,6 +151,8 @@ function Navbar() {
                                         borderColor: "#18c599",
                                     }}
                                 />
+
+                                {/* Pulsante per data successiva */}
                                 <button
                                     className="btn ms-2"
                                     onClick={nextDate}
@@ -158,7 +167,8 @@ function Navbar() {
                             </div>
                         </li>
                         <li className="nav-item"></li>
-                        {/* Bottone di logout visibile sopra i 576px */}
+
+                        {/* Logout per schermi grandi */}
                         <li className="nav-item align-self-end d-none d-sm-block">
                             <button
                                 onClick={handleLogout}

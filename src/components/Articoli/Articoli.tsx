@@ -10,7 +10,7 @@ type ArticoliProps = {
     articoli: ArticoloType[];
 };
 
-function Articoli( props : ArticoliProps) {
+function Articoli(props: ArticoliProps) {
     return (
         <div>
             <h1 className="py-1">Articoli</h1>
@@ -52,27 +52,43 @@ function Articoli( props : ArticoliProps) {
                                         borderColor: "rgba(57,79,225,0.67)",
                                     }}
                                 />
-                                <div
-                                    className={`carousel-caption d-none d-md-block bg-dark ${showBody ? "bg-opacity-100" : "bg-opacity-75"} rounded-3 p-3`}
+                                                                <div
+                                    className={`carousel-caption bg-dark ${showBody ? "bg-opacity-100" : "bg-opacity-75"} rounded-3 p-3`}
                                 >
-                                    <h5>{articolo.titolo}</h5>
+                                    <h5
+                                        style={{
+                                            fontSize: window.innerWidth <= 768 ? "1rem" : "1.25rem", // Font più piccolo su mobile
+                                        }}
+                                    >
+                                        {articolo.titolo}
+                                    </h5>
+                                    {showBody && <hr className="border-3 border-light" />}
                                     {showBody && (
-                                        <hr className="border-3 border-light" />
-                                    )}
-                                    {showBody && (
-                                        <div className="card-body rounded-3 p-1 my-2">
-                                            <small>{articolo.testo}</small>
+                                        <div
+                                            className="card-body rounded-3 p-1 my-2"
+                                            style={{
+                                                maxHeight: "150px", // Altezza massima per il contenitore
+                                                overflowY: "auto", // Abilita lo scorrimento verticale
+                                            }}
+                                        >
+                                            <small
+                                                style={{
+                                                    fontSize: window.innerWidth <= 768 ? "0.875rem" : "1rem", // Font più piccolo su mobile
+                                                }}
+                                            >
+                                                {articolo.testo}
+                                            </small>
                                         </div>
                                     )}
                                     <button
                                         className={`btn mb-2 ${showBody ? "btn-outline-light" : "btn-primary"}`}
-                                        onClick={() =>
-                                            setShowBody((prev) => !prev)
-                                        }
+                                        style={{
+                                            fontSize: window.innerWidth <= 768 ? "0.875rem" : "1rem", // Font più piccolo su mobile
+                                            padding: window.innerWidth <= 768 ? "0.25rem 0.5rem" : "0.5rem 1rem", // Riduci padding su mobile
+                                        }}
+                                        onClick={() => setShowBody((prev) => !prev)}
                                     >
-                                        {showBody
-                                            ? "Nascondi"
-                                            : "Scopri di più"}
+                                        {showBody ? "Nascondi" : "Scopri di più"}
                                     </button>
                                 </div>
                             </div>

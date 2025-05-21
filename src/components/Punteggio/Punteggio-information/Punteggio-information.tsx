@@ -3,7 +3,7 @@ import "./Punteggio-information.css";
 function PunteggioInformation() {
     return (
         <div className="container text-start fs-5 lh-sm">
-            <div className="row d-flex flex-column flex-sm-row align-items-start">
+            <div className="row d-flex flex-column flex-sm-row align-items-start mt-2">
                 <p className="align-self-start align-self-sm-center gx-auto text-nowrap col-sm-4 col-md-3 col-lg-2 col-xl-2">
                     <span style={{ color: "blue" }}>80</span>
                     {"-"}

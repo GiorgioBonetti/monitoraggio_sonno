@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { uploadFile } from "../../scripts/uploadFile";
 
 type MissingDataProps = {
@@ -5,8 +6,36 @@ type MissingDataProps = {
     dataRiferimento: string,
 };
 
-
 function MissingData(props: MissingDataProps) {
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById(
+            "inputGroupFile04"
+        ) as HTMLInputElement;
+        const file = fileInput.files?.[0];
+        if (!file) {
+            alert("Nessun file selezionato");
+            return;
+        }
+
+        setIsUploading(true); // Imposta lo stato di caricamento
+
+        try {
+            await uploadFile(file, props.dataRiferimento, props.idUtente);
+            setTimeout(() => {
+                setIsUploading(false); // Ripristina lo stato di caricamento
+                window.location.reload(); // Ricarica la pagina solo quando il DB ha finito
+            }, 3000);
+
+        } catch (error) {
+            console.error("Errore durante l'upload:", error);
+            alert("Errore durante l'upload del file");
+        }
+    };
+
     return (
         <div>
             <h1>Nessun dato presente</h1>
@@ -40,32 +69,15 @@ function MissingData(props: MissingDataProps) {
                                 required
                             />
                             <button
-                                className="btn btn-primary"
+                                className="btn btn-primary d-flex align-items-center justify-content-center"
                                 type="button"
                                 id="inputGroupFileAddon04"
                                 style={{
                                     transition: "all 0.2s ease",
                                     backgroundColor: "#18c599",
-                                    // backgroundColor: "rgba(57, 79, 225, 0.67)",
+                                    position: "relative",
                                 }}
-                                onClick={(e) => {
-
-                                    e.preventDefault();
-                                    console.log("Carica file");
-
-                                    const fileInput = document.getElementById(
-                                        "inputGroupFile04"
-                                    ) as HTMLInputElement;
-                                    const file = fileInput.files?.[0];
-                                    if (!file) {
-                                        alert("Nessun file selezionato");
-                                        return;
-                                    }
-
-                                    uploadFile(file, props.dataRiferimento, props.idUtente)
-                                    
-
-                                }}
+                                onClick={handleUpload}
                                 onMouseDown={(e) => {
                                     e.currentTarget.style.boxShadow =
                                         "0 4px 8px rgba(0, 0, 0, 0.3)";
@@ -77,8 +89,13 @@ function MissingData(props: MissingDataProps) {
                                     e.currentTarget.style.transform =
                                         "scale(1)";
                                 }}
+                                disabled={isUploading}
                             >
-                                <i className="bi bi-file-earmark-arrow-up"></i>
+                                {isUploading ? (
+                                    <span className="spinner-border spinner-border-sm text-light" role="status" />
+                                ) : (
+                                    <i className="bi bi-file-earmark-arrow-up"></i>
+                                )}
                             </button>
                         </div>
                     </form>

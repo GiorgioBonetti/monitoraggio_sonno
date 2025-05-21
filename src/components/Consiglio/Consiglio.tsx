@@ -32,24 +32,24 @@ function Consiglio(props: ConsiglioProps) {
             const sleepStagesStr =
                 Array.isArray(props.sleepStages) && props.sleepStages.length > 0
                     ? props.sleepStages
-                          .map((s) => `${s.nome}: ${s.number}`)
-                          .join(", ")
+                        .map((s) => `${s.nome}: ${s.number}`)
+                        .join(", ")
                     : "N/A";
             const oreDormiteStr = props.oreDormite.join(", ");
             const oreNelLettoStr = props.oreNelLetto.join(", ");
             const sleepStagesWeekStr = sleepStages.length
                 ? sleepStages
-                      .slice(0, 7)
-                      .map(
-                          (nightStages, p) =>
-                              `${nightStages
-                                  .map(
-                                      (stage) =>
-                                          ` ${stage.nome}: ${stage.number} minuti`,
-                                  )
-                                  .join(", ")} (${p} giorni fa)`,
-                      )
-                      .join(" | ")
+                    .slice(0, 7)
+                    .map(
+                        (nightStages, p) =>
+                            `${nightStages
+                                .map(
+                                    (stage) =>
+                                        ` ${stage.nome}: ${stage.number} minuti`,
+                                )
+                                .join(", ")} (${p} giorni fa)`,
+                    )
+                    .join(" | ")
                 : "Nessun storico";
 
             const prompt = `Dati utente:
@@ -95,7 +95,14 @@ Usa emoji che siano inerenti al tema del sonno dentro la frase che componi. Cont
             <div className="card border-4 rounded-4 mt-3">
                 <Card>
                     <div className="row">
-                        <h3 className="title col-12 pt-1 px-md-5 px-3">
+                        <h3
+                            className="title col-12 pt-1 px-md-5 px-3"
+                            style={{
+                                fontSize: window.innerWidth <= 768 ? "1rem" : "1.5rem", // Font più piccolo su mobile
+                                lineHeight: window.innerWidth <= 768 ? "1.5" : "1.75", // Migliora la leggibilità
+                                textAlign: "center", // Centra il testo per una migliore visualizzazione
+                            }}
+                        >
                             {consiglio}
                         </h3>
                     </div>

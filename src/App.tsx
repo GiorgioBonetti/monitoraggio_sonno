@@ -8,7 +8,7 @@ import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
-import {extractSleepStages,SleepStageType} from "./scripts/extractSleepStages.ts";
+import { extractSleepStages, SleepStageType } from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
@@ -20,6 +20,7 @@ import { useUser } from "./contesto/UserContext";
 import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
 import { getArticoli } from "./scripts/GetArticoli.ts";
+import { exportToPDF } from "./scripts/PDF.ts";
 
 function App() {
     const { user, login, logout } = useUser();
@@ -39,11 +40,11 @@ function App() {
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
-    const [sleepDataWeek, setSleepDataWeek] = useState< SleepDataInterface[][] | null>(null);
+    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null);
 
     const [searchParams] = useSearchParams();
 
-    const dateParam = ( searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
+    const dateParam = (searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
@@ -103,7 +104,7 @@ function App() {
                                 "night_reference",
                                 new Date(
                                     new Date(dateParam).getTime() -
-                                        i * 24 * 60 * 60 * 1000,
+                                    i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -133,7 +134,7 @@ function App() {
                     }
                 } // 0.5 secondo dopo il caricamento dei dati
             };
-            fetchData().then(() => {});
+            fetchData().then(() => { });
         }
     }, [user, dateParam, settMese]); // fetch del csv
 
@@ -199,6 +200,7 @@ function App() {
                                         punteggio={punteggio[0]}
                                         testo={punteggio[1]}
                                     ></Punteggio>
+                                    <button onClick={() => exportToPDF(dateParam, user, sleepStages)}>Esporta PDF</button>
                                 </Card>
                             </div>
                         </div>
