@@ -1,10 +1,5 @@
 import { useState } from "react";
-
-type ArticoloType = {
-    target: string;
-    titolo: string;
-    testo: string;
-};
+import { ArticoloType } from "../../scripts/dataConsigliArticoli.ts";
 
 type ArticoliProps = {
     articoli: ArticoloType[];
@@ -43,7 +38,7 @@ function Articoli(props: ArticoliProps) {
                                 className={`carousel-item${idx === 0 ? " active" : ""}`}
                             >
                                 <img
-                                    src="/immagineArticolo.jpg"
+                                    src={articolo.img}
                                     className="d-block w-100 rounded-4"
                                     alt="..."
                                     style={{
@@ -52,17 +47,40 @@ function Articoli(props: ArticoliProps) {
                                         borderColor: "rgba(57,79,225,0.67)",
                                     }}
                                 />
-                                                                <div
+                                <div
                                     className={`carousel-caption bg-dark ${showBody ? "bg-opacity-100" : "bg-opacity-75"} rounded-3 p-3`}
                                 >
                                     <h5
                                         style={{
-                                            fontSize: window.innerWidth <= 768 ? "1rem" : "1.25rem", // Font più piccolo su mobile
+                                            fontSize:
+                                                window.innerWidth <= 768
+                                                    ? "1rem"
+                                                    : "1.25rem", // Font più piccolo su mobile
                                         }}
                                     >
-                                        {articolo.titolo}
+                                        {articolo.titolo.includes(":") ? (
+                                            <>
+                                                <span className="text-info">
+                                                    {
+                                                        articolo.titolo.split(
+                                                            ":",
+                                                        )[0]
+                                                    }
+                                                </span>
+                                                {": "}
+                                                {articolo.titolo.slice(
+                                                    articolo.titolo.indexOf(
+                                                        ":",
+                                                    ) + 1,
+                                                )}
+                                            </>
+                                        ) : (
+                                            articolo.titolo
+                                        )}
                                     </h5>
-                                    {showBody && <hr className="border-3 border-light" />}
+                                    {showBody && (
+                                        <hr className="border-3 border-light" />
+                                    )}
                                     {showBody && (
                                         <div
                                             className="card-body rounded-3 p-1 my-2"
@@ -73,7 +91,10 @@ function Articoli(props: ArticoliProps) {
                                         >
                                             <small
                                                 style={{
-                                                    fontSize: window.innerWidth <= 768 ? "0.875rem" : "1rem", // Font più piccolo su mobile
+                                                    fontSize:
+                                                        window.innerWidth <= 768
+                                                            ? "0.875rem"
+                                                            : "1rem", // Font più piccolo su mobile
                                                 }}
                                             >
                                                 {articolo.testo}
@@ -83,12 +104,22 @@ function Articoli(props: ArticoliProps) {
                                     <button
                                         className={`btn mb-2 ${showBody ? "btn-outline-light" : "btn-primary"}`}
                                         style={{
-                                            fontSize: window.innerWidth <= 768 ? "0.875rem" : "1rem", // Font più piccolo su mobile
-                                            padding: window.innerWidth <= 768 ? "0.25rem 0.5rem" : "0.5rem 1rem", // Riduci padding su mobile
+                                            fontSize:
+                                                window.innerWidth <= 768
+                                                    ? "0.875rem"
+                                                    : "1rem", // Font più piccolo su mobile
+                                            padding:
+                                                window.innerWidth <= 768
+                                                    ? "0.25rem 0.5rem"
+                                                    : "0.5rem 1rem", // Riduci padding su mobile
                                         }}
-                                        onClick={() => setShowBody((prev) => !prev)}
+                                        onClick={() =>
+                                            setShowBody((prev) => !prev)
+                                        }
                                     >
-                                        {showBody ? "Nascondi" : "Scopri di più"}
+                                        {showBody
+                                            ? "Nascondi"
+                                            : "Scopri di più"}
                                     </button>
                                 </div>
                             </div>
