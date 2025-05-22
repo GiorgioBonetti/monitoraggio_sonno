@@ -5,8 +5,8 @@ import SHA256 from "crypto-js/sha256";
 import { useUser } from "../../../contesto/UserContext";
 
 function Login() {
-    const [email, setEmail] = useState("123@gmail.com");
-    const [password, setPassword] = useState("123");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const { login, logout } = useUser();
     const navigate = useNavigate();
