@@ -23,7 +23,15 @@ function Navbar(props: NavbarProps) {
     // Stato iniziale di `date` basato sui parametri dell'URL
     const [date, setDate] = useState<Date>(() => {
         const param = searchParams.get("date");
-        return param ? new Date(param) : new Date();
+        // controllo che la data non sia futura, oppure che la data non sia valida, ad esempio 2023-02-31 o 2023-13-01
+        if (param && !isNaN(Date.parse(param))) {
+            const parsedDate = new Date(param);
+            if (parsedDate > new Date()) {
+                return new Date();
+            }
+            return parsedDate;
+        }
+        return new Date();
     });
 
     // Aggiorna il parametro `date` nell'URL solo se cambia
