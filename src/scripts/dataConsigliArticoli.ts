@@ -6,10 +6,10 @@ export type ArticoloType = {
 };
 
 const immagini = [
-    "../../public/immaginiArticoli/IMG_0150-1.jpeg",
-    "../../public/immaginiArticoli/IMG_0151-2.jpeg",
-    "../../public/immaginiArticoli/IMG_0152-3.jpeg",
-    "../../public/immaginiArticoli/IMG_0153-4.jpeg",
+    "/immaginiArticoli/IMG_0150-1.jpeg",
+    "/immaginiArticoli/IMG_0151-2.jpeg",
+    "/immaginiArticoli/IMG_0152-3.jpeg",
+    "/immaginiArticoli/IMG_0153-4.jpeg",
 ];
 
 export const articoli: ArticoloType[] = [
