@@ -118,7 +118,33 @@ function Login() {
                             />
                         </div>
                         <div className="d-grid gap-2 mx-auto">
-                            <button type="submit" className="btn btn-primary">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ transition: "all 0.2s ease" }}
+                                onMouseDown={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                                onTouchStart={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onTouchEnd={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                            >
                                 Login
                             </button>
                         </div>
@@ -127,6 +153,25 @@ function Login() {
                         className="btn mt-1 btn-outline-primary"
                         onClick={() => {
                             navigate("/registrazione");
+                        }}
+                        style={{ transition: "all 0.2s ease" }}
+                        onMouseDown={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onMouseUp={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
+                        onTouchStart={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onTouchEnd={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
                         }}
                     >
                         Registrati

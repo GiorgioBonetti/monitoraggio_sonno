@@ -42,6 +42,15 @@ function GraficoBarre(props: GraficoBarreProps) {
                             e.currentTarget.style.boxShadow = "none";
                             e.currentTarget.style.transform = "scale(1)";
                         }}
+                        onTouchStart={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onTouchEnd={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
                     >
                         SETTIMANA
                     </button>
@@ -61,6 +70,15 @@ function GraficoBarre(props: GraficoBarreProps) {
                             e.currentTarget.style.transform = "scale(0.95)";
                         }}
                         onMouseUp={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
+                        onTouchStart={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onTouchEnd={(e) => {
                             e.currentTarget.style.boxShadow = "none";
                             e.currentTarget.style.transform = "scale(1)";
                         }}

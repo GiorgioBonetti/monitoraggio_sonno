@@ -1,8 +1,21 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useUser } from "../../contesto/UserContext";
 import { useEffect, useState } from "react";
+import { exportToPDF } from "../../scripts/PDF.ts";
+import { SleepStageType } from "../../scripts/extractSleepStages.ts";
+import { User } from "../../contesto/UserContext.tsx";
+import { SleepDataInterface } from "../../scripts/extractData.ts";
+import "./Navbar.css";
 
-function Navbar() {
+type NavbarProps = {
+    dateParam: string;
+    user: User | null;
+    sleepStages: SleepStageType[] | null;
+    loading: boolean;
+    sleepData: SleepDataInterface[] | null;
+};
+
+function Navbar(props: NavbarProps) {
     const [searchParams] = useSearchParams();
     const { logout } = useUser();
     const navigate = useNavigate();
@@ -53,21 +66,99 @@ function Navbar() {
         navigate("/login");
     };
 
+    const exportClick = () => {
+        if (
+            !props.user ||
+            props.loading ||
+            !props.sleepData ||
+            props.sleepData.length <= 0
+        ) {
+            alert("Non ci sono dati da esportare");
+            return;
+        } else {
+            return exportToPDF(props.dateParam, props.user!, props.sleepStages);
+        }
+    };
+
     return (
         <nav className="navbar navbar-expand-sm bg-light mb-1">
             <div className="container-fluid justify-content-between">
                 {/* Logo */}
-                <a className="navbar-brand" href="/">
-                    <img
-                        id="logo"
-                        src="/icon/moon.png"
-                        alt="Logo"
-                        width="24"
-                        height="24"
-                        className="d-inline-block align-text-top mx-3"
-                    />
-                    Sleep Monitor
-                </a>
+                <div className="btn-group dropdown zero">
+                    <button
+                        className="navbar-brand btn dropdown-toggle navbar-dropdown-btn zero"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        style={{
+                            transition: "all 0.2s ease",
+                        }}
+                        onMouseDown={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onMouseUp={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
+                        onTouchStart={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onTouchEnd={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
+                    >
+                        <img
+                            id="logo"
+                            src="/icon/moon.png"
+                            alt="Logo"
+                            width="24"
+                            height="24"
+                            className="d-inline-block align-text-top mx-3"
+                        />
+                        Sleep Monitor
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={exportClick}
+                                style={{
+                                    transition: "all 0.2s ease",
+                                }}
+                                onMouseDown={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                                onTouchStart={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onTouchEnd={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                            >
+                                Esporta PDF
+                            </button>
+                        </li>
+                    </ul>
+                </div>
 
                 {/* Logout per schermi piccoli */}
                 <button
@@ -76,12 +167,12 @@ function Navbar() {
                     style={{
                         transition: "all 0.2s ease",
                     }}
-                    onMouseDown={(e) => {
+                    onTouchStart={(e) => {
                         e.currentTarget.style.boxShadow =
                             "0 4px 8px rgba(0, 0, 0, 0.3)";
                         e.currentTarget.style.transform = "scale(0.95)";
                     }}
-                    onMouseUp={(e) => {
+                    onTouchEnd={(e) => {
                         e.currentTarget.style.boxShadow = "none";
                         e.currentTarget.style.transform = "scale(1)";
                     }}
@@ -101,18 +192,29 @@ function Navbar() {
                     style={{
                         transition: "all 0.2s ease",
                         borderColor: "#000000",
+                        height: "100%",
+                        padding: "7.75px",
+                        boxSizing: "border-box",
                     }}
-                    onMouseDown={(e) => {
+                    onTouchStart={(e) => {
                         e.currentTarget.style.boxShadow =
                             "0 4px 8px rgba(0, 0, 0, 0.3)";
                         e.currentTarget.style.transform = "scale(0.95)";
                     }}
-                    onMouseUp={(e) => {
+                    onTouchEnd={(e) => {
                         e.currentTarget.style.boxShadow = "none";
                         e.currentTarget.style.transform = "scale(1)";
                     }}
                 >
-                    <span className="navbar-toggler-icon"></span>
+                    <span
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <i className="bi bi-list"></i>
+                    </span>
                 </button>
 
                 {/* Contenuto della navbar */}
@@ -133,6 +235,30 @@ function Navbar() {
                                         color: "white",
                                         transition: "all 0.2s ease",
                                     }}
+                                    onMouseDown={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onMouseUp={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
+                                    }}
+                                    onTouchStart={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onTouchEnd={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
+                                    }}
                                 >
                                     &lt;
                                 </button>
@@ -150,6 +276,30 @@ function Navbar() {
                                         maxWidth: "200px",
                                         borderColor: "#18c599",
                                     }}
+                                    onMouseDown={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onMouseUp={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
+                                    }}
+                                    onTouchStart={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onTouchEnd={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
+                                    }}
                                 />
 
                                 {/* Pulsante per data successiva */}
@@ -160,6 +310,30 @@ function Navbar() {
                                         backgroundColor: "#18c599",
                                         color: "white",
                                         transition: "all 0.2s ease",
+                                    }}
+                                    onMouseDown={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onMouseUp={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
+                                    }}
+                                    onTouchStart={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                        e.currentTarget.style.transform =
+                                            "scale(0.95)";
+                                    }}
+                                    onTouchEnd={(e) => {
+                                        e.currentTarget.style.boxShadow =
+                                            "none";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
                                     }}
                                 >
                                     &gt;
@@ -183,6 +357,17 @@ function Navbar() {
                                         "scale(0.95)";
                                 }}
                                 onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                                onTouchStart={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onTouchEnd={(e) => {
                                     e.currentTarget.style.boxShadow = "none";
                                     e.currentTarget.style.transform =
                                         "scale(1)";

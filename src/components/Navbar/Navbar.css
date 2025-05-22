@@ -1,0 +1,17 @@
+.navbar-dropdown-btn {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.zero {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+@media (max-width: 576px) {
+    .btn-group.dropdown,
+    .btn-group.dropdown > .navbar-brand {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}

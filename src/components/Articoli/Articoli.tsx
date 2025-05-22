@@ -26,6 +26,27 @@ function Articoli(props: ArticoliProps) {
                             className={idx === 0 ? "active" : ""}
                             aria-current={idx === 0 ? "true" : undefined}
                             aria-label={`Slide ${idx + 1}`}
+                            style={{
+                                transition: "all 0.2s ease",
+                            }}
+                            onMouseDown={(e) => {
+                                e.currentTarget.style.boxShadow =
+                                    "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                e.currentTarget.style.transform = "scale(0.95)";
+                            }}
+                            onMouseUp={(e) => {
+                                e.currentTarget.style.boxShadow = "none";
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
+                            onTouchStart={(e) => {
+                                e.currentTarget.style.boxShadow =
+                                    "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                e.currentTarget.style.transform = "scale(0.95)";
+                            }}
+                            onTouchEnd={(e) => {
+                                e.currentTarget.style.boxShadow = "none";
+                                e.currentTarget.style.transform = "scale(1)";
+                            }}
                         ></button>
                     ))}
                 </div>
@@ -112,10 +133,35 @@ function Articoli(props: ArticoliProps) {
                                                 window.innerWidth <= 768
                                                     ? "0.25rem 0.5rem"
                                                     : "0.5rem 1rem", // Riduci padding su mobile
+                                            transition: "all 0.2s ease",
                                         }}
                                         onClick={() =>
                                             setShowBody((prev) => !prev)
                                         }
+                                        onMouseDown={(e) => {
+                                            e.currentTarget.style.boxShadow =
+                                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                            e.currentTarget.style.transform =
+                                                "scale(0.95)";
+                                        }}
+                                        onMouseUp={(e) => {
+                                            e.currentTarget.style.boxShadow =
+                                                "none";
+                                            e.currentTarget.style.transform =
+                                                "scale(1)";
+                                        }}
+                                        onTouchStart={(e) => {
+                                            e.currentTarget.style.boxShadow =
+                                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                            e.currentTarget.style.transform =
+                                                "scale(0.95)";
+                                        }}
+                                        onTouchEnd={(e) => {
+                                            e.currentTarget.style.boxShadow =
+                                                "none";
+                                            e.currentTarget.style.transform =
+                                                "scale(1)";
+                                        }}
                                     >
                                         {showBody
                                             ? "Nascondi"
@@ -131,6 +177,25 @@ function Articoli(props: ArticoliProps) {
                     type="button"
                     data-bs-target="#articoliCarousel"
                     data-bs-slide="prev"
+                    style={{ transition: "all 0.2s ease" }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    onTouchStart={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onTouchEnd={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
                 >
                     <span
                         className="carousel-control-prev-icon"
@@ -143,6 +208,25 @@ function Articoli(props: ArticoliProps) {
                     type="button"
                     data-bs-target="#articoliCarousel"
                     data-bs-slide="next"
+                    style={{ transition: "all 0.2s ease" }}
+                    onMouseDown={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onMouseUp={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    onTouchStart={(e) => {
+                        e.currentTarget.style.boxShadow =
+                            "0 4px 8px rgba(0, 0, 0, 0.3)";
+                        e.currentTarget.style.transform = "scale(0.95)";
+                    }}
+                    onTouchEnd={(e) => {
+                        e.currentTarget.style.boxShadow = "none";
+                        e.currentTarget.style.transform = "scale(1)";
+                    }}
                 >
                     <span
                         className="carousel-control-next-icon"

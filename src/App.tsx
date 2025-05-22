@@ -8,7 +8,10 @@ import Consiglio from "./components/Consiglio/Consiglio.tsx";
 import CreateScatterPlot from "./components/Chart/SleepStageChart/SleepStageChart.tsx";
 import { SleepDataInterface } from "./scripts/extractData.ts";
 import { useEffect, useState } from "react";
-import { extractSleepStages, SleepStageType } from "./scripts/extractSleepStages.ts";
+import {
+    extractSleepStages,
+    SleepStageType,
+} from "./scripts/extractSleepStages.ts";
 import { extractOreDormite, extractOreLetto } from "./scripts/totOreDormite.ts";
 import { extractPunteggioSonno } from "./scripts/calcolaPunteggio.ts";
 import TempoDormito from "./components/TempoDormito/TempoDormito.tsx";
@@ -20,7 +23,6 @@ import { useUser } from "./contesto/UserContext";
 import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
 import { getArticoli } from "./scripts/GetArticoli.ts";
-import { exportToPDF } from "./scripts/PDF.ts";
 
 function App() {
     const { user, login, logout } = useUser();
@@ -31,8 +33,12 @@ function App() {
     const stageOrder = ["Deep", "Light", "REM", "Awake"];
 
     // variabili per i dati
-    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(null);
-    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(null);
+    const [sleepData, setSleepData] = useState<SleepDataInterface[] | null>(
+        null,
+    );
+    const [sleepStages, setSleepStages] = useState<SleepStageType[] | null>(
+        null,
+    );
     const [oreDormite, setOreDormite] = useState<string[]>([]);
     const [oreNelLetto, setoreNelLetto] = useState<string[]>([]);
 
@@ -40,11 +46,15 @@ function App() {
 
     const [settMese, setsettMese] = useState<boolean>(true);
 
-    const [sleepDataWeek, setSleepDataWeek] = useState<SleepDataInterface[][] | null>(null);
+    const [sleepDataWeek, setSleepDataWeek] = useState<
+        SleepDataInterface[][] | null
+    >(null);
 
     const [searchParams] = useSearchParams();
 
-    const dateParam = (searchParams.get("date") || new Date().toISOString().split("T")[0]).slice(0, 10);
+    const dateParam = (
+        searchParams.get("date") || new Date().toISOString().split("T")[0]
+    ).slice(0, 10);
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
@@ -104,7 +114,7 @@ function App() {
                                 "night_reference",
                                 new Date(
                                     new Date(dateParam).getTime() -
-                                    i * 24 * 60 * 60 * 1000,
+                                        i * 24 * 60 * 60 * 1000,
                                 )
                                     .toISOString()
                                     .split("T")[0],
@@ -134,7 +144,7 @@ function App() {
                     }
                 } // 0.5 secondo dopo il caricamento dei dati
             };
-            fetchData().then(() => { });
+            fetchData().then(() => {});
         }
     }, [user, dateParam, settMese]); // fetch del csv
 
@@ -154,7 +164,13 @@ function App() {
         // Se i dati sono in fase di caricamento, mostra un caricamento
         return (
             <div>
-                <Navbar />
+                <Navbar
+                    dateParam={dateParam}
+                    user={user}
+                    sleepStages={sleepStages}
+                    loading={loading}
+                    sleepData={sleepData}
+                />
                 <div
                     className="d-flex justify-content-center align-items-center"
                     style={{ height: "100vh" }}
@@ -188,7 +204,13 @@ function App() {
     ) : (
         <div>
             {/* Navbar */}
-            <Navbar />
+            <Navbar
+                dateParam={dateParam}
+                user={user}
+                sleepStages={sleepStages}
+                loading={loading}
+                sleepData={sleepData}
+            />
             {sleepData && sleepData.length > 0 ? ( // Se ci sono dati, mostra i componenti
                 <div>
                     {/* Titolo */}
@@ -200,7 +222,6 @@ function App() {
                                         punteggio={punteggio[0]}
                                         testo={punteggio[1]}
                                     ></Punteggio>
-                                    <button onClick={() => exportToPDF(dateParam, user, sleepStages)}>Esporta PDF</button>
                                 </Card>
                             </div>
                         </div>

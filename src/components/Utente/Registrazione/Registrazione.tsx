@@ -42,7 +42,14 @@ function Registrazione() {
                     await supabase
                         .from("Utenti")
                         .insert([
-                            { Email: email, pwd: SHA256(password).toString(), Nome: name, Cognome: surname, dataNascita: birthday, Sesso: sex },
+                            {
+                                Email: email,
+                                pwd: SHA256(password).toString(),
+                                Nome: name,
+                                Cognome: surname,
+                                dataNascita: birthday,
+                                Sesso: sex,
+                            },
                         ])
                         .select();
 
@@ -51,7 +58,7 @@ function Registrazione() {
                     alert("Si è verificato un errore durante il login.");
                 }
             };
-            fetchData().then(() => { });
+            fetchData().then(() => {});
         }
     };
 
@@ -176,7 +183,33 @@ function Registrazione() {
                             </div>
                         </div>
                         <div className="d-grid gap-2 mx-auto">
-                            <button type="submit" className="btn btn-primary">
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ transition: "all 0.2s ease" }}
+                                onMouseDown={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onMouseUp={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                                onTouchStart={(e) => {
+                                    e.currentTarget.style.boxShadow =
+                                        "0 4px 8px rgba(0, 0, 0, 0.3)";
+                                    e.currentTarget.style.transform =
+                                        "scale(0.95)";
+                                }}
+                                onTouchEnd={(e) => {
+                                    e.currentTarget.style.boxShadow = "none";
+                                    e.currentTarget.style.transform =
+                                        "scale(1)";
+                                }}
+                            >
                                 Registrami
                             </button>
                         </div>
@@ -185,6 +218,25 @@ function Registrazione() {
                         className="btn mt-1 btn-link"
                         onClick={() => {
                             navigate("/login"); // Reindirizza alla pagina di login
+                        }}
+                        style={{ transition: "all 0.2s ease" }}
+                        onMouseDown={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onMouseUp={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
+                        }}
+                        onTouchStart={(e) => {
+                            e.currentTarget.style.boxShadow =
+                                "0 4px 8px rgba(0, 0, 0, 0.3)";
+                            e.currentTarget.style.transform = "scale(0.95)";
+                        }}
+                        onTouchEnd={(e) => {
+                            e.currentTarget.style.boxShadow = "none";
+                            e.currentTarget.style.transform = "scale(1)";
                         }}
                     >
                         Indietro
