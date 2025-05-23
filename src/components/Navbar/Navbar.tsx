@@ -5,6 +5,7 @@ import { exportToPDF } from "../../scripts/PDF.ts";
 import { SleepStageType } from "../../scripts/extractSleepStages.ts";
 import { User } from "../../contesto/UserContext.tsx";
 import { SleepDataInterface } from "../../scripts/extractData.ts";
+import { getValidDateFromSearchParams } from "../../scripts/dateUtils";
 import "./Navbar.css";
 
 type NavbarProps = {
@@ -20,19 +21,10 @@ function Navbar(props: NavbarProps) {
     const { logout } = useUser();
     const navigate = useNavigate();
 
-    // Stato iniziale di `date` basato sui parametri dell'URL
-    const [date, setDate] = useState<Date>(() => {
-        const param = searchParams.get("date");
-        // controllo che la data non sia futura, oppure che la data non sia valida, ad esempio 2023-02-31 o 2023-13-01
-        if (param && !isNaN(Date.parse(param))) {
-            const parsedDate = new Date(param);
-            if (parsedDate > new Date()) {
-                return new Date();
-            }
-            return parsedDate;
-        }
-        return new Date();
-    });
+    // Stato iniziale di `date` basato sui parametri dell'URL, usando la funzione centralizzata
+    const [date, setDate] = useState<Date>(() =>
+        getValidDateFromSearchParams(searchParams),
+    );
 
     // Aggiorna il parametro `date` nell'URL solo se cambia
     useEffect(() => {

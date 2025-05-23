@@ -23,6 +23,7 @@ import { useUser } from "./contesto/UserContext";
 import supabase from "./scripts/Supabase.ts";
 import { ControllaUser } from "./scripts/ControllaUser.ts";
 import { getArticoli } from "./scripts/GetArticoli.ts";
+import { getValidDateFromSearchParams } from "./scripts/dateUtils";
 
 function App() {
     const { user, login, logout } = useUser();
@@ -52,9 +53,9 @@ function App() {
 
     const [searchParams] = useSearchParams();
 
-    const dateParam = (
-        searchParams.get("date") || new Date().toISOString().split("T")[0]
-    ).slice(0, 10);
+    // Usa la funzione di validazione per ottenere la data corretta
+    const validDate = getValidDateFromSearchParams(searchParams);
+    const dateParam = validDate.toISOString().split("T")[0];
 
     useEffect(() => {
         document.title = "Sleep Monitor - Home";
