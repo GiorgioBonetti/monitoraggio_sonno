@@ -21,16 +21,7 @@ function MissingData(props: MissingDataProps) {
             return;
         }
 
-        // 1. Controllo che sia un file CSV
-        const fileName = file.name.toLowerCase();
-        const isCsv = fileName.endsWith(".csv") || file.type === "text/csv";
-        if (!isCsv) {
-            alert("Il file deve essere in formato CSV");
-            fileInput.value = "";
-            return;
-        }
-
-        // 2. Leggi il file come testo per controllare le prime due righe
+        // 1. Leggi il file come testo per controllare le prime due righe
         const text = await file.text();
         const lines = text.split(/\r?\n/).filter((l) => l.trim() !== "");
         if (lines.length < 2) {
@@ -40,7 +31,7 @@ function MissingData(props: MissingDataProps) {
             fileInput.value = "";
             return;
         }
-        // 2.1 Controllo intestazione
+        // 2 Controllo intestazione
         if (lines[0].trim() !== "Timestamp,Sleep Stage") {
             alert(
                 "L'intestazione del file deve essere esattamente: Timestamp,Sleep Stage",
@@ -69,13 +60,37 @@ function MissingData(props: MissingDataProps) {
                 fileInput.value = "";
                 return;
             }
-            const fileDate = timestamp.split(" ")[0];
+            const [fileDate, fileTime] = timestamp.split(" ");
             if (fileDate !== props.dataRiferimento) {
-                alert(
-                    `La data del primo campo della riga ${i + 1} (${fileDate}) non corrisponde alla data selezionata (${props.dataRiferimento})`,
-                );
-                fileInput.value = "";
-                return;
+                // Controllo se è il giorno dopo
+                const refDate = new Date(props.dataRiferimento + "T00:00:00");
+                const nextDate = new Date(refDate);
+                nextDate.setDate(refDate.getDate() + 1);
+                // Normalizza la data in formato YYYY-MM-DD
+                const nextDateStr = nextDate.toISOString().split("T")[0];
+                // Normalizza anche fileDate (per sicurezza)
+                const normFileDate = new Date(fileDate + "T00:00:00")
+                    .toISOString()
+                    .split("T")[0];
+                if (normFileDate === nextDateStr) {
+                    // Se orario tra 00:00:00 e 15:59:59 accetta, altrimenti errore
+                    const hour = parseInt(fileTime.split(":")[0], 10);
+                    if (hour >= 0 && hour < 16) {
+                        // ok
+                    } else {
+                        alert(
+                            `La data della riga ${i + 1} (${fileDate} ${fileTime}) è il giorno dopo, ma l'orario (${fileTime}) non è valido per la notte di riferimento (${props.dataRiferimento})`,
+                        );
+                        fileInput.value = "";
+                        return;
+                    }
+                } else {
+                    alert(
+                        `La data del primo campo della riga ${i + 1} (${fileDate}) non corrisponde alla data selezionata (${props.dataRiferimento}) né al giorno successivo valido`,
+                    );
+                    fileInput.value = "";
+                    return;
+                }
             }
             if (!validStages.includes(sleepStage)) {
                 alert(
@@ -112,6 +127,7 @@ function MissingData(props: MissingDataProps) {
                         <div className="input-group">
                             <input
                                 type="file"
+                                accept=".csv"
                                 className="form-control"
                                 id="inputGroupFile04"
                                 aria-describedby="inputGroupFileAddon04"
