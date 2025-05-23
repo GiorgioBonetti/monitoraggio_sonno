@@ -48,22 +48,42 @@ function MissingData(props: MissingDataProps) {
             fileInput.value = "";
             return;
         }
-        // 3. Controllo data della seconda riga
-        const firstDataRow = lines[1].split(",");
-        if (firstDataRow.length < 2) {
-            alert("La seconda riga non è valida (manca uno dei due campi)");
-            fileInput.value = "";
-            return;
-        }
-        const timestamp = firstDataRow[0].trim();
-        // props.dataRiferimento è in formato YYYY-MM-DD
-        const fileDate = timestamp.split(" ")[0];
-        if (fileDate !== props.dataRiferimento) {
-            alert(
-                `La data del primo campo della seconda riga (${fileDate}) non corrisponde alla data selezionata (${props.dataRiferimento})`,
-            );
-            fileInput.value = "";
-            return;
+        // 3. Controllo tutte le righe di dati (dalla seconda in poi)
+        const validStages = ["Deep", "Light", "Awake", "REM"];
+        const dateTimeRegex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+        for (let i = 1; i < lines.length; i++) {
+            const row = lines[i].split(",");
+            if (row.length < 2) {
+                alert(
+                    `La riga ${i + 1} non è valida (manca uno dei due campi)`,
+                );
+                fileInput.value = "";
+                return;
+            }
+            const timestamp = row[0].trim();
+            const sleepStage = row[1].trim();
+            if (!dateTimeRegex.test(timestamp)) {
+                alert(
+                    `Il formato della data e ora nella riga ${i + 1} non è valido. Deve essere YYYY-MM-DD HH:MM:SS`,
+                );
+                fileInput.value = "";
+                return;
+            }
+            const fileDate = timestamp.split(" ")[0];
+            if (fileDate !== props.dataRiferimento) {
+                alert(
+                    `La data del primo campo della riga ${i + 1} (${fileDate}) non corrisponde alla data selezionata (${props.dataRiferimento})`,
+                );
+                fileInput.value = "";
+                return;
+            }
+            if (!validStages.includes(sleepStage)) {
+                alert(
+                    `Lo stage del sonno nella riga ${i + 1} ('${sleepStage}') non è valido. Valori ammessi: Deep, Light, Awake, REM`,
+                );
+                fileInput.value = "";
+                return;
+            }
         }
 
         setIsUploading(true); // Imposta lo stato di caricamento
