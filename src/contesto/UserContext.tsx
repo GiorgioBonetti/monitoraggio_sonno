@@ -41,36 +41,85 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const fetchUser = async () => {
+            const storedUserString = localStorage.getItem("user");
+            if (storedUserString) {
+                const storedUser: User = JSON.parse(storedUserString);
+                // You may want to validate storedUser here before using
+                try {
+                    const { data } = await supabase
+                        .from("Utenti")
+                        .select("*")
+                        .eq("Email", storedUser.email)
+                        .eq("token", storedUser.token)
+                        .neq("token", "NO");
+                    if (data && data.length === 1) {
+                        setUser(data[0]);
+                        // Reindirizza solo dopo che tutto è stato salvato
+                        navigate("/");
+                    }
+                    else {
+                        // Se non trova l'utente, esegue il logout
+                        logout();
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            }
+        };
+        fetchUser();
     }, []);
 
     const login = async (userData: User) => {
-        const token = userData.token
-            ? userData.token
-            : SHA256(new Date().toISOString()).toString();
-        const updatedUser = { ...userData, token };
+        if (userData.token) {
+            const fetchUser = async () => {
+                // You may want to validate storedUser here before using
+                try {
+                    const { data } = await supabase
+                        .from("Utenti")
+                        .select("*")
+                        .eq("Email", userData.email)
+                        .eq("pwd", SHA256(userData.pwd).toString())
+                        .eq("token", userData.token)
+                        .neq("token", "NO");
+                    if (data && data.length === 1) {
+                        setUser(data[0]);
+                        navigate("/"); // Reindirizza solo dopo che tutto è stato salvato
+                    }
+                    else
+                        logout(); // Se non trova l'utente, esegue il logout
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                }
+            }
+            fetchUser();
+            localStorage.setItem("user", JSON.stringify(userData));
+        }
+        else {
+            // Se non c'è un token, creane uno nuovo
+            const token = SHA256(new Date().toISOString()).toString() + SHA256(userData.email).toString();
 
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        setUser(updatedUser);
+            userData.token = token; // Aggiungi il token all'oggetto userData
 
-        await supabase
-            .from("Utenti")
-            .update({ token })
-            .eq("id", userData.id)
-            .select();
+            await supabase
+                .from("Utenti")
+                .update({ token, updated_at: new Date().toISOString() })
+                .eq("id", userData.id)
+                .select();
 
-        navigate("/"); // Reindirizza solo dopo che tutto è stato salvato
+            setUser(userData); // Imposta l'utente nello stato
+            localStorage.setItem("user", JSON.stringify(userData));
+            navigate("/"); // Reindirizza solo dopo che tutto è stato salvato
+        }
     };
+
 
     const logout = () => {
         if (user?.id) {
             const fetchData = async () => {
                 await supabase
                     .from("Utenti")
-                    .update({ token: "NO" })
+                    .update({ token: "NO", updated_at: null })
                     .eq("id", user.id)
                     .select();
             };
@@ -87,7 +136,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             {children}
         </UserContext.Provider>
     );
-};
+}
+
 
 // 5. Custom hook per accedere facilmente al contesto
 export const useUser = (): UserContextType => {
@@ -96,8 +146,8 @@ export const useUser = (): UserContextType => {
     return context
         ? context
         : {
-              user: null,
-              login: () => {},
-              logout: () => {},
-          };
+            user: null,
+            login: () => { },
+            logout: () => { },
+        };
 };

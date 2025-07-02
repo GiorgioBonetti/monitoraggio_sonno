@@ -53,6 +53,22 @@ function App() {
 
     const [searchParams] = useSearchParams();
 
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; // necessario per far comparire il prompt
+            if (window.confirm("Sei sicuro di voler uscire?") && user) {
+                logout();
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+
     // Usa la funzione di validazione per ottenere la data corretta
     const validDate = getValidDateFromSearchParams(searchParams);
     const dateParam = validDate.toISOString().split("T")[0];
